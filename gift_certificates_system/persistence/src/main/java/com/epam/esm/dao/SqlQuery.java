@@ -14,7 +14,7 @@ public class SqlQuery {
             "create_date, last_update_date FROM gift_certificate WHERE id = ?";
 
     public static final String GIFT_CERTIFICATE_UPDATE = "UPDATE gift_certificate SET name = ?, " +
-            "description = ?, price, duration, = ?, create_date = ?, last_update_date = ? WHERE id = ?";
+            "description = ?, price = ?, duration = ?, create_date = ?, last_update_date = ? WHERE id = ?";
 
     public static final String GIFT_CERTIFICATE_REMOVE = "DELETE FROM gift_certificate WHERE id = ?";
 

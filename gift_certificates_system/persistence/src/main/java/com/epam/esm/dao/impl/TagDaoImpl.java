@@ -10,6 +10,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +33,7 @@ public class TagDaoImpl implements TagDao {
 
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection
-                    .prepareStatement(TAG_INSERT);
+                    .prepareStatement(TAG_INSERT, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, tag.getName());
             return ps;
         }, keyHolder);
