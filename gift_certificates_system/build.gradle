@@ -1,0 +1,20 @@
+group 'com.epam.esm'
+version '1.0-SNAPSHOT'
+
+allprojects {
+    apply plugin: "java"
+
+    ext {
+        springVersion = '5.3.2'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation "org.springframework:spring-core:$springVersion"
+        implementation "org.springframework:spring-context:$springVersion"
+    }
+}
+
