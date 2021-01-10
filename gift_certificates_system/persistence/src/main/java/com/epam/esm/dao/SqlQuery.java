@@ -24,7 +24,13 @@ public class SqlQuery {
 
     public static final String TAG_FIND_BY_ID = "SELECT id, name FROM tag WHERE id = ?";
 
-    public static final String TAG_UPDATE = "UPDATE tag SET name = ? WHERE id = ?";
-
     public static final String TAG_REMOVE = "DELETE FROM tag WHERE id = ?";
+
+    public static final String TAG_FIND_BY_NAME = "SELECT id, name FROM tag WHERE name = ?";
+
+    public static final String GIFT_CERTIFICATE_HAS_TAG_INSERT = "INSERT INTO gift_certificate_has_tag " +
+            "(gift_certificate_id_fk, tag_id_fk) VALUES (?, ?)";
+
+    public static final String GIFT_CERTIFICATE_HAS_TAG_REMOVE = "DELETE FROM gift_certificate_has_tag WHERE " +
+            "gift_certificate_id_fk = ?";
 }

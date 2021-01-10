@@ -3,6 +3,7 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.mapper.GiftCertificateMapper;
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -18,8 +19,8 @@ import static com.epam.esm.dao.SqlQuery.*;
 
 @Repository
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
-    private JdbcTemplate jdbcTemplate;
-    private GiftCertificateMapper giftCertificateMapper;
+    private final JdbcTemplate jdbcTemplate;
+    private final GiftCertificateMapper giftCertificateMapper;
 
     @Autowired
     public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, GiftCertificateMapper giftCertificateMapper) {
@@ -73,5 +74,17 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     public boolean remove(long id) {
         int result = jdbcTemplate.update(GIFT_CERTIFICATE_REMOVE, id);
         return result != 0;
+    }
+
+    @Override
+    public void addGiftCertificateHasTag(GiftCertificate giftCertificate) {
+        long giftCertificateId = giftCertificate.getId();
+        List<Tag> tags = giftCertificate.getTags();
+        tags.forEach(tag -> jdbcTemplate.update(GIFT_CERTIFICATE_HAS_TAG_INSERT, giftCertificateId, tag));
+    }
+
+    @Override
+    public void removeGiftCertificateHasTag(long id) {
+        jdbcTemplate.update(GIFT_CERTIFICATE_HAS_TAG_REMOVE, id);
     }
 }

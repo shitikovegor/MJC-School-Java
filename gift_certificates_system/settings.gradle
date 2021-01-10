@@ -1,3 +1,4 @@
 rootProject.name = 'gift_certificates_system'
 include 'persistence'
+include 'service'
 

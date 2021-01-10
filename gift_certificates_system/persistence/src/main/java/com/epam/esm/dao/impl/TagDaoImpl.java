@@ -18,8 +18,8 @@ import static com.epam.esm.dao.SqlQuery.*;
 
 @Repository
 public class TagDaoImpl implements TagDao {
-    private JdbcTemplate jdbcTemplate;
-    private TagMapper tagMapper;
+    private final JdbcTemplate jdbcTemplate;
+    private final TagMapper tagMapper;
 
     @Autowired
     public TagDaoImpl(JdbcTemplate jdbcTemplate, TagMapper tagMapper) {
@@ -56,13 +56,17 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public boolean update(Tag tag) {
-        int result = jdbcTemplate.update(TAG_UPDATE, tag.getName(), tag.getId());
-        return result != 0;
+        throw new UnsupportedOperationException("Update method is unsupported");
     }
 
     @Override
     public boolean remove(long id) {
         int result = jdbcTemplate.update(TAG_REMOVE, id);
         return result != 0;
+    }
+
+    @Override
+    public Optional<Tag> findByName(String name) {
+        return jdbcTemplate.query(TAG_FIND_BY_NAME, tagMapper, name).stream().findFirst();
     }
 }

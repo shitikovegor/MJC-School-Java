@@ -1,11 +1,11 @@
-package com.epam.esm.entity;
+package com.epam.esm.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
-public class GiftCertificate {
+public class GiftCertificateDto {
     private long id;
     private String name;
     private String description;
@@ -13,12 +13,12 @@ public class GiftCertificate {
     private int duration;
     private LocalDateTime createDate;
     private LocalDateTime lastUpdateDate;
-    private List<Tag> tags;
+    private List<TagDto> tags;
 
-    public GiftCertificate() {
+    public GiftCertificateDto() {
     }
 
-    public GiftCertificate(long id, String name, String description, BigDecimal price, int duration, LocalDateTime createDate, LocalDateTime lastUpdateDate) {
+    public GiftCertificateDto(long id, String name, String description, BigDecimal price, int duration, LocalDateTime createDate, LocalDateTime lastUpdateDate) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -84,12 +84,12 @@ public class GiftCertificate {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public List<Tag> getTags() {
+    public List<TagDto> getTags() {
         return Collections.unmodifiableList(tags);
     }
 
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
+    public void setTags(List<TagDto> tagDtos) {
+        this.tags = tagDtos;
     }
 
     @Override
@@ -97,7 +97,7 @@ public class GiftCertificate {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        GiftCertificate that = (GiftCertificate) o;
+        GiftCertificateDto that = (GiftCertificateDto) o;
 
         if (id != that.id) return false;
         if (duration != that.duration) return false;
@@ -125,7 +125,7 @@ public class GiftCertificate {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("GiftCertificate{");
+        final StringBuilder sb = new StringBuilder("GiftCertificateDto{");
         sb.append("id=").append(id);
         sb.append(", name='").append(name).append('\'');
         sb.append(", description='").append(description).append('\'');

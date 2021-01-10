@@ -32,6 +32,8 @@ class GiftCertificateDaoImplTest {
                 .setType(EmbeddedDatabaseType.H2)
                 .addScript("db_script/gift_certificate_create_table.sql")
                 .addScript("db_script/gift_certificate_insert_data.sql")
+                .addScript("db_script/gift_certificate_has_tag_create_table.sql")
+                .addScript("db_script/gift_certificate_has_tag_insert_data.sql")
                 .build();
         JdbcTemplate template = new JdbcTemplate(database);
         giftCertificateDao = new GiftCertificateDaoImpl(template, new GiftCertificateMapper());

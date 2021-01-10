@@ -74,15 +74,8 @@ class TagDaoImplTest {
 
     @Test
     void findByIdNegativeTest() {
-        Optional<Tag> actual = tagDao.findById(8);
+        Optional<Tag> actual = tagDao.findById(6);
         assertEquals(Optional.empty(), actual);
-    }
-
-    @Test
-    void updateTest() {
-        Tag tagForUpdate = new Tag(3, "food");
-        boolean actual = tagDao.update(tagForUpdate);
-        assertTrue(actual);
     }
 
     @Test
