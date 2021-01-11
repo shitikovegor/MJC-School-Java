@@ -1,8 +1,6 @@
 package com.epam.esm.dao;
 
-public class SqlQuery {
-    private SqlQuery(){
-    }
+public final class SqlQuery {
 
     public static final String GIFT_CERTIFICATE_INSERT = "INSERT INTO gift_certificate (name, description, price, " +
             "duration, create_date, last_update_date) VALUES (?, ?, ?, ?, ?, ?)";

@@ -1,8 +1,6 @@
 package com.epam.esm.dao;
 
-public class ColumnName {
-    private ColumnName() {
-    }
+public final class ColumnName {
 
     public static final String ID = "id";
     public static final String NAME = "name";

@@ -3,7 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.ServiceException;
+import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.validator.TagValidator;
 import org.modelmapper.ModelMapper;
@@ -47,7 +47,7 @@ public class TagServiceImpl implements TagService {
         TagValidator.validateId(id);
         Optional<Tag> foundTag = tagDao.findById(id);
         return foundTag.map(tag -> modelMapper.map(tag, TagDto.class))
-                .orElseThrow(() -> new ServiceException("Tag with id " + id + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Tag with id " + id + " not found."));
     }
 
     @Override

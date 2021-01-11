@@ -4,8 +4,7 @@ import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.ServiceException;
+import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.TagService;
 import com.epam.esm.validator.GiftCertificateValidator;
@@ -58,7 +57,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         GiftCertificateValidator.validateId(id);
         Optional<GiftCertificate> foundGiftCertificate = giftCertificateDao.findById(id);
         return foundGiftCertificate.map(giftCertificate -> modelMapper.map(giftCertificate, GiftCertificateDto.class))
-                .orElseThrow(() -> new ServiceException("Gift certificate with id " + id + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("Gift certificate with id " + id + " not found."));
     }
 
     @Transactional

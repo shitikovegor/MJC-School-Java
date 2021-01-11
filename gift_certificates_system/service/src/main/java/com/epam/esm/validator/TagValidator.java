@@ -1,7 +1,7 @@
 package com.epam.esm.validator;
 
 import com.epam.esm.dto.TagDto;
-import com.epam.esm.exception.ServiceException;
+import com.epam.esm.exception.IncorrectParameterException;
 
 public class TagValidator {
     private static int MIN_NUMBER = 1;
@@ -14,13 +14,13 @@ public class TagValidator {
 
     public static void validateId(long id) {
         if (id < MIN_NUMBER) {
-            throw new ServiceException("Id is incorrect: " + id + ". Id should be a positive number.");
+            throw new IncorrectParameterException("Id is incorrect: " + id + ". Id should be a positive number.");
         }
     }
 
     public static void validateName(String name) {
         if (name == null || !name.matches(NAME_PATTERN)) {
-            throw new ServiceException("Name is incorrect: " + name +
+            throw new IncorrectParameterException("Name is incorrect: " + name +
                     ". Name must contain letters, numbers, a hyphen. Size from 1 to 100.");
         }
     }
