@@ -9,6 +9,7 @@ import com.epam.esm.validator.TagValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,9 +51,11 @@ public class TagServiceImpl implements TagService {
                 .orElseThrow(() -> new ResourceNotFoundException("Tag with id " + id + " not found."));
     }
 
+    @Transactional
     @Override
     public void remove(long id) {
         TagValidator.validateId(id);
         tagDao.remove(id);
+        tagDao.removeGiftCertificateHasTag(id);
     }
 }

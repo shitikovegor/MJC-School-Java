@@ -14,16 +14,16 @@ import static com.epam.esm.dao.ColumnName.*;
 public class GiftCertificateMapper implements RowMapper<GiftCertificate> {
     @Override
     public GiftCertificate mapRow(ResultSet rs, int rowNum) throws SQLException {
-        GiftCertificate giftCertificate = new GiftCertificate(
-                rs.getLong(ID.getValue()),
-                rs.getString(NAME.getValue()),
-                rs.getString(DESCRIPTION.getValue()),
-                rs.getBigDecimal(PRICE.getValue()),
-                rs.getInt(DURATION.getValue()),
-                LocalDateTime.of(rs.getDate(CREATE_DATE.getValue()).toLocalDate(),
-                        rs.getTime(CREATE_DATE.getValue()).toLocalTime()),
-                LocalDateTime.of(rs.getDate(LAST_UPDATE_DATE.getValue()).toLocalDate(),
-                        rs.getTime(LAST_UPDATE_DATE.getValue()).toLocalTime()));
+        GiftCertificate giftCertificate = new GiftCertificate();
+        giftCertificate.setId(rs.getLong(ID.getValue()));
+        giftCertificate.setName(rs.getString(NAME.getValue()));
+        giftCertificate.setDescription(rs.getString(DESCRIPTION.getValue()));
+        giftCertificate.setPrice(rs.getBigDecimal(PRICE.getValue()));
+        giftCertificate.setDuration(rs.getInt(DURATION.getValue()));
+        giftCertificate.setCreateDate(LocalDateTime.of(rs.getDate(CREATE_DATE.getValue()).toLocalDate(),
+                rs.getTime(CREATE_DATE.getValue()).toLocalTime()));
+        giftCertificate.setLastUpdateDate(LocalDateTime.of(rs.getDate(LAST_UPDATE_DATE.getValue()).toLocalDate(),
+                rs.getTime(LAST_UPDATE_DATE.getValue()).toLocalTime()));
 
         return giftCertificate;
     }

@@ -4,6 +4,9 @@ version '1.0-SNAPSHOT'
 allprojects {
     apply plugin: "java"
 
+    compileJava.options.encoding = "UTF-8"
+    compileTestJava.options.encoding = "UTF-8"
+
     ext {
         springVersion = '5.3.2'
     }

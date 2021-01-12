@@ -1,4 +1,4 @@
-package com.epam.esm.handler;
+package com.epam.esm.exception;
 
 public enum ErrorCode {
     INCORRECT_PARAMETER(4004),

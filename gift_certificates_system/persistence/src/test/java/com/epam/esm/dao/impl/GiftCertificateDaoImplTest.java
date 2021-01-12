@@ -7,15 +7,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,7 +46,7 @@ class GiftCertificateDaoImplTest {
     }
 
     @Test
-    void addPositiveTest() {
+    void addCorrectDataShouldReturnGiftCertificate() {
         GiftCertificate certificate = new GiftCertificate();
         certificate.setName("Title");
         certificate.setDescription("Description");
@@ -61,7 +60,7 @@ class GiftCertificateDaoImplTest {
     }
 
     @Test
-    void addReturnedIdTest() {
+    void addCorrectDataShouldReturnValidId() {
         GiftCertificate certificate = new GiftCertificate();
         certificate.setName("Title");
         certificate.setDescription("Description");
@@ -75,7 +74,7 @@ class GiftCertificateDaoImplTest {
     }
 
     @Test
-    void findAllPositiveTest() {
+    void findAllCorrectDataShouldReturnListOfGiftCertificates() {
         List<GiftCertificate> certificates = giftCertificateDao.findAll();
         int actual = certificates.size();
         int expected = 5;
@@ -83,12 +82,15 @@ class GiftCertificateDaoImplTest {
     }
 
     @Test
-    void findByIdPositiveTest() {
-        GiftCertificate expected = new GiftCertificate(
-                3, "dinner in cafe", "New Year dinner",
-                new BigDecimal(50.99).setScale(2, RoundingMode.DOWN), 1,
-                LocalDateTime.of(2020, 12, 31, 23, 59, 0),
-                LocalDateTime.of(2021, 12, 31, 23, 59, 59));
+    void findByIdCorrectDataShouldReturnGiftCertificate() {
+        GiftCertificate expected = new GiftCertificate();
+        expected.setId(3);
+        expected.setName("dinner in cafe");
+        expected.setDescription("New Year dinner");
+        expected.setPrice(new BigDecimal(50.99).setScale(2, RoundingMode.DOWN));
+        expected.setDuration(10);
+        expected.setCreateDate(LocalDateTime.of(2020, 12, 31, 23, 59, 0));
+        expected.setLastUpdateDate(LocalDateTime.of(2021, 12, 31, 23, 59, 59));
 
         Optional<GiftCertificate> actualOptional = giftCertificateDao.findById(3);
         GiftCertificate actual = actualOptional.orElse(null);
@@ -96,30 +98,31 @@ class GiftCertificateDaoImplTest {
     }
 
     @Test
-    void findByIdNegativeTest() {
+    void findByIdNotExistingTagShouldReturnEmptyValue() {
         Optional<GiftCertificate> actual = giftCertificateDao.findById(8);
         assertEquals(Optional.empty(), actual);
     }
 
     @Test
-    void updateTest() {
+    void updateCorrectDataShouldReturnTrue() {
         GiftCertificate certificateForUpdate = new GiftCertificate(
                 3, "dinner", "New Year",
                 new BigDecimal(55), 2,
                 LocalDateTime.of(2020, 12, 25, 23, 59, 0),
-                LocalDateTime.of(2021, 12, 28, 23, 59, 59));
+                LocalDateTime.of(2021, 12, 28, 23, 59, 59),
+                new ArrayList<>());
         boolean actual = giftCertificateDao.update(certificateForUpdate);
         assertTrue(actual);
     }
 
     @Test
-    void removePositiveTest() {
+    void removeCorrectDataShouldReturnTrue() {
         boolean actual = giftCertificateDao.remove(3);
         assertTrue(actual);
     }
 
     @Test
-    void removeNegativeTest() {
+    void removeNotExistingDataShouldReturnFalse() {
         boolean actual = giftCertificateDao.remove(15);
         assertFalse(actual);
     }

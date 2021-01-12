@@ -24,6 +24,8 @@ public class TagDaoImpl implements TagDao {
     private final static String TAG_FIND_BY_ID = "SELECT id, name FROM tag WHERE id = ?";
     private final static String TAG_REMOVE = "DELETE FROM tag WHERE id = ?";
     private final static String TAG_FIND_BY_NAME = "SELECT id, name FROM tag WHERE name = ?";
+    private static final String GIFT_CERTIFICATE_HAS_TAG_REMOVE = "DELETE FROM gift_certificate_has_tag WHERE " +
+            "tag_id_fk = ?";
 
     @Autowired
     public TagDaoImpl(JdbcTemplate jdbcTemplate, TagMapper tagMapper) {
@@ -72,5 +74,10 @@ public class TagDaoImpl implements TagDao {
     @Override
     public Optional<Tag> findByName(String name) {
         return jdbcTemplate.query(TAG_FIND_BY_NAME, tagMapper, name).stream().findFirst();
+    }
+
+    @Override
+    public void removeGiftCertificateHasTag(long id) {
+        jdbcTemplate.update(GIFT_CERTIFICATE_HAS_TAG_REMOVE, id);
     }
 }

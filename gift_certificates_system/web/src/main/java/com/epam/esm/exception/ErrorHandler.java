@@ -1,14 +1,12 @@
-package com.epam.esm.handler;
+package com.epam.esm.exception;
 
-import com.epam.esm.exception.IncorrectParameterException;
-import com.epam.esm.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import static com.epam.esm.handler.ErrorCode.*;
+import static com.epam.esm.exception.ErrorCode.*;
 
 @RestControllerAdvice
 public class ErrorHandler extends ResponseEntityExceptionHandler {

@@ -40,7 +40,7 @@ class TagDaoImplTest {
     }
 
     @Test
-    void addPositiveTest() {
+    void addCorrectDataShouldReturnTag() {
         Tag tag = new Tag();
         tag.setName("New tag");
         Tag actual = tagDao.add(tag);
@@ -48,7 +48,7 @@ class TagDaoImplTest {
     }
 
     @Test
-    void addReturnedIdTest() {
+    void addCorrectDataShouldReturnValidId() {
         Tag tag = new Tag();
         tag.setName("Title");
         Tag actual = tagDao.add(tag);
@@ -56,7 +56,7 @@ class TagDaoImplTest {
     }
 
     @Test
-    void findAllPositiveTest() {
+    void findAllCorrectDataShouldReturnListOfTags() {
         List<Tag> tags = tagDao.findAll();
         int actual = tags.size();
         int expected = 5;
@@ -64,7 +64,7 @@ class TagDaoImplTest {
     }
 
     @Test
-    void findByIdPositiveTest() {
+    void findByIdCorrectDataShouldReturnTag() {
         Tag expected = new Tag(3, "food");
 
         Optional<Tag> actualOptional = tagDao.findById(3);
@@ -73,19 +73,19 @@ class TagDaoImplTest {
     }
 
     @Test
-    void findByIdNegativeTest() {
+    void findByIdNotExistingTagShouldReturnEmptyValue() {
         Optional<Tag> actual = tagDao.findById(6);
         assertEquals(Optional.empty(), actual);
     }
 
     @Test
-    void removePositiveTest() {
+    void removeCorrectDataShouldReturnTrue() {
         boolean actual = tagDao.remove(3);
         assertTrue(actual);
     }
 
     @Test
-    void removeNegativeTest() {
+    void removeNotExistingDataShouldReturnFalse() {
         boolean actual = tagDao.remove(15);
         assertFalse(actual);
     }
