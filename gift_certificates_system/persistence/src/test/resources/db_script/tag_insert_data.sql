@@ -1,7 +1,7 @@
-INSERT INTO tagDto VALUES (1, 'rest');
-INSERT INTO tagDto VALUES (2, 'extreme');
-INSERT INTO tagDto VALUES (3, 'food');
-INSERT INTO tagDto VALUES (4, 'sport');
-INSERT INTO tagDto VALUES (5, 'romantic');
+INSERT INTO tag VALUES (1, 'rest');
+INSERT INTO tag VALUES (2, 'extreme');
+INSERT INTO tag VALUES (3, 'food');
+INSERT INTO tag VALUES (4, 'sport');
+INSERT INTO tag VALUES (5, 'romantic');
 
 

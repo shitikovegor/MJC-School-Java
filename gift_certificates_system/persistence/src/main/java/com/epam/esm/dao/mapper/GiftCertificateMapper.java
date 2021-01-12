@@ -15,15 +15,15 @@ public class GiftCertificateMapper implements RowMapper<GiftCertificate> {
     @Override
     public GiftCertificate mapRow(ResultSet rs, int rowNum) throws SQLException {
         GiftCertificate giftCertificate = new GiftCertificate(
-                rs.getLong(ID),
-                rs.getString(NAME),
-                rs.getString(DESCRIPTION),
-                rs.getBigDecimal(PRICE),
-                rs.getInt(DURATION),
-                LocalDateTime.of(rs.getDate(CREATE_DATE).toLocalDate(),
-                        rs.getTime(CREATE_DATE).toLocalTime()),
-                LocalDateTime.of(rs.getDate(LAST_UPDATE_DATE).toLocalDate(),
-                        rs.getTime(LAST_UPDATE_DATE).toLocalTime()));
+                rs.getLong(ID.getValue()),
+                rs.getString(NAME.getValue()),
+                rs.getString(DESCRIPTION.getValue()),
+                rs.getBigDecimal(PRICE.getValue()),
+                rs.getInt(DURATION.getValue()),
+                LocalDateTime.of(rs.getDate(CREATE_DATE.getValue()).toLocalDate(),
+                        rs.getTime(CREATE_DATE.getValue()).toLocalTime()),
+                LocalDateTime.of(rs.getDate(LAST_UPDATE_DATE.getValue()).toLocalDate(),
+                        rs.getTime(LAST_UPDATE_DATE.getValue()).toLocalTime()));
 
         return giftCertificate;
     }

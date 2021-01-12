@@ -14,12 +14,16 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
-import static com.epam.esm.dao.SqlQuery.*;
-
 @Repository
 public class TagDaoImpl implements TagDao {
     private final JdbcTemplate jdbcTemplate;
     private final TagMapper tagMapper;
+
+    private final static String TAG_INSERT = "INSERT INTO tag (name) VALUES (?)";
+    private final static String TAG_FIND_ALL = "SELECT id, name FROM tag";
+    private final static String TAG_FIND_BY_ID = "SELECT id, name FROM tag WHERE id = ?";
+    private final static String TAG_REMOVE = "DELETE FROM tag WHERE id = ?";
+    private final static String TAG_FIND_BY_NAME = "SELECT id, name FROM tag WHERE name = ?";
 
     @Autowired
     public TagDaoImpl(JdbcTemplate jdbcTemplate, TagMapper tagMapper) {

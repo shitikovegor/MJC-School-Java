@@ -15,12 +15,24 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
-import static com.epam.esm.dao.SqlQuery.*;
-
 @Repository
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private final JdbcTemplate jdbcTemplate;
     private final GiftCertificateMapper giftCertificateMapper;
+
+    private static final String GIFT_CERTIFICATE_INSERT = "INSERT INTO gift_certificate (name, description, price, " +
+            "duration, create_date, last_update_date) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String GIFT_CERTIFICATE_FIND_ALL = "SELECT id, name, description, price, duration, " +
+            "create_date, last_update_date FROM gift_certificate";
+    private static final String GIFT_CERTIFICATE_FIND_BY_ID = "SELECT id, name, description, price, duration, " +
+            "create_date, last_update_date FROM gift_certificate WHERE id = ?";
+    private static final String GIFT_CERTIFICATE_UPDATE = "UPDATE gift_certificate SET name = ?, " +
+            "description = ?, price = ?, duration = ?, create_date = ?, last_update_date = ? WHERE id = ?";
+    private static final String GIFT_CERTIFICATE_REMOVE = "DELETE FROM gift_certificate WHERE id = ?";
+    private static final String GIFT_CERTIFICATE_HAS_TAG_INSERT = "INSERT INTO gift_certificate_has_tag " +
+            "(gift_certificate_id_fk, tag_id_fk) VALUES (?, ?)";
+    private static final String GIFT_CERTIFICATE_HAS_TAG_REMOVE = "DELETE FROM gift_certificate_has_tag WHERE " +
+            "gift_certificate_id_fk = ?";
 
     @Autowired
     public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, GiftCertificateMapper giftCertificateMapper) {

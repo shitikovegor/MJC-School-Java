@@ -1,5 +1,7 @@
 package com.epam.esm.entity;
 
+import java.util.Objects;
+
 public class Tag {
     private long id;
     private String name;
@@ -30,20 +32,20 @@ public class Tag {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Tag tag = (Tag) o;
-
-        if (id != tag.id) return false;
-        return name != null ? name.equals(tag.name) : tag.name == null;
+        return id == tag.id &&
+                Objects.equals(name, tag.name);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
+        return Objects.hash(id, name);
     }
 
     @Override

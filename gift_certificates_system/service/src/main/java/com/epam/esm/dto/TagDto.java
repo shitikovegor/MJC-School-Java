@@ -1,5 +1,7 @@
 package com.epam.esm.dto;
 
+import java.util.Objects;
+
 public class TagDto {
     private long id;
     private String name;
@@ -30,20 +32,20 @@ public class TagDto {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         TagDto tagDto = (TagDto) o;
-
-        if (id != tagDto.id) return false;
-        return name != null ? name.equals(tagDto.name) : tagDto.name == null;
+        return id == tagDto.id &&
+                Objects.equals(name, tagDto.name);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
+        return Objects.hash(id, name);
     }
 
     @Override

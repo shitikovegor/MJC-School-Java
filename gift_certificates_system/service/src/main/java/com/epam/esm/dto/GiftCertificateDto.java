@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class GiftCertificateDto {
     private long id;
@@ -94,33 +95,26 @@ public class GiftCertificateDto {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        GiftCertificateDto that = (GiftCertificateDto) o;
-
-        if (id != that.id) return false;
-        if (duration != that.duration) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (price != null ? !price.equals(that.price) : that.price != null) return false;
-        if (createDate != null ? !createDate.equals(that.createDate) : that.createDate != null) return false;
-        if (lastUpdateDate != null ? !lastUpdateDate.equals(that.lastUpdateDate) : that.lastUpdateDate != null)
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
             return false;
-        return tags != null ? tags.equals(that.tags) : that.tags == null;
+        }
+        GiftCertificateDto that = (GiftCertificateDto) o;
+        return id == that.id &&
+                duration == that.duration &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(price, that.price) &&
+                Objects.equals(createDate, that.createDate) &&
+                Objects.equals(lastUpdateDate, that.lastUpdateDate) &&
+                Objects.equals(tags, that.tags);
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (price != null ? price.hashCode() : 0);
-        result = 31 * result + duration;
-        result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
-        result = 31 * result + (lastUpdateDate != null ? lastUpdateDate.hashCode() : 0);
-        result = 31 * result + (tags != null ? tags.hashCode() : 0);
-        return result;
+        return Objects.hash(id, name, description, price, duration, createDate, lastUpdateDate, tags);
     }
 
     @Override
