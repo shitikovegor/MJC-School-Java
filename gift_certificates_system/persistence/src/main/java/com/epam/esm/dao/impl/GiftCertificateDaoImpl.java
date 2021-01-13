@@ -73,13 +73,13 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public boolean update(GiftCertificate giftCertificate) {
-        int result = jdbcTemplate.update(GIFT_CERTIFICATE_UPDATE, giftCertificate.getName(),
+    public GiftCertificate update(GiftCertificate giftCertificate) {
+        jdbcTemplate.update(GIFT_CERTIFICATE_UPDATE, giftCertificate.getName(),
                 giftCertificate.getDescription(),
                 giftCertificate.getPrice(), giftCertificate.getDuration(), giftCertificate.getCreateDate(),
                 giftCertificate.getLastUpdateDate(), giftCertificate.getId());
 
-        return result != 0;
+        return giftCertificate;
     }
 
     @Override

@@ -10,7 +10,7 @@ public interface BaseDao<T> {
 
     Optional<T> findById(long id);
 
-    boolean update (T t);
+    T update (T t);
 
     boolean remove (long id);
 }

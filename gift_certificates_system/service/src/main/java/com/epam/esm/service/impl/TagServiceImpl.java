@@ -55,7 +55,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public void remove(long id) {
         TagValidator.validateId(id);
-        tagDao.remove(id);
         tagDao.removeGiftCertificateHasTag(id);
+        tagDao.remove(id);
     }
 }

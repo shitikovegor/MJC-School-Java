@@ -109,7 +109,7 @@ class TagServiceImplTest {
     @Test
     void removeIncorrectDataShouldThrowException() {
         when(tagDao.remove(anyLong())).thenReturn(true);
-        doNothing().when(tagDao).removeGiftCertificateHasTag(anyLong()); // TODO: 12.01.2021 need to do this line or not?
+        doNothing().when(tagDao).removeGiftCertificateHasTag(anyLong());
         long id = -2L;
         assertThrows(IncorrectParameterException.class, () -> tagService.remove(id));
     }

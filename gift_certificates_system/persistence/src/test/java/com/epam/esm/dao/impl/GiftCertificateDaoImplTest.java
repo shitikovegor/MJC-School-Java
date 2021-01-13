@@ -111,8 +111,8 @@ class GiftCertificateDaoImplTest {
                 LocalDateTime.of(2020, 12, 25, 23, 59, 0),
                 LocalDateTime.of(2021, 12, 28, 23, 59, 59),
                 new ArrayList<>());
-        boolean actual = giftCertificateDao.update(certificateForUpdate);
-        assertTrue(actual);
+        GiftCertificate actual = giftCertificateDao.update(certificateForUpdate);
+        assertEquals(certificateForUpdate, actual);
     }
 
     @Test

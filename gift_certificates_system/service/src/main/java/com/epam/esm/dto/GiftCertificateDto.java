@@ -1,8 +1,9 @@
 package com.epam.esm.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,7 +13,9 @@ public class GiftCertificateDto {
     private String description;
     private BigDecimal price;
     private int duration;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime createDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime lastUpdateDate;
     private List<TagDto> tags;
 
@@ -88,7 +91,7 @@ public class GiftCertificateDto {
     }
 
     public List<TagDto> getTags() {
-        return Collections.unmodifiableList(tags);
+        return tags;
     }
 
     public void setTags(List<TagDto> tagDtos) {

@@ -18,6 +18,8 @@ allprojects {
     dependencies {
         implementation "org.springframework:spring-core:$springVersion"
         implementation "org.springframework:spring-context:$springVersion"
+        implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.1'
+        implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.3'
     }
 }
 

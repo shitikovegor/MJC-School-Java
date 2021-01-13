@@ -2,7 +2,6 @@ package com.epam.esm.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -88,7 +87,7 @@ public class GiftCertificate {
     }
 
     public List<Tag> getTags() {
-        return Collections.unmodifiableList(tags);
+        return tags;
     }
 
     public void setTags(List<Tag> tags) {

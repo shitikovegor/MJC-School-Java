@@ -64,8 +64,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public void remove(long id) {
         GiftCertificateValidator.validateId(id);
-        giftCertificateDao.remove(id);
         giftCertificateDao.removeGiftCertificateHasTag(id);
+        giftCertificateDao.remove(id);
     }
 
     @Transactional
@@ -77,11 +77,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         checkTags(foundGiftCertificateDto);
 
         GiftCertificate foundGiftCertificate = modelMapper.map(foundGiftCertificateDto, GiftCertificate.class);
-        giftCertificateDao.update(foundGiftCertificate);
-        giftCertificateDao.removeGiftCertificateHasTag(foundGiftCertificate.getId());
-        giftCertificateDao.addGiftCertificateHasTag(foundGiftCertificate);
+        GiftCertificate updatedGiftCertificate = giftCertificateDao.update(foundGiftCertificate);
+        giftCertificateDao.removeGiftCertificateHasTag(updatedGiftCertificate.getId());
+        giftCertificateDao.addGiftCertificateHasTag(updatedGiftCertificate);
 
-        return foundGiftCertificateDto;
+        return modelMapper.map(updatedGiftCertificate, GiftCertificateDto.class);
     }
 
     private void checkTags(GiftCertificateDto giftCertificateDto) {
