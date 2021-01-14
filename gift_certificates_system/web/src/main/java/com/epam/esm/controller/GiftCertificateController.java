@@ -1,6 +1,7 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.dto.GiftCertificateDto;
+import com.epam.esm.dto.GiftCertificateQueryParametersDto;
 import com.epam.esm.service.GiftCertificateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,9 @@ public class GiftCertificateController {
     }
 
     @GetMapping
-    public List<GiftCertificateDto> getGiftCertificates() {
-        return giftCertificateService.findAll();
+    public List<GiftCertificateDto> getGiftCertificates
+            (@RequestBody GiftCertificateQueryParametersDto giftCertificateQueryParametersDto) {
+        return giftCertificateService.findCertificates(giftCertificateQueryParametersDto);
     }
 
     @GetMapping("/{id}")

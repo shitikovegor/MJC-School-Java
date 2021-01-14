@@ -1,10 +1,13 @@
 package com.epam.esm.validator;
 
 import com.epam.esm.dto.GiftCertificateDto;
+import com.epam.esm.exception.ExceptionKey;
 import com.epam.esm.exception.IncorrectParameterException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import static com.epam.esm.exception.ExceptionKey.*;
 
 public class GiftCertificateValidator {
     private static int MIN_NUMBER = 1;
@@ -15,7 +18,6 @@ public class GiftCertificateValidator {
     private static BigDecimal MAX_PRICE = new BigDecimal(999999.99);
 
     public static void validate(GiftCertificateDto giftCertificateDto) {
-        validateId(giftCertificateDto.getId());
         validateName(giftCertificateDto.getName());
         validateDescription(giftCertificateDto.getDescription());
         validatePrice(giftCertificateDto.getPrice());
@@ -25,39 +27,38 @@ public class GiftCertificateValidator {
 
     public static void validateId(long id) {
         if (id < MIN_NUMBER) {
-            throw new IncorrectParameterException("Id is incorrect: " + id + ". Id should be a positive number.");
+            throw new IncorrectParameterException(GIFT_CERTIFICATE_ID_INCORRECT.getKey(),
+                    String.valueOf(id));
         }
     }
 
     public static void validateName(String name) {
         if (name == null || !name.matches(NAME_PATTERN)) {
-            throw new IncorrectParameterException("Name is incorrect: " + name +
-                    ". Name must contain letters, numbers, a hyphen. Size from 1 to 100.");
+            throw new IncorrectParameterException(GIFT_CERTIFICATE_NAME_INCORRECT.getKey(), name);
         }
     }
 
     public static void validateDescription(String description) {
         if (description == null || !description.matches(DESCRIPTION_PATTERN)) {
-            throw new IncorrectParameterException("Description is incorrect: " + description +
-                    ". Description must contain letters, numbers, symbols: -,._!?&. Size from 1 to 500.");
+            throw new IncorrectParameterException(GIFT_CERTIFICATE_DESCRIPTION_INCORRECT.getKey(), description);
         }
     }
 
     public static void validatePrice(BigDecimal price) {
         if (price == null || price.compareTo(MIN_PRICE) == -1 || price.compareTo(MAX_PRICE) == 1) {
-            throw new IncorrectParameterException("Price is incorrect: " + price + ". Price should be from 1 to 999999,99.");
+            throw new IncorrectParameterException(GIFT_CERTIFICATE_PRICE_INCORRECT.getKey(), price.toString());
         }
     }
 
     public static void validateDuration(int duration) {
         if (duration < MIN_NUMBER || duration > MAX_DURATION) {
-            throw new IncorrectParameterException("Duration is incorrect: " + duration + ". Duration should be from 1 to 365.");
+            throw new IncorrectParameterException(GIFT_CERTIFICATE_DURATION_INCORRECT.getKey(), String.valueOf(duration));
         }
     }
 
     public static void validateDates(LocalDateTime createDate, LocalDateTime lastUpdateDate) {
         if (createDate == null || lastUpdateDate == null || createDate.isAfter(lastUpdateDate)) {
-            throw new IncorrectParameterException("Dates are incorrect. Create date should be before last update date.");
+            throw new IncorrectParameterException(GIFT_CERTIFICATE_DATES_INCORRECT.getKey());
         }
     }
 }

@@ -3,7 +3,9 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.mapper.GiftCertificateMapper;
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.GiftCertificateQueryParameters;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.util.GiftCertificatesQueryCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -33,6 +35,11 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             "(gift_certificate_id_fk, tag_id_fk) VALUES (?, ?)";
     private static final String GIFT_CERTIFICATE_HAS_TAG_REMOVE = "DELETE FROM gift_certificate_has_tag WHERE " +
             "gift_certificate_id_fk = ?";
+    private static final String GIFT_CERTIFICATE_FIND_BY_PARAMETERS = "SELECT gift_certificate.id, gift_certificate.name, " +
+            "gift_certificate.description, gift_certificate.price, gift_certificate.duration, gift_certificate.create_date, " +
+            "gift_certificate.last_update_date FROM gift_certificate " +
+            "LEFT JOIN gift_certificate_has_tag ON gift_certificate.id = gift_certificate_has_tag.gift_certificate_id_fk " +
+            "LEFT JOIN tag ON gift_certificate_has_tag.tag_id_fk = tag.id ";
 
     @Autowired
     public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, GiftCertificateMapper giftCertificateMapper) {
@@ -56,7 +63,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             return ps;
         }, keyHolder);
 
-        long id = (long) keyHolder.getKey();
+        long id = keyHolder.getKey().longValue();
         giftCertificate.setId(id);
 
         return giftCertificate;
@@ -92,11 +99,17 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     public void addGiftCertificateHasTag(GiftCertificate giftCertificate) {
         long giftCertificateId = giftCertificate.getId();
         List<Tag> tags = giftCertificate.getTags();
-        tags.forEach(tag -> jdbcTemplate.update(GIFT_CERTIFICATE_HAS_TAG_INSERT, giftCertificateId, tag));
+        tags.forEach(tag -> jdbcTemplate.update(GIFT_CERTIFICATE_HAS_TAG_INSERT, giftCertificateId, tag.getId()));
     }
 
     @Override
     public void removeGiftCertificateHasTag(long id) {
         jdbcTemplate.update(GIFT_CERTIFICATE_HAS_TAG_REMOVE, id);
+    }
+
+    @Override
+    public List<GiftCertificate> findByQueryParameters(GiftCertificateQueryParameters giftCertificateQueryParameters) {
+        String queryParameters = GiftCertificatesQueryCreator.createQuery(giftCertificateQueryParameters);
+        return jdbcTemplate.query(GIFT_CERTIFICATE_FIND_BY_PARAMETERS + queryParameters, giftCertificateMapper);
     }
 }

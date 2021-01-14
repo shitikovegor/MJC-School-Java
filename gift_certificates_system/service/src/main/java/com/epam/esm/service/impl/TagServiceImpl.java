@@ -3,6 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.ExceptionKey;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.validator.TagValidator;
@@ -28,7 +29,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDto add(TagDto tagDto) {
-        TagValidator.validate(tagDto);
+        TagValidator.validateName(tagDto.getName());
         Tag tag = modelMapper.map(tagDto, Tag.class);
         Optional<Tag> existingTag = tagDao.findByName(tag.getName());
         Tag addedTag = existingTag.orElseGet(() -> tagDao.add(tag));
@@ -48,7 +49,7 @@ public class TagServiceImpl implements TagService {
         TagValidator.validateId(id);
         Optional<Tag> foundTag = tagDao.findById(id);
         return foundTag.map(tag -> modelMapper.map(tag, TagDto.class))
-                .orElseThrow(() -> new ResourceNotFoundException("Tag with id " + id + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND.getKey(), String.valueOf(id)));
     }
 
     @Transactional
@@ -57,5 +58,12 @@ public class TagServiceImpl implements TagService {
         TagValidator.validateId(id);
         tagDao.removeGiftCertificateHasTag(id);
         tagDao.remove(id);
+    }
+
+    @Override
+    public List<TagDto> findByCertificateId(long id) {
+        return tagDao.findByCertificateId(id).stream()
+                .map(tag -> modelMapper.map(tag, TagDto.class))
+                .collect(Collectors.toList());
     }
 }

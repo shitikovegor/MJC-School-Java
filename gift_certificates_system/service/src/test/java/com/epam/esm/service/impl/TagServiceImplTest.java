@@ -55,7 +55,7 @@ class TagServiceImplTest {
 
     @Test
     void addIncorrectDataShouldThrowException() {
-        TagDto tagDto = new TagDto(-24, "Food");
+        TagDto tagDto = new TagDto(24, "Food!@!");
         when(tagDao.findByName(any())).thenReturn(Optional.empty());
         when(tagDao.add(any())).thenReturn(null);
         assertThrows(IncorrectParameterException.class, () -> tagService.add(tagDto));

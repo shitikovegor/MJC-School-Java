@@ -13,37 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TagValidatorTest {
 
-    private static Stream<TagDto> createCorrectData() {
-        return Stream.of(
-                new TagDto(1, "rest"),
-                new TagDto(223, "2 and 1"),
-                new TagDto(3093112, "экстримальный отдых"),
-                new TagDto(7, "sea-cruise")
-        );
-    }
-
-    private static Stream<TagDto> createIncorrectData() {
-        return Stream.of(
-                new TagDto(1, "rest & de@"),
-                new TagDto(223, ""),
-                new TagDto(-3093112, "экстримальный отдых"),
-                new TagDto(0, "sea-cruise"),
-                new TagDto(10, "sea, cruise")
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("createCorrectData")
-    void validateCorrectDataShouldNotThrowException(TagDto tagDto) {
-        assertDoesNotThrow(() -> TagValidator.validate(tagDto));
-    }
-
-    @ParameterizedTest
-    @MethodSource("createIncorrectData")
-    void validateIncorrectDataShouldThrowException(TagDto tagDto) {
-        assertThrows(IncorrectParameterException.class, () -> TagValidator.validate(tagDto));
-    }
-
     @ParameterizedTest
     @ValueSource(longs = {1, 40, 454, 343223223})
     void validateCorrectIdShouldNotThrowException(long id) {

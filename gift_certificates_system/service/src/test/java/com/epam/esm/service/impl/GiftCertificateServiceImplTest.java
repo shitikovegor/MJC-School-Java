@@ -2,7 +2,9 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dto.GiftCertificateDto;
+import com.epam.esm.dto.GiftCertificateQueryParametersDto;
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.entity.GiftCertificateQueryParameters;
 import com.epam.esm.exception.IncorrectParameterException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.GiftCertificateService;
@@ -78,7 +80,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    void findAllCorrectDataShouldReturnTagDtoList() {
+    void findCertificatesCorrectDataShouldReturnTagDtoList() {
         GiftCertificate giftCertificate1 = new GiftCertificate(3, "dinner in cafe",
                 "New Year dinner", new BigDecimal(50.99), 10,
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
@@ -99,8 +101,14 @@ class GiftCertificateServiceImplTest {
                 LocalDateTime.of(2021, 1, 12, 12, 59, 59), new ArrayList<>());
         List<GiftCertificateDto> giftCertificatesDto = List.of(giftCertificateDto1, giftCertificateDto2);
 
-        when(giftCertificateDao.findAll()).thenReturn(giftCertificates);
-        assertEquals(giftCertificatesDto, giftCertificateService.findAll());
+        when(giftCertificateDao.findByQueryParameters(any(GiftCertificateQueryParameters.class)))
+                .thenReturn(giftCertificates);
+        when(tagService.findByCertificateId(anyLong())).thenReturn(new ArrayList<>());
+        GiftCertificateQueryParametersDto parametersDto =
+                new GiftCertificateQueryParametersDto("", "in", "i",
+                        GiftCertificateQueryParametersDto.TypeSort.NAME,
+                        GiftCertificateQueryParametersDto.OrderSort.ASC);
+        assertEquals(giftCertificatesDto, giftCertificateService.findCertificates(parametersDto));
     }
 
     @Test
@@ -110,6 +118,7 @@ class GiftCertificateServiceImplTest {
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
                 LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>());
         when(giftCertificateDao.findById(3)).thenReturn(Optional.of(giftCertificate));
+        when(tagService.findByCertificateId(anyLong())).thenReturn(new ArrayList<>());
         GiftCertificateDto expected = new GiftCertificateDto(3, "dinner in cafe",
                 "New Year dinner", new BigDecimal(50.99), 10,
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
@@ -121,6 +130,7 @@ class GiftCertificateServiceImplTest {
     @Test
     void findByIdCorrectDataShouldThrowException() {
         when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.empty());
+        when(tagService.findByCertificateId(anyLong())).thenReturn(new ArrayList<>());
         long id = 2L;
         assertThrows(ResourceNotFoundException.class, () -> giftCertificateService.findById(id));
     }
@@ -132,6 +142,7 @@ class GiftCertificateServiceImplTest {
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
                 LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>());
         when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.of(giftCertificate));
+        when(tagService.findByCertificateId(anyLong())).thenReturn(new ArrayList<>());
         long id = -2L;
         assertThrows(IncorrectParameterException.class, () -> giftCertificateService.findById(id));
     }

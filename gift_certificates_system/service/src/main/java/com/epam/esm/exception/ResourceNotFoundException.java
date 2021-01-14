@@ -1,19 +1,19 @@
 package com.epam.esm.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
-    public ResourceNotFoundException() {
-        super();
+    private String messageParameter;
+    private String messageKey;
+
+    public ResourceNotFoundException(String messageKey, String messageParameter) {
+        this.messageKey = messageKey;
+        this.messageParameter = messageParameter;
     }
 
-    public ResourceNotFoundException(String message) {
-        super(message);
+    public String getMessageParameter() {
+        return messageParameter;
     }
 
-    public ResourceNotFoundException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public ResourceNotFoundException(Throwable cause) {
-        super(cause);
+    public String getMessageKey() {
+        return messageKey;
     }
 }

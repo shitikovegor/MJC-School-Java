@@ -16,16 +16,17 @@ import java.util.Optional;
 
 @Repository
 public class TagDaoImpl implements TagDao {
-    private final JdbcTemplate jdbcTemplate;
-    private final TagMapper tagMapper;
-
-    private final static String TAG_INSERT = "INSERT INTO tag (name) VALUES (?)";
-    private final static String TAG_FIND_ALL = "SELECT id, name FROM tag";
-    private final static String TAG_FIND_BY_ID = "SELECT id, name FROM tag WHERE id = ?";
-    private final static String TAG_REMOVE = "DELETE FROM tag WHERE id = ?";
-    private final static String TAG_FIND_BY_NAME = "SELECT id, name FROM tag WHERE name = ?";
+    private static final String TAG_INSERT = "INSERT INTO tag (name) VALUES (?)";
+    private static final String TAG_FIND_ALL = "SELECT id, name FROM tag";
+    private static final String TAG_FIND_BY_ID = "SELECT id, name FROM tag WHERE id = ?";
+    private static final String TAG_REMOVE = "DELETE FROM tag WHERE id = ?";
+    private static final String TAG_FIND_BY_NAME = "SELECT id, name FROM tag WHERE name = ?";
     private static final String GIFT_CERTIFICATE_HAS_TAG_REMOVE = "DELETE FROM gift_certificate_has_tag WHERE " +
             "tag_id_fk = ?";
+    private static final String TAG_FIND_BY_CERTIFICATE_ID = "SELECT id, name FROM gift_certificate_has_tag LEFT JOIN" +
+            " tag ON tag_id_fk = id WHERE gift_certificate_id_fk = ?";
+    private final JdbcTemplate jdbcTemplate;
+    private final TagMapper tagMapper;
 
     @Autowired
     public TagDaoImpl(JdbcTemplate jdbcTemplate, TagMapper tagMapper) {
@@ -44,7 +45,7 @@ public class TagDaoImpl implements TagDao {
             return ps;
         }, keyHolder);
 
-        long id = (long) keyHolder.getKey();
+        long id = keyHolder.getKey().longValue();
         tag.setId(id);
 
         return tag;
@@ -79,5 +80,10 @@ public class TagDaoImpl implements TagDao {
     @Override
     public void removeGiftCertificateHasTag(long id) {
         jdbcTemplate.update(GIFT_CERTIFICATE_HAS_TAG_REMOVE, id);
+    }
+
+    @Override
+    public List<Tag> findByCertificateId(long id) {
+        return jdbcTemplate.query(TAG_FIND_BY_CERTIFICATE_ID, tagMapper, id);
     }
 }
