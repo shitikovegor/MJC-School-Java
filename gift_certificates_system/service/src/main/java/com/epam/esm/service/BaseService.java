@@ -1,7 +1,7 @@
 package com.epam.esm.service;
 
 public interface BaseService<T> {
-    T add(T t);
+    long add(T t);
 
     T findById(long id);
 

@@ -2,8 +2,10 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.dto.TagDto;
+import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.ExceptionKey;
+import com.epam.esm.exception.IncorrectParameterException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.validator.TagValidator;
@@ -28,13 +30,17 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public TagDto add(TagDto tagDto) {
+    public long add(TagDto tagDto) {
         TagValidator.validateName(tagDto.getName());
         Tag tag = modelMapper.map(tagDto, Tag.class);
         Optional<Tag> existingTag = tagDao.findByName(tag.getName());
-        Tag addedTag = existingTag.orElseGet(() -> tagDao.add(tag));
 
-        return modelMapper.map(addedTag, TagDto.class);
+        if (existingTag.isEmpty()) {
+            Tag addedTag = tagDao.add(tag);
+            return addedTag.getId();
+        } else {
+            throw new IncorrectParameterException(ExceptionKey.TAG_EXISTS.getKey(), tag.getName());
+        }
     }
 
     @Override
@@ -56,6 +62,9 @@ public class TagServiceImpl implements TagService {
     @Override
     public void remove(long id) {
         TagValidator.validateId(id);
+        if (tagDao.findById(id).isEmpty()) {
+            throw new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND.getKey(), String.valueOf(id));
+        }
         tagDao.removeGiftCertificateHasTag(id);
         tagDao.remove(id);
     }
@@ -65,5 +74,12 @@ public class TagServiceImpl implements TagService {
         return tagDao.findByCertificateId(id).stream()
                 .map(tag -> modelMapper.map(tag, TagDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<TagDto> findByName(String name) {
+        TagValidator.validateName(name);
+        Optional<Tag> foundTag = tagDao.findByName(name);
+        return foundTag.map(tag -> modelMapper.map(tag, TagDto.class));
     }
 }

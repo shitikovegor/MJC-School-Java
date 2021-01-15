@@ -37,14 +37,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Transactional
     @Override
-    public GiftCertificateDto add(GiftCertificateDto giftCertificateDto) {
+    public long add(GiftCertificateDto giftCertificateDto) {
         checkTags(giftCertificateDto);
+        giftCertificateDto.setCreateDate(LocalDateTime.now());
+        giftCertificateDto.setLastUpdateDate(LocalDateTime.now());
         GiftCertificateValidator.validate(giftCertificateDto);
         GiftCertificate giftCertificate = modelMapper.map(giftCertificateDto, GiftCertificate.class);
         GiftCertificate addedGiftCertificate = giftCertificateDao.add(giftCertificate);
         giftCertificateDao.addGiftCertificateHasTag(addedGiftCertificate);
 
-        return modelMapper.map(addedGiftCertificate, GiftCertificateDto.class);
+        return addedGiftCertificate.getId();
     }
 
     @Override
@@ -53,14 +55,17 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         Optional<GiftCertificate> foundGiftCertificate = giftCertificateDao.findById(id);
 
         return foundGiftCertificate.map(this::mapAndSetTags)
-        .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.GIFT_CERTIFICATE_NOT_FOUND.getKey(),
-                String.valueOf(id)));
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.GIFT_CERTIFICATE_NOT_FOUND.getKey(),
+                        String.valueOf(id)));
     }
 
     @Transactional
     @Override
     public void remove(long id) {
         GiftCertificateValidator.validateId(id);
+        if (giftCertificateDao.findById(id).isEmpty()) {
+            throw new ResourceNotFoundException(ExceptionKey.GIFT_CERTIFICATE_NOT_FOUND.getKey(), String.valueOf(id));
+        }
         giftCertificateDao.removeGiftCertificateHasTag(id);
         giftCertificateDao.remove(id);
     }
@@ -96,7 +101,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
         if (giftCertificateDto.getTags() != null) {
             tags = giftCertificateDto.getTags().stream()
-                    .map(tagDto -> tagService.add(tagDto))
+                    .map(tagDto -> tagService.findByName(tagDto.getName())
+                            .orElseGet(() -> new TagDto(tagService.add(tagDto), tagDto.getName())))
                     .collect(Collectors.toList());
         }
         giftCertificateDto.setTags(tags);
