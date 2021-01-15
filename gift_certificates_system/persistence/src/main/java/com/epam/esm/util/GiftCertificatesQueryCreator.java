@@ -4,6 +4,13 @@ import com.epam.esm.entity.GiftCertificateQueryParameters;
 
 import java.text.MessageFormat;
 
+/**
+ * Class {@code GiftCertificatesQueryCreator} represents
+ * Gift-certificates query creator which uses parameters for search.
+ *
+ * @author Egor Shitikov
+ * @version 1.0
+ */
 public class GiftCertificatesQueryCreator {
     private static final String TAG_NAME_CONDITION = "tag.name LIKE ''{0}'' ";
     private static final String GIFT_CERTIFICATE_NAME_CONDITION = "gift_certificate.name LIKE ''%{0}%'' ";
@@ -13,6 +20,12 @@ public class GiftCertificatesQueryCreator {
     private static final String SQL_GROUP_BY = "GROUP BY gift_certificate.id ";
     private static final String SQL_ORDER_BY = "ORDER BY ";
 
+    /**
+     * Create query string.
+     *
+     * @param parameters the parameters
+     * @return the string
+     */
     public static String createQuery(GiftCertificateQueryParameters parameters) {
         StringBuilder stringBuilder = new StringBuilder();
         if (parameters.getTagName() != null) {

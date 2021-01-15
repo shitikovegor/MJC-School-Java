@@ -10,6 +10,12 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 
+/**
+ * Class {@code PersistenceConfiguration} contains spring configuration for persistence.
+ *
+ * @author Egor Shitikov
+ * @version 1.0
+ */
 @Configuration
 @PropertySource("classpath:property/database.properties")
 @ComponentScan("com.epam.esm")
@@ -24,6 +30,11 @@ public class PersistenceConfiguration {
     @Value("${database.password}")
     private String password;
 
+    /**
+     * Bean {@code DataSource} will be use as data source
+     *
+     * @return the data source
+     */
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -36,6 +47,11 @@ public class PersistenceConfiguration {
         return dataSource;
     }
 
+    /**
+     * Bean {@code JdbcTemplate} will be use for queries
+     *
+     * @return the jdbc template
+     */
     @Bean
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());

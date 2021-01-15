@@ -10,6 +10,12 @@ import java.sql.SQLException;
 import static com.epam.esm.dao.ColumnName.ID;
 import static com.epam.esm.dao.ColumnName.NAME;
 
+/**
+ * Component {@code TagMapper}  Tag mapper.
+ *
+ * @author Egor Shitikov
+ * @version 1.0
+ */
 @Component
 public class TagMapper implements RowMapper<Tag> {
     @Override

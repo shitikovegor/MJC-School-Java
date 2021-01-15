@@ -10,6 +10,12 @@ import java.time.LocalDateTime;
 
 import static com.epam.esm.dao.ColumnName.*;
 
+/**
+ * Component {@code GiftCertificateMapper} Gift certificate mapper.
+ *
+ * @author Egor Shitikov
+ * @version 1.0
+ */
 @Component
 public class GiftCertificateMapper implements RowMapper<GiftCertificate> {
     @Override
