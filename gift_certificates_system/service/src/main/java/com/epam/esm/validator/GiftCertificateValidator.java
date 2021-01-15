@@ -33,13 +33,13 @@ public class GiftCertificateValidator {
     }
 
     public static void validateName(String name) {
-        if (name == null || !name.matches(NAME_PATTERN)) {
+        if (name == null || !name.trim().matches(NAME_PATTERN)) {
             throw new IncorrectParameterException(GIFT_CERTIFICATE_NAME_INCORRECT.getKey(), name);
         }
     }
 
     public static void validateDescription(String description) {
-        if (description == null || !description.matches(DESCRIPTION_PATTERN)) {
+        if (description == null || !description.trim().matches(DESCRIPTION_PATTERN)) {
             throw new IncorrectParameterException(GIFT_CERTIFICATE_DESCRIPTION_INCORRECT.getKey(), description);
         }
     }

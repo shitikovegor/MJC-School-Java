@@ -11,6 +11,7 @@ import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.TagService;
 import com.epam.esm.validator.GiftCertificateValidator;
+import com.epam.esm.validator.TagValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,6 +89,22 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
     @Override
     public List<GiftCertificateDto> findCertificates(GiftCertificateQueryParametersDto giftCertificateQueryParametersDto) {
+        String tagName = giftCertificateQueryParametersDto.getTagName();
+        if (tagName != null) {
+            TagValidator.validateName(tagName);
+        }
+        String giftCertificateName = giftCertificateQueryParametersDto.getName();
+        if (giftCertificateName != null) {
+            GiftCertificateValidator.validateName(giftCertificateName);
+        }
+        String description = giftCertificateQueryParametersDto.getDescription();
+        if (description != null) {
+            GiftCertificateValidator.validateDescription(description);
+        }
+        if (giftCertificateQueryParametersDto.getTypeSort() == null) {
+            giftCertificateQueryParametersDto.setOrderSort(null);
+        }
+
         GiftCertificateQueryParameters parameters = modelMapper.map(giftCertificateQueryParametersDto,
                 GiftCertificateQueryParameters.class);
         List<GiftCertificate> giftCertificates = giftCertificateDao.findByQueryParameters(parameters);
@@ -101,6 +118,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
         if (giftCertificateDto.getTags() != null) {
             tags = giftCertificateDto.getTags().stream()
+                    .distinct()
                     .map(tagDto -> tagService.findByName(tagDto.getName())
                             .orElseGet(() -> new TagDto(tagService.add(tagDto), tagDto.getName())))
                     .collect(Collectors.toList());

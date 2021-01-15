@@ -16,7 +16,7 @@ public class TagValidator {
     }
 
     public static void validateName(String name) {
-        if (name == null || !name.matches(NAME_PATTERN)) {
+        if (name == null || !name.trim().matches(NAME_PATTERN)) {
             throw new IncorrectParameterException(TAG_NAME_INCORRECT.getKey(), name);
         }
     }

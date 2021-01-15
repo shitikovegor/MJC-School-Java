@@ -3,12 +3,12 @@ package com.epam.esm.exception;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.text.MessageFormat;
 import java.util.Locale;
 
 import static com.epam.esm.exception.ErrorCode.*;
@@ -60,7 +60,16 @@ public class ErrorHandler {
         return new ErrorInfo(errorMessage, INTERNAL_ERROR.getCode());
     }
 
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorInfo handleMessageNotReadableException(HttpMessageNotReadableException exception, Locale locale) {
+        String errorMessage = createErrorMessage(
+                messageSource.getMessage(ExceptionKey.INCORRECT_PARAMETER.getKey(), new Object[]{}, locale),
+                exception.getMessage());
+        return new ErrorInfo(errorMessage, BAD_REQUEST.getCode());
+    }
+
     private String createErrorMessage(String message, String parameter) {
-        return MessageFormat.format(message, parameter);
+        return String.format(message, parameter);
     }
 }

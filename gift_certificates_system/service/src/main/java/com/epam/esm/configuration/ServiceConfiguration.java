@@ -13,11 +13,22 @@ import javax.sql.DataSource;
 
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
+/**
+ * Class {@code ServiceConfiguration} contains spring configuration for service.
+ *
+ * @author Egor Shitikov
+ * @version 1.0
+ */
 @Configuration
 @ComponentScan("com.epam.esm")
 @EnableTransactionManagement
 public class ServiceConfiguration {
 
+    /**
+     * Bean {@code ModelMapper} will be use as model mapper
+     *
+     * @return the model mapper
+     */
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper mapper = new ModelMapper();
@@ -29,6 +40,12 @@ public class ServiceConfiguration {
         return mapper;
     }
 
+    /**
+     * Bean {@code PlatformTransactionManager} will be use for transactions
+     *
+     * @param dataSource the data source
+     * @return the platform transaction manager
+     */
     @Bean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);

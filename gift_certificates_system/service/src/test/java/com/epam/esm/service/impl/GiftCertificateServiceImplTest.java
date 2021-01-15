@@ -53,7 +53,7 @@ class GiftCertificateServiceImplTest {
     }
 
     @Test
-    void addCorrectDataShouldReturnGiftCertificateDto() {
+    void addCorrectDataShouldReturnGiftCertificateDtoId() {
         GiftCertificateDto giftCertificateDto = new GiftCertificateDto(
                 3, "dinner", "New Year",
                 new BigDecimal(55), 2,
@@ -64,9 +64,10 @@ class GiftCertificateServiceImplTest {
                 new BigDecimal(55), 2,
                 LocalDateTime.of(2020, 12, 25, 23, 59, 0),
                 LocalDateTime.of(2021, 12, 28, 23, 59, 59), new ArrayList<>());
-        when(giftCertificateDao.add(giftCertificate)).thenReturn(giftCertificate);
+        when(tagService.findByName(anyString())).thenReturn(Optional.empty());
+        when(giftCertificateDao.add(any(GiftCertificate.class))).thenReturn(giftCertificate);
         doNothing().when(giftCertificateDao).addGiftCertificateHasTag(any(GiftCertificate.class));
-        assertEquals(giftCertificateDto, giftCertificateService.add(giftCertificateDto));
+        assertEquals(giftCertificateDto.getId(), giftCertificateService.add(giftCertificateDto));
     }
 
     @Test
@@ -105,7 +106,7 @@ class GiftCertificateServiceImplTest {
                 .thenReturn(giftCertificates);
         when(tagService.findByCertificateId(anyLong())).thenReturn(new ArrayList<>());
         GiftCertificateQueryParametersDto parametersDto =
-                new GiftCertificateQueryParametersDto("", "in", "i",
+                new GiftCertificateQueryParametersDto("re", "in", "i",
                         GiftCertificateQueryParametersDto.TypeSort.NAME,
                         GiftCertificateQueryParametersDto.OrderSort.ASC);
         assertEquals(giftCertificatesDto, giftCertificateService.findCertificates(parametersDto));
@@ -149,7 +150,12 @@ class GiftCertificateServiceImplTest {
 
     @Test
     void removeCorrectDataShouldNotThrowException() {
+        GiftCertificate giftCertificate = new GiftCertificate(2, "dinner in cafe",
+                "New Year dinner", new BigDecimal(50.99), 10,
+                LocalDateTime.of(2020, 12, 31, 23, 59, 0),
+                LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>());
         doNothing().when(giftCertificateDao).removeGiftCertificateHasTag(anyLong());
+        when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.of(giftCertificate));
         when(giftCertificateDao.remove(anyLong())).thenReturn(true);
         long id = 2L;
         assertDoesNotThrow(() -> giftCertificateService.remove(id));
@@ -157,7 +163,12 @@ class GiftCertificateServiceImplTest {
 
     @Test
     void removeIncorrectDataShouldThrowException() {
+        GiftCertificate giftCertificate = new GiftCertificate(2, "dinner in cafe",
+                "New Year dinner", new BigDecimal(50.99), 10,
+                LocalDateTime.of(2020, 12, 31, 23, 59, 0),
+                LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>());
         doNothing().when(giftCertificateDao).removeGiftCertificateHasTag(anyLong());
+        when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.of(giftCertificate));
         when(giftCertificateDao.remove(anyLong())).thenReturn(true);
         long id = -2L;
         assertThrows(IncorrectParameterException.class, () -> giftCertificateService.remove(id));

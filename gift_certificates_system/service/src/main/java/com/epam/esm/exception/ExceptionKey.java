@@ -13,7 +13,8 @@ public enum  ExceptionKey {
     GIFT_CERTIFICATE_DURATION_INCORRECT("giftCertificate.incorrectDuration"),
     GIFT_CERTIFICATE_DATES_INCORRECT("giftCertificate.incorrectDates"),
     INTERNAL_ERROR("internalError"),
-    UNSUPPORTED_MEDIA_TYPE("unsupportedMediaType");
+    UNSUPPORTED_MEDIA_TYPE("unsupportedMediaType"),
+    INCORRECT_PARAMETER("incorrectParameter");
 
     private String key;
 
