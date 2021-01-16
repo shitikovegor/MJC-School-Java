@@ -107,8 +107,8 @@ class GiftCertificateServiceImplTest {
         when(tagService.findByCertificateId(anyLong())).thenReturn(new ArrayList<>());
         GiftCertificateQueryParametersDto parametersDto =
                 new GiftCertificateQueryParametersDto("re", "in", "i",
-                        GiftCertificateQueryParametersDto.TypeSort.NAME,
-                        GiftCertificateQueryParametersDto.OrderSort.ASC);
+                        GiftCertificateQueryParametersDto.SortType.NAME,
+                        GiftCertificateQueryParametersDto.SortOrder.ASC);
         assertEquals(giftCertificatesDto, giftCertificateService.findCertificates(parametersDto));
     }
 

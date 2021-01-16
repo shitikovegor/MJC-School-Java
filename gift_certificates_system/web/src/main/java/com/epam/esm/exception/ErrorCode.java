@@ -1,5 +1,11 @@
 package com.epam.esm.exception;
 
+/**
+ * Enum {@code ErrorCode} represents custom codes of application errors.
+ *
+ * @author Egor Shitikov
+ * @version 1.0
+ */
 public enum ErrorCode {
     INCORRECT_PARAMETER(4004),
     NOT_FOUND(4044),
@@ -13,6 +19,11 @@ public enum ErrorCode {
         this.code = code;
     }
 
+    /**
+     * Gets error code.
+     *
+     * @return the error code
+     */
     public int getCode() {
         return code;
     }

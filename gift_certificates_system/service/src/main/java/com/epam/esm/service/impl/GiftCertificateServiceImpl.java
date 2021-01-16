@@ -101,8 +101,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (description != null) {
             GiftCertificateValidator.validateDescription(description);
         }
-        if (giftCertificateQueryParametersDto.getTypeSort() == null) {
-            giftCertificateQueryParametersDto.setOrderSort(null);
+        if (giftCertificateQueryParametersDto.getSortType() == null) {
+            giftCertificateQueryParametersDto.setSortOrder(null);
         }
 
         GiftCertificateQueryParameters parameters = modelMapper.map(giftCertificateQueryParametersDto,

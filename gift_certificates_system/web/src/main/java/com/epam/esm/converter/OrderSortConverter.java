@@ -2,16 +2,22 @@ package com.epam.esm.converter;
 
 import org.springframework.core.convert.converter.Converter;
 
-import static com.epam.esm.dto.GiftCertificateQueryParametersDto.OrderSort;
+import static com.epam.esm.dto.GiftCertificateQueryParametersDto.SortOrder;
 
-public class OrderSortConverter implements Converter<String, OrderSort> {
+/**
+ * Class {@code OrderSortConverter} uses to convert request parameter to {@link SortOrder}.
+ *
+ * @author Egor Shitikov
+ * @version 1.0
+ */
+public class OrderSortConverter implements Converter<String, SortOrder> {
 
     @Override
-    public OrderSort convert(String source) {
+    public SortOrder convert(String source) {
         try {
-            return OrderSort.valueOf(source.toUpperCase());
+            return SortOrder.valueOf(source.toUpperCase());
         } catch (IllegalArgumentException e) {
-            return OrderSort.ASC;
+            return SortOrder.ASC;
         }
     }
 }

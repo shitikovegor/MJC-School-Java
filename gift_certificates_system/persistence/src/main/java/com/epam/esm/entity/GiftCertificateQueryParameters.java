@@ -10,24 +10,24 @@ package com.epam.esm.entity;
 public class GiftCertificateQueryParameters {
 
     /**
-     * The enum Type sort.
+     * Enum {@code SortType} represents values of sort by type.
      *
      * @author Egor Shitikov
      * @version 1.0
      */
-    public enum TypeSort {
+    public enum SortType {
         /**
-         * Name type sort.
+         * Name sort type.
          */
         NAME("gift_certificate.name"),
         /**
-         * Create date type sort.
+         * Create date sort type.
          */
         CREATE_DATE("gift_certificate.create_date");
 
         private String queryValue;
 
-        TypeSort(String queryValue) {
+        SortType(String queryValue) {
             this.queryValue = queryValue;
         }
 
@@ -42,24 +42,24 @@ public class GiftCertificateQueryParameters {
     }
 
     /**
-     * The enum Order sort.
+     * Enum {@code SortOrder} represents values of sorting order.
      *
      * @author Egor Shitikov
      * @version 1.0
      */
-    public enum OrderSort {
+    public enum SortOrder {
         /**
-         * Asc order sort.
+         * Asc sort order.
          */
         ASC(" ASC"),
         /**
-         * Desc order sort.
+         * Desc sort order.
          */
         DESC(" DESC");
 
         private String queryValue;
 
-        OrderSort(String queryValue) {
+        SortOrder(String queryValue) {
             this.queryValue = queryValue;
         }
 
@@ -76,8 +76,8 @@ public class GiftCertificateQueryParameters {
     private String tagName;
     private String name;
     private String description;
-    private TypeSort typeSort;
-    private OrderSort orderSort;
+    private SortType sortType;
+    private SortOrder sortOrder;
 
     /**
      * Instantiates a new Gift certificate query parameters.
@@ -91,15 +91,15 @@ public class GiftCertificateQueryParameters {
      * @param tagName     the tag name
      * @param name        the name
      * @param description the description
-     * @param typeSort    the type sort
-     * @param orderSort   the order sort
+     * @param sortType    the sort type
+     * @param sortOrder   the sort order
      */
-    public GiftCertificateQueryParameters(String tagName, String name, String description, TypeSort typeSort, OrderSort orderSort) {
+    public GiftCertificateQueryParameters(String tagName, String name, String description, SortType sortType, SortOrder sortOrder) {
         this.tagName = tagName;
         this.name = name;
         this.description = description;
-        this.typeSort = typeSort;
-        this.orderSort = orderSort;
+        this.sortType = sortType;
+        this.sortOrder = sortOrder;
     }
 
     /**
@@ -157,38 +157,38 @@ public class GiftCertificateQueryParameters {
     }
 
     /**
-     * Gets type sort.
+     * Gets sort type.
      *
-     * @return the type sort
+     * @return the sort type
      */
-    public TypeSort getTypeSort() {
-        return typeSort;
+    public SortType getSortType() {
+        return sortType;
     }
 
     /**
-     * Sets type sort.
+     * Sets sort type.
      *
-     * @param typeSort the type sort
+     * @param sortType the sort type
      */
-    public void setTypeSort(TypeSort typeSort) {
-        this.typeSort = typeSort;
+    public void setSortType(SortType sortType) {
+        this.sortType = sortType;
     }
 
     /**
-     * Gets order sort.
+     * Gets sort order.
      *
-     * @return the order sort
+     * @return the sort order
      */
-    public OrderSort getOrderSort() {
-        return orderSort;
+    public SortOrder getSortOrder() {
+        return sortOrder;
     }
 
     /**
-     * Sets order sort.
+     * Sets sort order.
      *
-     * @param orderSort the order sort
+     * @param sortOrder the sort order
      */
-    public void setOrderSort(OrderSort orderSort) {
-        this.orderSort = orderSort;
+    public void setSortOrder(SortOrder sortOrder) {
+        this.sortOrder = sortOrder;
     }
 }

@@ -1,5 +1,11 @@
 package com.epam.esm.dao;
 
+/**
+ * Enum {@code ColumnName} represents names of database tables columns.
+ *
+ * @author Egor Shitikov
+ * @version 1.0
+ */
 public enum ColumnName {
     ID("id"),
     NAME("name"),
@@ -15,6 +21,11 @@ public enum ColumnName {
         this.value = value;
     }
 
+    /**
+     * Gets column name value.
+     *
+     * @return the value
+     */
     public java.lang.String getValue() {
         return value;
     }

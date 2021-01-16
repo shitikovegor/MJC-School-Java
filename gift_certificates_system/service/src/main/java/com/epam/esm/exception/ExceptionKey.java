@@ -1,5 +1,12 @@
 package com.epam.esm.exception;
 
+/**
+ * Enum {@code ExceptionKey} represents key of exception
+ * to generate an error message via message source .
+ *
+ * @author Egor Shitikov
+ * @version 1.0
+ */
 public enum  ExceptionKey {
     TAG_NOT_FOUND("tag.notFound"),
     TAG_ID_INCORRECT("tag.incorrectId"),
@@ -22,6 +29,11 @@ public enum  ExceptionKey {
         this.key = key;
     }
 
+    /**
+     * Gets key of exception.
+     *
+     * @return the key
+     */
     public String getKey() {
         return key;
     }

@@ -41,12 +41,12 @@ public class GiftCertificatesQueryCreator {
             stringBuilder.append(MessageFormat.format(GIFT_CERTIFICATE_DESCRIPTION_CONDITION, parameters.getDescription()));
         }
         stringBuilder.append(SQL_GROUP_BY);
-        if (parameters.getOrderSort() != null) {
+        if (parameters.getSortOrder() != null) {
             stringBuilder.append(SQL_ORDER_BY)
-                    .append(parameters.getTypeSort().getQueryValue());
+                    .append(parameters.getSortType().getQueryValue());
         }
-        if (parameters.getTypeSort() != null) {
-            stringBuilder.append(parameters.getOrderSort().getQueryValue());
+        if (parameters.getSortType() != null) {
+            stringBuilder.append(parameters.getSortOrder().getQueryValue());
         }
         return stringBuilder.toString();
 
