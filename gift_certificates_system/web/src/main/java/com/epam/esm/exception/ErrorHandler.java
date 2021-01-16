@@ -8,6 +8,7 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.Locale;
 
@@ -113,6 +114,22 @@ public class ErrorHandler {
                 messageSource.getMessage(ExceptionKey.INCORRECT_PARAMETER.getKey(), new Object[]{}, locale),
                 exception.getMessage());
         return new ErrorInfo(errorMessage, BAD_REQUEST.getCode());
+    }
+
+    /**
+     * Handle {@link NoHandlerFoundException}.
+     *
+     * @param exception the exception
+     * @param locale    the locale
+     * @return the error information
+     */
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorInfo handleNoHandlerFoundException(NoHandlerFoundException exception, Locale locale) {
+        String errorMessage = createErrorMessage(
+                messageSource.getMessage(ExceptionKey.HANDLER_NOT_FOUND.getKey(), new Object[]{}, locale),
+                exception.getMessage());
+        return new ErrorInfo(errorMessage, NOT_FOUND.getCode());
     }
 
     private String createErrorMessage(String message, String parameter) {

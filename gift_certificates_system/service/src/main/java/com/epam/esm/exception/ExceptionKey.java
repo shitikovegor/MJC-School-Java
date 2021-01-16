@@ -21,7 +21,8 @@ public enum  ExceptionKey {
     GIFT_CERTIFICATE_DATES_INCORRECT("giftCertificate.incorrectDates"),
     INTERNAL_ERROR("internalError"),
     UNSUPPORTED_MEDIA_TYPE("unsupportedMediaType"),
-    INCORRECT_PARAMETER("incorrectParameter");
+    INCORRECT_PARAMETER("incorrectParameter"),
+    HANDLER_NOT_FOUND("handlerNotFound");
 
     private String key;
 
