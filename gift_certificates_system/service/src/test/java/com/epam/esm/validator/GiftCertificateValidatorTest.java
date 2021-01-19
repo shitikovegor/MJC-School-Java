@@ -45,10 +45,6 @@ class GiftCertificateValidatorTest {
     }
 
     private static Stream<GiftCertificateDto> createIncorrectData() {
-        GiftCertificateDto incorrectId = new GiftCertificateDto(-3, "dinner in cafe",
-                "New Year dinner", new BigDecimal(50.99), 10,
-                LocalDateTime.of(2020, 12, 31, 23, 59, 0),
-                LocalDateTime.of(2021, 12, 31, 23, 59, 59), null);
         GiftCertificateDto incorrectName = new GiftCertificateDto(56, "rest in hotel!",
                 "rest. In good place", new BigDecimal(150), 25,
                 LocalDateTime.of(2020, 12, 25, 10, 0, 0),
@@ -82,7 +78,6 @@ class GiftCertificateValidatorTest {
                 null, LocalDateTime.of(2021, 1, 5, 15, 0, 0), null);
 
         return Stream.of(
-                incorrectId,
                 incorrectName,
                 incorrectDescription,
                 incorrectPriceMin,

@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Interface {@code GiftCertificateDao} represents an extended abstract behavior
- * for working with the Tag entity.
+ * for working with the GiftCertificate entity.
  *
  * @author Egor Shitikov
  * @version 1.0

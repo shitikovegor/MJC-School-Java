@@ -1,7 +1,7 @@
 group 'com.epam.esm'
 version '1.0-SNAPSHOT'
 
-allprojects {
+subprojects {
     apply plugin: "java"
 
     compileJava.options.encoding = "UTF-8"

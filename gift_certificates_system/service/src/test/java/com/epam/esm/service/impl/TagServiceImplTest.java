@@ -127,4 +127,32 @@ class TagServiceImplTest {
         long id = 2L;
         assertThrows(ResourceNotFoundException.class, () -> tagService.remove(id));
     }
+
+    @Test
+    void findByCertificateIdCorrectDataShouldReturnListOfTags() {
+        List<Tag> tags = List.of(new Tag(2, "Rest"),
+                new Tag(3, "Sea"));
+        when(tagDao.findByCertificateId(2)).thenReturn(tags);
+        long id = 2L;
+        List<TagDto> expected = List.of(new TagDto(2, "Rest"),
+                new TagDto(3, "Sea"));
+        assertEquals(expected, tagService.findByCertificateId(id));
+    }
+
+    @Test
+    void findByNameCorrectDataShouldReturnTagDto() {
+        Tag tag = new Tag(2, "Rest");
+        when(tagDao.findByName("Rest")).thenReturn(Optional.of(tag));
+        Optional<TagDto> expected = Optional.of(new TagDto(2, "Rest"));
+        String actualName = "Rest";
+        assertEquals(expected, tagService.findByName(actualName));
+    }
+
+    @Test
+    void findByNameIncorrectDataShouldThrowException() {
+        Tag tag = new Tag(2, "Rest");
+        when(tagDao.findByName(anyString())).thenReturn(Optional.of(tag));
+        String incorrectName = "<\\name_incorrect";
+        assertThrows(IncorrectParameterException.class, () -> tagService.findByName(incorrectName));
+    }
 }
