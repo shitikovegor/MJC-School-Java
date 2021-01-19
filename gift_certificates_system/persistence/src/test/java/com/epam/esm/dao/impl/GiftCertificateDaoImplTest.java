@@ -70,7 +70,7 @@ class GiftCertificateDaoImplTest {
         certificate.setLastUpdateDate(LocalDateTime.of(2021, 1, 5, 10, 0, 0));
 
         GiftCertificate actual = giftCertificateDao.add(certificate);
-        assertTrue(actual.getId() != 0);
+        assertNotEquals(0, actual.getId());
     }
 
     @Test

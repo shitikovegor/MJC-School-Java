@@ -1,4 +1,4 @@
-package com.epam.esm.dao;
+package com.epam.esm.dao.mapper;
 
 /**
  * Enum {@code ColumnName} represents names of database tables columns.

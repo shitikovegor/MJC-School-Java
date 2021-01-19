@@ -124,7 +124,7 @@ public class ErrorHandler {
      * @return the error information
      */
     @ExceptionHandler(NoHandlerFoundException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorInfo handleNoHandlerFoundException(NoHandlerFoundException exception, Locale locale) {
         String errorMessage = createErrorMessage(
                 messageSource.getMessage(ExceptionKey.HANDLER_NOT_FOUND.getKey(), new Object[]{}, locale),

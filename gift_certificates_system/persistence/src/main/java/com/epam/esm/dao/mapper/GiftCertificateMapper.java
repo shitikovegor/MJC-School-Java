@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 
-import static com.epam.esm.dao.ColumnName.*;
+import static com.epam.esm.dao.mapper.ColumnName.*;
 
 /**
  * Component {@code GiftCertificateMapper} Gift certificate mapper.

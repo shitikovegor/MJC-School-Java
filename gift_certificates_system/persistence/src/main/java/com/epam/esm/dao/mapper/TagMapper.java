@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.epam.esm.dao.ColumnName.ID;
-import static com.epam.esm.dao.ColumnName.NAME;
+import static com.epam.esm.dao.mapper.ColumnName.ID;
+import static com.epam.esm.dao.mapper.ColumnName.NAME;
 
 /**
  * Component {@code TagMapper}  Tag mapper.

@@ -12,7 +12,7 @@ import java.text.MessageFormat;
  * @version 1.0
  */
 public class GiftCertificatesQueryCreator {
-    private static final String TAG_NAME_CONDITION = "tag.name LIKE ''{0}'' ";
+    private static final String TAG_NAME_CONDITION = "tag.name = ''{0}'' ";
     private static final String GIFT_CERTIFICATE_NAME_CONDITION = "gift_certificate.name LIKE ''%{0}%'' ";
     private static final String GIFT_CERTIFICATE_DESCRIPTION_CONDITION = "gift_certificate.description LIKE ''%{0}%'' ";
     private static final String SQL_WHERE = " WHERE ";
