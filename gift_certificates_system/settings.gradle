@@ -2,6 +2,4 @@ rootProject.name = 'gift_certificates_system'
 include 'persistence'
 include 'service'
 include 'web'
-include 'webN'
-include 'webn'
 
