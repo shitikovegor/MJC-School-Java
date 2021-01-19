@@ -2,7 +2,6 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.dto.TagDto;
-import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.ExceptionKey;
 import com.epam.esm.exception.IncorrectParameterException;
@@ -65,7 +64,7 @@ public class TagServiceImpl implements TagService {
         if (tagDao.findById(id).isEmpty()) {
             throw new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND.getKey(), String.valueOf(id));
         }
-        tagDao.removeGiftCertificateHasTag(id);
+        tagDao.removeFromTableGiftCertificateHasTag(id);
         tagDao.remove(id);
     }
 

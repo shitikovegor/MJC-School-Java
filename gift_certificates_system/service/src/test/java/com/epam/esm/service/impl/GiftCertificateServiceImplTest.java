@@ -66,7 +66,7 @@ class GiftCertificateServiceImplTest {
                 LocalDateTime.of(2021, 12, 28, 23, 59, 59), new ArrayList<>());
         when(tagService.findByName(anyString())).thenReturn(Optional.empty());
         when(giftCertificateDao.add(any(GiftCertificate.class))).thenReturn(giftCertificate);
-        doNothing().when(giftCertificateDao).addGiftCertificateHasTag(any(GiftCertificate.class));
+        doNothing().when(giftCertificateDao).addToTableGiftCertificateHasTag(any(GiftCertificate.class));
         assertEquals(giftCertificateDto.getId(), giftCertificateService.add(giftCertificateDto));
     }
 
@@ -154,7 +154,7 @@ class GiftCertificateServiceImplTest {
                 "New Year dinner", new BigDecimal(50.99), 10,
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
                 LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>());
-        doNothing().when(giftCertificateDao).removeGiftCertificateHasTag(anyLong());
+        doNothing().when(giftCertificateDao).removeFromTableGiftCertificateHasTag(anyLong());
         when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.of(giftCertificate));
         when(giftCertificateDao.remove(anyLong())).thenReturn(true);
         long id = 2L;
@@ -167,7 +167,7 @@ class GiftCertificateServiceImplTest {
                 "New Year dinner", new BigDecimal(50.99), 10,
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
                 LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>());
-        doNothing().when(giftCertificateDao).removeGiftCertificateHasTag(anyLong());
+        doNothing().when(giftCertificateDao).removeFromTableGiftCertificateHasTag(anyLong());
         when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.of(giftCertificate));
         when(giftCertificateDao.remove(anyLong())).thenReturn(true);
         long id = -2L;
@@ -192,8 +192,8 @@ class GiftCertificateServiceImplTest {
         long id = 56L;
         when(giftCertificateDao.findById(id)).thenReturn(Optional.of(foundGiftCertificate));
         when(giftCertificateDao.update(any(GiftCertificate.class))).thenReturn(updatedGiftCertificate);
-        doNothing().when(giftCertificateDao).removeGiftCertificateHasTag(id);
-        doNothing().when(giftCertificateDao).addGiftCertificateHasTag(foundGiftCertificate);
+        doNothing().when(giftCertificateDao).removeFromTableGiftCertificateHasTag(id);
+        doNothing().when(giftCertificateDao).addToTableGiftCertificateHasTag(foundGiftCertificate);
         assertEquals(giftCertificateForUpdate, giftCertificateService.update(giftCertificateForUpdate));
     }
 
@@ -206,8 +206,8 @@ class GiftCertificateServiceImplTest {
 
         when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.empty());
         when(giftCertificateDao.update(any(GiftCertificate.class))).thenReturn(null);
-        doNothing().when(giftCertificateDao).removeGiftCertificateHasTag(anyLong());
-        doNothing().when(giftCertificateDao).addGiftCertificateHasTag(any(GiftCertificate.class));
+        doNothing().when(giftCertificateDao).removeFromTableGiftCertificateHasTag(anyLong());
+        doNothing().when(giftCertificateDao).addToTableGiftCertificateHasTag(any(GiftCertificate.class));
         assertThrows(ResourceNotFoundException.class, () -> giftCertificateService.update(giftCertificateDto));
     }
 
@@ -224,8 +224,8 @@ class GiftCertificateServiceImplTest {
 
         when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.of(giftCertificate));
         when(giftCertificateDao.update(any(GiftCertificate.class))).thenReturn(giftCertificate);
-        doNothing().when(giftCertificateDao).removeGiftCertificateHasTag(anyLong());
-        doNothing().when(giftCertificateDao).addGiftCertificateHasTag(giftCertificate);
+        doNothing().when(giftCertificateDao).removeFromTableGiftCertificateHasTag(anyLong());
+        doNothing().when(giftCertificateDao).addToTableGiftCertificateHasTag(giftCertificate);
         assertThrows(IncorrectParameterException.class, () -> giftCertificateService.update(incorrectGiftCertificate));
     }
 }

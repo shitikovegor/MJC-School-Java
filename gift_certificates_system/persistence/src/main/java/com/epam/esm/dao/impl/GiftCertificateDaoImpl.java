@@ -96,14 +96,14 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public void addGiftCertificateHasTag(GiftCertificate giftCertificate) {
+    public void addToTableGiftCertificateHasTag(GiftCertificate giftCertificate) {
         long giftCertificateId = giftCertificate.getId();
         List<Tag> tags = giftCertificate.getTags();
         tags.forEach(tag -> jdbcTemplate.update(GIFT_CERTIFICATE_HAS_TAG_INSERT, giftCertificateId, tag.getId()));
     }
 
     @Override
-    public void removeGiftCertificateHasTag(long id) {
+    public void removeFromTableGiftCertificateHasTag(long id) {
         jdbcTemplate.update(GIFT_CERTIFICATE_HAS_TAG_REMOVE, id);
     }
 

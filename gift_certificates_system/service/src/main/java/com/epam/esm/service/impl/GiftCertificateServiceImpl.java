@@ -39,13 +39,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Transactional
     @Override
     public long add(GiftCertificateDto giftCertificateDto) {
-        checkTags(giftCertificateDto);
+        findAndSetTags(giftCertificateDto);
         giftCertificateDto.setCreateDate(LocalDateTime.now());
         giftCertificateDto.setLastUpdateDate(LocalDateTime.now());
         GiftCertificateValidator.validate(giftCertificateDto);
         GiftCertificate giftCertificate = modelMapper.map(giftCertificateDto, GiftCertificate.class);
         GiftCertificate addedGiftCertificate = giftCertificateDao.add(giftCertificate);
-        giftCertificateDao.addGiftCertificateHasTag(addedGiftCertificate);
+        giftCertificateDao.addToTableGiftCertificateHasTag(addedGiftCertificate);
 
         return addedGiftCertificate.getId();
     }
@@ -67,7 +67,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (giftCertificateDao.findById(id).isEmpty()) {
             throw new ResourceNotFoundException(ExceptionKey.GIFT_CERTIFICATE_NOT_FOUND.getKey(), String.valueOf(id));
         }
-        giftCertificateDao.removeGiftCertificateHasTag(id);
+        giftCertificateDao.removeFromTableGiftCertificateHasTag(id);
         giftCertificateDao.remove(id);
     }
 
@@ -77,12 +77,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         GiftCertificateDto foundGiftCertificateDto = findById(giftCertificateDto.getId());
         fillUpdatedFields(giftCertificateDto, foundGiftCertificateDto);
         GiftCertificateValidator.validate(foundGiftCertificateDto);
-        checkTags(foundGiftCertificateDto);
+        findAndSetTags(foundGiftCertificateDto);
 
         GiftCertificate foundGiftCertificate = modelMapper.map(foundGiftCertificateDto, GiftCertificate.class);
         GiftCertificate updatedGiftCertificate = giftCertificateDao.update(foundGiftCertificate);
-        giftCertificateDao.removeGiftCertificateHasTag(updatedGiftCertificate.getId());
-        giftCertificateDao.addGiftCertificateHasTag(updatedGiftCertificate);
+        giftCertificateDao.removeFromTableGiftCertificateHasTag(updatedGiftCertificate.getId());
+        giftCertificateDao.addToTableGiftCertificateHasTag(updatedGiftCertificate);
 
         return modelMapper.map(updatedGiftCertificate, GiftCertificateDto.class);
     }
@@ -113,7 +113,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                 .collect(Collectors.toList());
     }
 
-    private void checkTags(GiftCertificateDto giftCertificateDto) {
+    private void findAndSetTags(GiftCertificateDto giftCertificateDto) {
         List<TagDto> tags = new ArrayList<>();
 
         if (giftCertificateDto.getTags() != null) {

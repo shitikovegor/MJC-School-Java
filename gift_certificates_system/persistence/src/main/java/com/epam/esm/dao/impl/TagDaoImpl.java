@@ -62,11 +62,6 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public Tag update(Tag tag) {
-        throw new UnsupportedOperationException("Update method is unsupported");
-    }
-
-    @Override
     public boolean remove(long id) {
         int result = jdbcTemplate.update(TAG_REMOVE, id);
         return result != 0;
@@ -78,7 +73,7 @@ public class TagDaoImpl implements TagDao {
     }
 
     @Override
-    public void removeGiftCertificateHasTag(long id) {
+    public void removeFromTableGiftCertificateHasTag(long id) {
         jdbcTemplate.update(GIFT_CERTIFICATE_HAS_TAG_REMOVE, id);
     }
 

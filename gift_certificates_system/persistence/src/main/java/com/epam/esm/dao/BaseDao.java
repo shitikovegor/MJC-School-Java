@@ -35,14 +35,6 @@ public interface BaseDao<T> {
     Optional<T> findById(long id);
 
     /**
-     * Update entity.
-     *
-     * @param entity to update
-     * @return the updated entity
-     */
-    T update (T entity);
-
-    /**
      * Remove entity by id.
      *
      * @param id the id of entity to delete

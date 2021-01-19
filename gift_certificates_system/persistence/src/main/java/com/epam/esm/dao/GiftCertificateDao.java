@@ -14,18 +14,26 @@ import java.util.List;
  */
 public interface GiftCertificateDao extends BaseDao<GiftCertificate> {
     /**
+     * Update entity.
+     *
+     * @param entity to update
+     * @return the updated entity
+     */
+    GiftCertificate update (GiftCertificate entity);
+
+    /**
      * Add gift certificate id to cross table.
      *
      * @param giftCertificate the gift certificate
      */
-    void addGiftCertificateHasTag(GiftCertificate giftCertificate);
+    void addToTableGiftCertificateHasTag(GiftCertificate giftCertificate);
 
     /**
      * Remove gift certificates from cross table by gift certificate id.
      *
      * @param id the id
      */
-    void removeGiftCertificateHasTag(long id);
+    void removeFromTableGiftCertificateHasTag(long id);
 
     /**
      * Find gift certificates by query parameters.

@@ -20,10 +20,10 @@ public class ApplicationInitializer implements WebApplicationInitializer {
     public void onStartup(ServletContext servletContext) {
         AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();
         context.register(WebConfiguration.class);
-        servletContext.addListener(new ContextLoaderListener(context));
         context.setServletContext(servletContext);
-
-
+        servletContext.addListener(new ContextLoaderListener(context));
+        servletContext.setInitParameter("spring.profiles.active", "prod");
+        
         ServletRegistration.Dynamic dispatcher = servletContext.addServlet(
                 "dispatcherServlet", new DispatcherServlet(context));
         dispatcher.setInitParameter("throwExceptionIfNoHandlerFound", "true");

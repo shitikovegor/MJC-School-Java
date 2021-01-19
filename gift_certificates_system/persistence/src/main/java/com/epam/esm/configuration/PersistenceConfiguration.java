@@ -1,10 +1,11 @@
 package com.epam.esm.configuration;
 
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
@@ -17,7 +18,6 @@ import javax.sql.DataSource;
  * @version 1.0
  */
 @Configuration
-@PropertySource("classpath:property/database.properties")
 @ComponentScan("com.epam.esm")
 public class PersistenceConfiguration {
 
@@ -29,20 +29,44 @@ public class PersistenceConfiguration {
     private String user;
     @Value("${database.password}")
     private String password;
+    @Value("${database.max_pool_size}")
+    private Integer maxPoolSize;
 
     /**
-     * Bean {@code DataSource} will be use as data source
+     * Bean {@code PropertySourcesPlaceholderConfigurer} will set path for properties of database
+     *
+     * @return the property sources placeholder configurer
+     */
+    @Bean
+    @Profile("prod")
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        PropertySourcesPlaceholderConfigurer props = new PropertySourcesPlaceholderConfigurer();
+        props.setLocations(new ClassPathResource("property/database.prod.properties"));
+        return props;
+    }
+
+    @Bean
+    @Profile("dev")
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurerDev() {
+        PropertySourcesPlaceholderConfigurer props = new PropertySourcesPlaceholderConfigurer();
+        props.setLocations(new ClassPathResource("property/database.dev.properties"));
+        return props;
+    }
+
+    /**
+     * Bean {@code HikariDataSource} will be use as data source
      *
      * @return the data source
      */
     @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+    public HikariDataSource dataSource() {
+        HikariDataSource dataSource = new HikariDataSource();
 
         dataSource.setDriverClassName(driverClassName);
-        dataSource.setUrl(url);
+        dataSource.setJdbcUrl(url);
         dataSource.setUsername(user);
         dataSource.setPassword(password);
+        dataSource.setMaximumPoolSize(maxPoolSize);
 
         return dataSource;
     }
