@@ -1,0 +1,14 @@
+plugins {
+    id 'war'
+}
+
+group 'com.epam.esm'
+version '1.0-SNAPSHOT'
+
+
+
+dependencies {
+    implementation project(':service')
+    implementation "org.springframework:spring-webmvc:$springVersion"
+    implementation 'javax.servlet:javax.servlet-api:4.0.1'
+}

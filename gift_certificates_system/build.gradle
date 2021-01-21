@@ -1,0 +1,25 @@
+group 'com.epam.esm'
+version '1.0-SNAPSHOT'
+
+subprojects {
+    apply plugin: "java"
+
+    compileJava.options.encoding = "UTF-8"
+    compileTestJava.options.encoding = "UTF-8"
+
+    ext {
+        springVersion = '5.3.2'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation "org.springframework:spring-core:$springVersion"
+        implementation "org.springframework:spring-context:$springVersion"
+        implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.1'
+        implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.11.3'
+    }
+}
+
