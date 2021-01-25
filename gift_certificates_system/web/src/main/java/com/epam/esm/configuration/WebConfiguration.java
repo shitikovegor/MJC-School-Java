@@ -19,8 +19,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @version 1.0
  */
 @Configuration
-@EnableWebMvc
-@ComponentScan("com.epam.esm")
 public class WebConfiguration implements WebMvcConfigurer {
     @Value("i18n/messages")
     private String pathName;

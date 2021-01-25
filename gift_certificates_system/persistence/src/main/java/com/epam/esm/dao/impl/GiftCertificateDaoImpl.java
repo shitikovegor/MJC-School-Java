@@ -6,6 +6,8 @@ import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.GiftCertificateQueryParameters;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.util.GiftCertificatesQueryCreator;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -21,6 +23,7 @@ import java.util.Optional;
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private final JdbcTemplate jdbcTemplate;
     private final GiftCertificateMapper giftCertificateMapper;
+    private final SessionFactory sessionFactory;
 
     private static final String GIFT_CERTIFICATE_INSERT = "INSERT INTO gift_certificate (name, description, price, " +
             "duration, create_date, last_update_date) VALUES (?, ?, ?, ?, ?, ?)";
@@ -42,9 +45,11 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
             "LEFT JOIN tag ON gift_certificate_has_tag.tag_id_fk = tag.id ";
 
     @Autowired
-    public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, GiftCertificateMapper giftCertificateMapper) {
+    public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, GiftCertificateMapper giftCertificateMapper,
+                                  SessionFactory sessionFactory) {
         this.jdbcTemplate = jdbcTemplate;
         this.giftCertificateMapper = giftCertificateMapper;
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
@@ -76,7 +81,9 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public Optional<GiftCertificate> findById(long id) {
-        return jdbcTemplate.query(GIFT_CERTIFICATE_FIND_BY_ID, giftCertificateMapper, id).stream().findFirst();
+        Session session = sessionFactory.getCurrentSession();
+        return Optional.of(session.get(GiftCertificate.class, id));
+//        return jdbcTemplate.query(GIFT_CERTIFICATE_FIND_BY_ID, giftCertificateMapper, id).stream().findFirst();
     }
 
     @Override

@@ -2,7 +2,10 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.dao.mapper.TagMapper;
+import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -27,11 +30,13 @@ public class TagDaoImpl implements TagDao {
             " tag ON tag_id_fk = id WHERE gift_certificate_id_fk = ?";
     private final JdbcTemplate jdbcTemplate;
     private final TagMapper tagMapper;
+    private final SessionFactory sessionFactory;
 
     @Autowired
-    public TagDaoImpl(JdbcTemplate jdbcTemplate, TagMapper tagMapper) {
+    public TagDaoImpl(JdbcTemplate jdbcTemplate, TagMapper tagMapper, SessionFactory sessionFactory) {
         this.jdbcTemplate = jdbcTemplate;
         this.tagMapper = tagMapper;
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
@@ -58,7 +63,9 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public Optional<Tag> findById(long id) {
-        return jdbcTemplate.query(TAG_FIND_BY_ID, tagMapper, id).stream().findFirst();
+        Session session = sessionFactory.getCurrentSession();
+        return Optional.of(session.get(Tag.class, id));
+//        return jdbcTemplate.query(TAG_FIND_BY_ID, tagMapper, id).stream().findFirst();
     }
 
     @Override
