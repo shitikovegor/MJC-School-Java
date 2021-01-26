@@ -27,12 +27,4 @@ public interface TagDao extends BaseDao<Tag> {
      * @param id the id
      */
     void removeFromTableGiftCertificateHasTag(long id);
-
-    /**
-     * Find by certificate id list of tags.
-     *
-     * @param id the id of gift_certificate
-     * @return the list of tags
-     */
-    List<Tag> findByCertificateId(long id);
 }

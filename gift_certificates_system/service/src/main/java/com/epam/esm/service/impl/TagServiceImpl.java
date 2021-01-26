@@ -51,7 +51,6 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public TagDto findById(long id) {
-        TagValidator.validateId(id);
         Optional<Tag> foundTag = tagDao.findById(id);
         return foundTag.map(tag -> modelMapper.map(tag, TagDto.class))
                 .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND.getKey(), String.valueOf(id)));
@@ -60,19 +59,11 @@ public class TagServiceImpl implements TagService {
     @Transactional
     @Override
     public void remove(long id) {
-        TagValidator.validateId(id);
-        if (tagDao.findById(id).isEmpty()) {
-            throw new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND.getKey(), String.valueOf(id));
-        }
-        tagDao.removeFromTableGiftCertificateHasTag(id);
-        tagDao.remove(id);
-    }
+        Optional<Tag> tagOptional = tagDao.findById(id);
+        Tag tag = tagOptional.orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND.getKey(), String.valueOf(id)));
 
-    @Override
-    public List<TagDto> findByCertificateId(long id) {
-        return tagDao.findByCertificateId(id).stream()
-                .map(tag -> modelMapper.map(tag, TagDto.class))
-                .collect(Collectors.toList());
+        tagDao.removeFromTableGiftCertificateHasTag(tag.getId());
+        tagDao.remove(tag);
     }
 
     @Override

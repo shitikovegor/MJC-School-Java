@@ -1,6 +1,7 @@
 package com.epam.esm.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,11 +15,10 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "gift_certificate")
-public class GiftCertificate {
+public class GiftCertificate implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "name", length = 100, nullable = false) // TODO: 25.01.2021 need to write all params of column?
     private String name;
     private String description;
     private BigDecimal price;
@@ -27,10 +27,10 @@ public class GiftCertificate {
     private LocalDateTime createDate;
     @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
-    @JoinTable(name = "gift_certificate_has_tag", joinColumns = {
-            @JoinColumn(name = "gift_certificate_id_fk", referencedColumnName = "id"),
-            @JoinColumn(name = "tag_id_fk", referencedColumnName = "id")})
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "gift_certificate_has_tag",
+            joinColumns = @JoinColumn(name = "gift_certificate_id_fk", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id_fk", referencedColumnName = "id"))
     private List<Tag> tags;
 
     /**

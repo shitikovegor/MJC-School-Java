@@ -1,12 +1,10 @@
 package com.epam.esm.configuration;
 
-import org.hibernate.SessionFactory;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
@@ -36,17 +34,5 @@ public class ServiceConfiguration {
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
         return mapper;
-    }
-
-    /**
-     * Bean {@code HibernateTransactionManager} will be use for transactions
-     *
-     * @param sessionFactory the session factory
-     * @return the Hibernate transaction manager
-     */
-    @Bean(name = "transactionManager")
-    public HibernateTransactionManager TransactionManager(SessionFactory sessionFactory) {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager(sessionFactory);
-        return transactionManager;
     }
 }
