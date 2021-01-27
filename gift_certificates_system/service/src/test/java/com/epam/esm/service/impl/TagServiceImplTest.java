@@ -104,7 +104,7 @@ class TagServiceImplTest {
     void removeCorrectDataShouldNotThrowException() {
         Tag tag = new Tag(1L, "Food");
         when(tagDao.findById(anyLong())).thenReturn(Optional.of(tag));
-        when(tagDao.remove(anyLong())).thenReturn(true);
+        doNothing().when(tagDao).remove(any(Tag.class));
         long id = 2L;
         assertDoesNotThrow(() -> tagService.remove(id));
     }
@@ -113,7 +113,7 @@ class TagServiceImplTest {
     void removeIncorrectDataShouldThrowIncorrectException() {
         Tag tag = new Tag(1L, "Food");
         when(tagDao.findById(anyLong())).thenReturn(Optional.of(tag));
-        when(tagDao.remove(anyLong())).thenReturn(true);
+        doNothing().when(tagDao).remove(any(Tag.class));
         doNothing().when(tagDao).removeFromTableGiftCertificateHasTag(anyLong());
         long id = -2L;
         assertThrows(IncorrectParameterException.class, () -> tagService.remove(id));
@@ -122,21 +122,9 @@ class TagServiceImplTest {
     @Test
     void removeIncorrectDataShouldThrowResourceNotFoundException() {
         when(tagDao.findById(anyLong())).thenReturn(Optional.empty());
-        when(tagDao.remove(anyLong())).thenReturn(false);
-        doNothing().when(tagDao).removeFromTableGiftCertificateHasTag(anyLong());
+        doNothing().when(tagDao).remove(any(Tag.class));
         long id = 2L;
         assertThrows(ResourceNotFoundException.class, () -> tagService.remove(id));
-    }
-
-    @Test
-    void findByCertificateIdCorrectDataShouldReturnListOfTags() {
-        List<Tag> tags = List.of(new Tag(2, "Rest"),
-                new Tag(3, "Sea"));
-        when(tagDao.findByCertificateId(2)).thenReturn(tags);
-        long id = 2L;
-        List<TagDto> expected = List.of(new TagDto(2, "Rest"),
-                new TagDto(3, "Sea"));
-        assertEquals(expected, tagService.findByCertificateId(id));
     }
 
     @Test

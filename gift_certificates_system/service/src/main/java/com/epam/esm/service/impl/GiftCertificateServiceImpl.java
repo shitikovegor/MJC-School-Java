@@ -95,9 +95,9 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (description != null) {
             GiftCertificateValidator.validateDescription(description);
         }
-        if (giftCertificateQueryParametersDto.getSortType() == null) {
-            giftCertificateQueryParametersDto.setSortOrder(null);
-        }
+//        if (giftCertificateQueryParametersDto.getSortType() == null) {
+//            giftCertificateQueryParametersDto.setSortOrder(null);
+//        }
 
         GiftCertificateQueryParameters parameters = modelMapper.map(giftCertificateQueryParametersDto,
                 GiftCertificateQueryParameters.class);
@@ -113,7 +113,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
             tags = giftCertificateDto.getTags().stream()
                     .distinct()
                     .map(tagDto -> tagService.findByName(tagDto.getName())
-                            .orElseGet(() -> new TagDto(0, tagDto.getName())))
+                            .orElseGet(() -> new TagDto(tagService.add(tagDto), tagDto.getName())))
                     .collect(Collectors.toList());
         }
         giftCertificateDto.setTags(tags);

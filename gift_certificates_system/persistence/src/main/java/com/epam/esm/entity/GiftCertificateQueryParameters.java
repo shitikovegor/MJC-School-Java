@@ -19,11 +19,11 @@ public class GiftCertificateQueryParameters {
         /**
          * Name sort type.
          */
-        NAME("gift_certificate.name"),
+        NAME("name"),
         /**
          * Create date sort type.
          */
-        CREATE_DATE("gift_certificate.create_date");
+        CREATE_DATE("createDate");
 
         private String queryValue;
 
@@ -51,26 +51,11 @@ public class GiftCertificateQueryParameters {
         /**
          * Asc sort order.
          */
-        ASC(" ASC"),
+        ASC,
         /**
          * Desc sort order.
          */
-        DESC(" DESC");
-
-        private String queryValue;
-
-        SortOrder(String queryValue) {
-            this.queryValue = queryValue;
-        }
-
-        /**
-         * Gets query value.
-         *
-         * @return the query value
-         */
-        public String getQueryValue() {
-            return queryValue;
-        }
+        DESC;
     }
 
     private String tagName;

@@ -5,12 +5,12 @@ import org.springframework.core.convert.converter.Converter;
 import static com.epam.esm.dto.GiftCertificateQueryParametersDto.SortType;
 
 /**
- * Class {@code TypeSortConverter} uses to convert request parameter to {@link SortType}.
+ * Class {@code SortTypeConverter} uses to convert request parameter to {@link SortType}.
  *
  * @author Egor Shitikov
  * @version 1.0
  */
-public class TypeSortConverter implements Converter<String, SortType> {
+public class SortTypeConverter implements Converter<String, SortType> {
 
     @Override
     public SortType convert(String source) {

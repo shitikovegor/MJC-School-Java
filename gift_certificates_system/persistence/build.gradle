@@ -5,8 +5,21 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.22'
     implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
     testImplementation 'com.h2database:h2:1.4.200'
+    annotationProcessor("org.hibernate:hibernate-jpamodelgen:5.4.27.Final")
 }
 
 test {
     useJUnitPlatform()
+}
+
+compileJava {
+    options.annotationProcessorGeneratedSourcesDirectory = file("${buildDir}/generated")
+}
+
+sourceSets {
+    generated {
+        java {
+            srcDirs = ["${buildDir}/generated"]
+        }
+    }
 }

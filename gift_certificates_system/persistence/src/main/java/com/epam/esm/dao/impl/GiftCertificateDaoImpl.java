@@ -1,54 +1,33 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
-import com.epam.esm.dao.mapper.GiftCertificateMapper;
-import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.GiftCertificateQueryParameters;
-import com.epam.esm.util.GiftCertificatesQueryCreator;
+import com.epam.esm.entity.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.epam.esm.entity.GiftCertificateQueryParameters.*;
+
 @Repository
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
-    private static final String GIFT_CERTIFICATE_INSERT = "INSERT INTO gift_certificate (name, description, price, " +
-            "duration, create_date, last_update_date) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String GIFT_CERTIFICATE_FIND_ALL = "SELECT id, name, description, price, duration, " +
-            "create_date, last_update_date FROM gift_certificate";
-    private static final String GIFT_CERTIFICATE_FIND_BY_ID = "SELECT id, name, description, price, duration, " +
-            "create_date, last_update_date FROM gift_certificate WHERE id = ?";
-    private static final String GIFT_CERTIFICATE_UPDATE = "UPDATE gift_certificate SET name = ?, " +
-            "description = ?, price = ?, duration = ?, create_date = ?, last_update_date = ? WHERE id = ?";
-    private static final String GIFT_CERTIFICATE_REMOVE = "DELETE FROM gift_certificate WHERE id = ?";
-    private static final String GIFT_CERTIFICATE_HAS_TAG_INSERT = "INSERT INTO gift_certificate_has_tag " +
-            "(gift_certificate_id_fk, tag_id_fk) VALUES (?, ?)";
-    private static final String GIFT_CERTIFICATE_HAS_TAG_REMOVE = "DELETE FROM gift_certificate_has_tag WHERE " +
-            "gift_certificate_id_fk = ?";
-    private static final String GIFT_CERTIFICATE_FIND_BY_PARAMETERS = "SELECT gift_certificate.id, gift_certificate.name, " +
-            "gift_certificate.description, gift_certificate.price, gift_certificate.duration, gift_certificate.create_date, " +
-            "gift_certificate.last_update_date FROM gift_certificate " +
-            "LEFT JOIN gift_certificate_has_tag ON gift_certificate.id = gift_certificate_has_tag.gift_certificate_id_fk " +
-            "LEFT JOIN tag ON gift_certificate_has_tag.tag_id_fk = tag.id ";
-    private final JdbcTemplate jdbcTemplate;
-    private final GiftCertificateMapper giftCertificateMapper;
     private final SessionFactory sessionFactory;
 
     @Autowired
-    public GiftCertificateDaoImpl(JdbcTemplate jdbcTemplate, GiftCertificateMapper giftCertificateMapper,
-                                  SessionFactory sessionFactory) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.giftCertificateMapper = giftCertificateMapper;
+    public GiftCertificateDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     @Override
     public GiftCertificate add(GiftCertificate giftCertificate) {
-        return (GiftCertificate) sessionFactory.getCurrentSession().merge(giftCertificate);
+        sessionFactory.getCurrentSession().persist(giftCertificate);
+        return giftCertificate;
     }
 
     @Override
@@ -74,7 +53,41 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public List<GiftCertificate> findByQueryParameters(GiftCertificateQueryParameters giftCertificateQueryParameters) {
-        String queryParameters = GiftCertificatesQueryCreator.createQuery(giftCertificateQueryParameters);
-        return jdbcTemplate.query(GIFT_CERTIFICATE_FIND_BY_PARAMETERS + queryParameters, giftCertificateMapper);
+        CriteriaQuery<GiftCertificate> query = generateCriteriaQuery(giftCertificateQueryParameters);
+        TypedQuery<GiftCertificate> typedQuery = sessionFactory.getCurrentSession().createQuery(query);
+        return typedQuery.getResultList();
+    }
+
+    private CriteriaQuery generateCriteriaQuery(GiftCertificateQueryParameters giftCertificateQueryParameters) {
+        CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<GiftCertificate> query = builder.createQuery(GiftCertificate.class);
+        Root<GiftCertificate> root = query.from(GiftCertificate.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        String tagName = giftCertificateQueryParameters.getTagName();
+        if (tagName != null) {
+            ListJoin<GiftCertificate, Tag> tags = root.join(GiftCertificate_.tags, JoinType.LEFT);
+            predicates.add(builder.equal(tags.get(Tag_.NAME), tagName));
+        }
+        String name = giftCertificateQueryParameters.getName();
+        if (name != null) {
+            predicates.add(builder.like(root.get(GiftCertificate_.NAME), "%" + name + "%"));
+        }
+        String description = giftCertificateQueryParameters.getDescription();
+        if (description != null) {
+            predicates.add(builder.like(root.get(GiftCertificate_.DESCRIPTION), "%" + description + "%"));
+        }
+        query.select(root).where(predicates.toArray(Predicate[]::new));
+
+        SortType sortType = giftCertificateQueryParameters.getSortType();
+        SortOrder sortOrder = giftCertificateQueryParameters.getSortOrder();
+        if (sortType == null || sortOrder == null) {
+            query.orderBy(builder.asc(root.get(GiftCertificate_.CREATE_DATE)));
+        } else if (sortOrder == SortOrder.ASC) {
+            query.orderBy(builder.asc(root.get(sortType.getQueryValue())));
+        } else {
+            query.orderBy(builder.desc(root.get(sortType.getQueryValue())));
+        }
+        return query;
     }
 }

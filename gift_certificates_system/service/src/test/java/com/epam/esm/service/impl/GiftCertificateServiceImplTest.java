@@ -66,7 +66,6 @@ class GiftCertificateServiceImplTest {
                 LocalDateTime.of(2021, 12, 28, 23, 59, 59), new ArrayList<>());
         when(tagService.findByName(anyString())).thenReturn(Optional.empty());
         when(giftCertificateDao.add(any(GiftCertificate.class))).thenReturn(giftCertificate);
-        doNothing().when(giftCertificateDao).addToTableGiftCertificateHasTag(any(GiftCertificate.class));
         assertEquals(giftCertificateDto.getId(), giftCertificateService.add(giftCertificateDto));
     }
 
@@ -104,7 +103,6 @@ class GiftCertificateServiceImplTest {
 
         when(giftCertificateDao.findByQueryParameters(any(GiftCertificateQueryParameters.class)))
                 .thenReturn(giftCertificates);
-        when(tagService.findByCertificateId(anyLong())).thenReturn(new ArrayList<>());
         GiftCertificateQueryParametersDto parametersDto =
                 new GiftCertificateQueryParametersDto("re", "in", "i",
                         GiftCertificateQueryParametersDto.SortType.NAME,
@@ -119,7 +117,6 @@ class GiftCertificateServiceImplTest {
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
                 LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>());
         when(giftCertificateDao.findById(3)).thenReturn(Optional.of(giftCertificate));
-        when(tagService.findByCertificateId(anyLong())).thenReturn(new ArrayList<>());
         GiftCertificateDto expected = new GiftCertificateDto(3, "dinner in cafe",
                 "New Year dinner", new BigDecimal(50.99), 10,
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
@@ -131,7 +128,6 @@ class GiftCertificateServiceImplTest {
     @Test
     void findByIdCorrectDataShouldThrowException() {
         when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.empty());
-        when(tagService.findByCertificateId(anyLong())).thenReturn(new ArrayList<>());
         long id = 2L;
         assertThrows(ResourceNotFoundException.class, () -> giftCertificateService.findById(id));
     }
@@ -143,7 +139,6 @@ class GiftCertificateServiceImplTest {
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
                 LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>());
         when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.of(giftCertificate));
-        when(tagService.findByCertificateId(anyLong())).thenReturn(new ArrayList<>());
         long id = -2L;
         assertThrows(IncorrectParameterException.class, () -> giftCertificateService.findById(id));
     }
@@ -154,9 +149,8 @@ class GiftCertificateServiceImplTest {
                 "New Year dinner", new BigDecimal(50.99), 10,
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
                 LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>());
-        doNothing().when(giftCertificateDao).removeFromTableGiftCertificateHasTag(anyLong());
         when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.of(giftCertificate));
-        when(giftCertificateDao.remove(anyLong())).thenReturn(true);
+        doNothing().when(giftCertificateDao).remove(any(GiftCertificate.class));
         long id = 2L;
         assertDoesNotThrow(() -> giftCertificateService.remove(id));
     }
@@ -167,9 +161,8 @@ class GiftCertificateServiceImplTest {
                 "New Year dinner", new BigDecimal(50.99), 10,
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
                 LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>());
-        doNothing().when(giftCertificateDao).removeFromTableGiftCertificateHasTag(anyLong());
         when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.of(giftCertificate));
-        when(giftCertificateDao.remove(anyLong())).thenReturn(true);
+        doNothing().when(giftCertificateDao).remove(any(GiftCertificate.class));
         long id = -2L;
         assertThrows(IncorrectParameterException.class, () -> giftCertificateService.remove(id));
     }
@@ -192,8 +185,6 @@ class GiftCertificateServiceImplTest {
         long id = 56L;
         when(giftCertificateDao.findById(id)).thenReturn(Optional.of(foundGiftCertificate));
         when(giftCertificateDao.update(any(GiftCertificate.class))).thenReturn(updatedGiftCertificate);
-        doNothing().when(giftCertificateDao).removeFromTableGiftCertificateHasTag(id);
-        doNothing().when(giftCertificateDao).addToTableGiftCertificateHasTag(foundGiftCertificate);
         assertEquals(giftCertificateForUpdate, giftCertificateService.update(giftCertificateForUpdate));
     }
 
@@ -206,8 +197,6 @@ class GiftCertificateServiceImplTest {
 
         when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.empty());
         when(giftCertificateDao.update(any(GiftCertificate.class))).thenReturn(null);
-        doNothing().when(giftCertificateDao).removeFromTableGiftCertificateHasTag(anyLong());
-        doNothing().when(giftCertificateDao).addToTableGiftCertificateHasTag(any(GiftCertificate.class));
         assertThrows(ResourceNotFoundException.class, () -> giftCertificateService.update(giftCertificateDto));
     }
 
@@ -224,8 +213,6 @@ class GiftCertificateServiceImplTest {
 
         when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.of(giftCertificate));
         when(giftCertificateDao.update(any(GiftCertificate.class))).thenReturn(giftCertificate);
-        doNothing().when(giftCertificateDao).removeFromTableGiftCertificateHasTag(anyLong());
-        doNothing().when(giftCertificateDao).addToTableGiftCertificateHasTag(giftCertificate);
         assertThrows(IncorrectParameterException.class, () -> giftCertificateService.update(incorrectGiftCertificate));
     }
 }
