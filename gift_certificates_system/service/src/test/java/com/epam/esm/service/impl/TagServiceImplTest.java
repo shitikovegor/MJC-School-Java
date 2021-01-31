@@ -2,11 +2,13 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.dao.impl.TagDaoImpl;
+import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.IncorrectParameterException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.TagService;
+import com.epam.esm.util.Page;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,8 +74,8 @@ class TagServiceImplTest {
         TagDto tagDto2 = new TagDto(23, "Rest");
         List<TagDto> tagsDto = List.of(tagDto1, tagDto2);
 
-        when(tagDao.findAll()).thenReturn(tags);
-        assertEquals(tagsDto, tagService.findAll());
+        when(tagDao.findAll(new Page(5,1))).thenReturn(tags);
+        assertEquals(tagsDto, tagService.findAll(new PageDto(5,1)));
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.GiftCertificateQueryParametersDto;
+import com.epam.esm.dto.PageDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.GiftCertificateQueryParameters;
 import com.epam.esm.exception.IncorrectParameterException;
@@ -101,13 +102,13 @@ class GiftCertificateServiceImplTest {
                 LocalDateTime.of(2021, 1, 12, 12, 59, 59), new ArrayList<>());
         List<GiftCertificateDto> giftCertificatesDto = List.of(giftCertificateDto1, giftCertificateDto2);
 
-        when(giftCertificateDao.findByQueryParameters(any(GiftCertificateQueryParameters.class)))
-                .thenReturn(giftCertificates);
+//        when(giftCertificateDao.findByQueryParameters(any(GiftCertificateQueryParameters.class)))
+//                .thenReturn(giftCertificates);
         GiftCertificateQueryParametersDto parametersDto =
                 new GiftCertificateQueryParametersDto("re", "in", "i",
                         GiftCertificateQueryParametersDto.SortType.NAME,
                         GiftCertificateQueryParametersDto.SortOrder.ASC);
-        assertEquals(giftCertificatesDto, giftCertificateService.findCertificates(parametersDto));
+        assertEquals(giftCertificatesDto, giftCertificateService.findCertificates(parametersDto, new PageDto(5,1)));
     }
 
     @Test

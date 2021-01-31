@@ -4,34 +4,34 @@ import javax.persistence.*;
 import java.util.Objects;
 
 /**
- * Class {@code Tag} represents tag entity.
+ * Class {@code User} represents user entity.
  *
  * @author Egor Shitikov
  * @version 1.0
  */
 @Entity
-@Table(name = "tag")
-public class Tag {
+@Table(name = "user")
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
+    private String email;
 
     /**
-     * Instantiates a new Tag.
+     * Instantiates a new User.
      */
-    public Tag() {
+    public User() {
     }
 
     /**
-     * Instantiates a new Tag.
+     * Instantiates a new User.
      *
-     * @param id   the id
-     * @param name the name
+     * @param id    the id
+     * @param email the email
      */
-    public Tag(long id, String name) {
+    public User(long id, String email) {
         this.id = id;
-        this.name = name;
+        this.email = email;
     }
 
     public long getId() {
@@ -42,12 +42,12 @@ public class Tag {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEmail() {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail(String name) {
+        this.email = name;
     }
 
     @Override
@@ -58,21 +58,21 @@ public class Tag {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Tag tag = (Tag) o;
-        return id == tag.id &&
-                Objects.equals(name, tag.name);
+        User user = (User) o;
+        return id == user.id &&
+                Objects.equals(email, user.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, email);
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Tag{");
+        final StringBuilder sb = new StringBuilder("User{");
         sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
+        sb.append(", email='").append(email).append('\'');
         sb.append('}');
         return sb.toString();
     }

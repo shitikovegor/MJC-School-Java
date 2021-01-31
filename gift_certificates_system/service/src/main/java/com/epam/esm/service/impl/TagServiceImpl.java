@@ -1,12 +1,14 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.TagDao;
+import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.ExceptionKey;
 import com.epam.esm.exception.IncorrectParameterException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.TagService;
+import com.epam.esm.util.Page;
 import com.epam.esm.validator.TagValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,7 @@ public class TagServiceImpl implements TagService {
         this.tagDao = tagDao;
     }
 
+    @Transactional
     @Override
     public long add(TagDto tagDto) {
         TagValidator.validateName(tagDto.getName());
@@ -43,8 +46,9 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<TagDto> findAll() {
-        return tagDao.findAll().stream()
+    public List<TagDto> findAll(PageDto pageDto) {
+        Page page = modelMapper.map(pageDto, Page.class);
+        return tagDao.findAll(page).stream()
                 .map(tag -> modelMapper.map(tag, TagDto.class))
                 .collect(Collectors.toList());
     }

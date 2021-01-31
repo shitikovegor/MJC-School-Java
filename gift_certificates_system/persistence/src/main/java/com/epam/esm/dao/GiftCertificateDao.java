@@ -2,6 +2,7 @@ package com.epam.esm.dao;
 
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.GiftCertificateQueryParameters;
+import com.epam.esm.util.Page;
 
 import java.util.List;
 
@@ -27,5 +28,6 @@ public interface GiftCertificateDao extends BaseDao<GiftCertificate> {
      * @param giftCertificateQueryParameters the gift certificate query parameters
      * @return the list of gift certificates
      */
-    List<GiftCertificate> findByQueryParameters(GiftCertificateQueryParameters giftCertificateQueryParameters);
+    List<GiftCertificate> findByQueryParameters(GiftCertificateQueryParameters giftCertificateQueryParameters,
+                                                Page page);
 }

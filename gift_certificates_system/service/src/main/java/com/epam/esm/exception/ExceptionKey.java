@@ -22,7 +22,9 @@ public enum  ExceptionKey {
     INTERNAL_ERROR("internalError"),
     UNSUPPORTED_MEDIA_TYPE("unsupportedMediaType"),
     INCORRECT_PARAMETER("incorrectParameter"),
-    HANDLER_NOT_FOUND("handlerNotFound");
+    HANDLER_NOT_FOUND("handlerNotFound"),
+    USER_NOT_FOUND("user.notFound"),
+    USER_EXISTS("user.exists");
 
     private String key;
 

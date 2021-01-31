@@ -1,7 +1,7 @@
 package com.epam.esm.service;
 
 /**
- * Interface {@code BaseService} Base service describes base business logic operations.
+ * Interface {@code BaseService} describes base business logic operations.
  *
  * @param <T> the type parameter
  * @author Egor Shitikov

@@ -5,30 +5,31 @@ import org.springframework.hateoas.RepresentationModel;
 import java.util.Objects;
 
 /**
- * Class {@code TagDto} represents data of gift-certificate.
+ * Class {@code User} represents data of user.
  *
  * @author Egor Shitikov
  * @version 1.0
  */
-public class TagDto extends RepresentationModel<TagDto> {
+public class UserDto extends RepresentationModel<UserDto> {
+
     private long id;
-    private String name;
+    private String email;
 
     /**
-     * Instantiates a new Tag DTO.
+     * Instantiates a new User DTO.
      */
-    public TagDto() {
+    public UserDto() {
     }
 
     /**
-     * Instantiates a new Tag DTO.
+     * Instantiates a new User DTO.
      *
-     * @param id   the id
-     * @param name the name
+     * @param id    the id
+     * @param email the email
      */
-    public TagDto(long id, String name) {
+    public UserDto(long id, String email) {
         this.id = id;
-        this.name = name;
+        this.email = email;
     }
 
     public long getId() {
@@ -39,12 +40,12 @@ public class TagDto extends RepresentationModel<TagDto> {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEmail() {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail(String name) {
+        this.email = name;
     }
 
     @Override
@@ -55,21 +56,21 @@ public class TagDto extends RepresentationModel<TagDto> {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        TagDto tagDto = (TagDto) o;
-        return id == tagDto.id &&
-                Objects.equals(name, tagDto.name);
+        UserDto userDto = (UserDto) o;
+        return id == userDto.id &&
+                Objects.equals(email, userDto.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, email);
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("TagDto{");
+        final StringBuilder sb = new StringBuilder("UserDto{");
         sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
+        sb.append(", email='").append(email).append('\'');
         sb.append('}');
         return sb.toString();
     }

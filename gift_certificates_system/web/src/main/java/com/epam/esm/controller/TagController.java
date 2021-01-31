@@ -1,5 +1,6 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * Class {@code TagController} uses to work with gift-certificate information.
@@ -34,13 +38,19 @@ public class TagController {
     }
 
     /**
-     * Gets list of tags.
+     * Gets tags.
      *
+     * @param pageNumber the page number
+     * @param size       the size
      * @return the tags
      */
     @GetMapping
-    public List<TagDto> getTags() {
-        return tagService.findAll();
+    public List<TagDto> getTags(@RequestParam(required = false, defaultValue = "1") int pageNumber,
+                                @RequestParam(required = false, defaultValue = "5") int size) {
+        PageDto pageDto = new PageDto(size, pageNumber);
+        List<TagDto> tags = tagService.findAll(pageDto);
+        tags.forEach(this::addRelationship);
+        return tags;
     }
 
     /**
@@ -70,7 +80,7 @@ public class TagController {
                 .toUri();
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(location);
-
+        addRelationship(tagDto);
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
 
@@ -83,5 +93,9 @@ public class TagController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTag(@PathVariable long id) {
         tagService.remove(id);
+    }
+
+    private void addRelationship(TagDto tagDto) {
+        tagDto.add(linkTo(methodOn(TagController.class).getTagById(tagDto.getId())).withSelfRel());
     }
 }
