@@ -1,7 +1,10 @@
 package com.epam.esm.dto;
 
+import com.epam.esm.exception.ExceptionKey;
 import org.springframework.hateoas.RepresentationModel;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Null;
 import java.util.Objects;
 
 /**

@@ -37,9 +37,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto findById(long id) {
         Optional<Order> foundOrder = orderDao.findById(id);
-
         return foundOrder.map(order -> modelMapper.map(order, OrderDto.class))
-                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.GIFT_CERTIFICATE_NOT_FOUND.getKey(),
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.ORDER_NOT_FOUND,
                         String.valueOf(id)));
     }
 
@@ -62,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
     public void remove(long id) {
         Optional<Order> orderOptional = orderDao.findById(id);
         Order order = orderOptional.orElseThrow(() ->
-                new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND.getKey(), String.valueOf(id)));
+                new ResourceNotFoundException(ExceptionKey.ORDER_NOT_FOUND, String.valueOf(id)));
         orderDao.remove(order);
     }
 

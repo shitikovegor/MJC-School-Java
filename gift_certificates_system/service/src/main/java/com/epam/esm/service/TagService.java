@@ -16,6 +16,13 @@ import java.util.Optional;
  */
 public interface TagService extends BaseService<TagDto> {
     /**
+     * Remove tag by id.
+     *
+     * @param id the id of tag to remove
+     */
+    void remove(long id);
+
+    /**
      * Find all tags.
      *
      * @return the list of tags DTO
@@ -29,4 +36,11 @@ public interface TagService extends BaseService<TagDto> {
      * @return the optional of found tag DTO
      */
     Optional<TagDto> findByName(String name);
+
+    /**
+     * Find most popular tag from user with max purchases tag dto.
+     *
+     * @return the tag dto
+     */
+    TagDto findMostPopularTagFromUserWithMaxPurchases();
 }

@@ -9,6 +9,7 @@ import com.epam.esm.exception.IncorrectParameterException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.UserService;
 import com.epam.esm.util.Page;
+import com.epam.esm.validator.UserValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public long add(UserDto userDto) {
+        UserValidator.validateEmail(userDto.getEmail());
         User user = modelMapper.map(userDto, User.class);
         Optional<User> existingUser = userDao.findByEmail(user.getEmail());
 
@@ -39,7 +41,7 @@ public class UserServiceImpl implements UserService {
             User addedUser = userDao.add(user);
             return addedUser.getId();
         } else {
-            throw new IncorrectParameterException(ExceptionKey.USER_EXISTS.getKey(), user.getEmail());
+            throw new IncorrectParameterException(ExceptionKey.USER_EXISTS, user.getEmail());
         }
     }
 
@@ -55,26 +57,14 @@ public class UserServiceImpl implements UserService {
     public UserDto findById(long id) {
         Optional<User> foundUser = userDao.findById(id);
         return foundUser.map(user -> modelMapper.map(user, UserDto.class))
-                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.USER_NOT_FOUND.getKey(), String.valueOf(id)));
-    }
-
-    // TODO: 31.01.2021 exception, if user exists
-    @Transactional
-    @Override
-    public void remove(long id) {
-        Optional<User> userOptional = userDao.findById(id);
-        User user = userOptional.orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.USER_NOT_FOUND.getKey(),
-                String.valueOf(id)));
-        userDao.remove(user);
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.USER_NOT_FOUND, String.valueOf(id)));
     }
 
     @Override
     public UserDto findByEmail(String email) {
         Optional<User> foundUser = userDao.findByEmail(email);
         return foundUser.map(user -> modelMapper.map(user, UserDto.class))
-                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.USER_NOT_FOUND.getKey(),
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.USER_NOT_FOUND,
                         String.valueOf(email)));
     }
 }
-
-// TODO: 31.01.2021 validation

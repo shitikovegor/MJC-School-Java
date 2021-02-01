@@ -27,4 +27,6 @@ public interface TagDao extends BaseDao<Tag> {
      * @param id the id
      */
     void removeFromTableGiftCertificateHasTag(long id);
+
+    Optional<Tag> findMostPopularTagFromUserWithMaxPurchases();
 }

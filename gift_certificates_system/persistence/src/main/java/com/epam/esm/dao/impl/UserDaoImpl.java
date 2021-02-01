@@ -35,12 +35,12 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> findById(long id) {
-        return Optional.of(entityManager.find(User.class, id));
+        return Optional.ofNullable(entityManager.find(User.class, id));
     }
 
     @Override
     public void remove(User user) {
-        entityManager.remove(user);
+        throw new UnsupportedOperationException("Method remove for User is unsupported.");
     }
 
     @Override

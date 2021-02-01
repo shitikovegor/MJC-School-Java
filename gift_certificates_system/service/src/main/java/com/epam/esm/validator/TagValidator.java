@@ -22,7 +22,7 @@ public class TagValidator {
      */
     public static void validateId(long id) {
         if (id < MIN_NUMBER) {
-            throw new IncorrectParameterException(TAG_ID_INCORRECT.getKey(), String.valueOf(id));
+            throw new IncorrectParameterException(TAG_ID_INCORRECT, String.valueOf(id));
         }
     }
 
@@ -33,7 +33,7 @@ public class TagValidator {
      */
     public static void validateName(String name) {
         if (name == null || !name.trim().matches(NAME_PATTERN)) {
-            throw new IncorrectParameterException(TAG_NAME_INCORRECT.getKey(), name);
+            throw new IncorrectParameterException(TAG_NAME_INCORRECT, name);
         }
     }
 }

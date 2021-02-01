@@ -1,7 +1,7 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.GiftCertificateQueryParameters;
+import com.epam.esm.util.GiftCertificateQueryParameters;
 import com.epam.esm.util.Page;
 
 import java.util.List;

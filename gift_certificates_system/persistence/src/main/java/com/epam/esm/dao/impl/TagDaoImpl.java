@@ -17,6 +17,18 @@ public class TagDaoImpl implements TagDao {
     private static final String TAG_FIND_ALL = "SELECT t FROM Tag t";
     private static final String GIFT_CERTIFICATE_HAS_TAG_REMOVE = "DELETE FROM gift_certificate_has_tag WHERE " +
             "tag_id_fk = ?";
+    private static final String TAG_FIND_POPULAR_TAG_BY_MAX_USER_PRICE =
+            "WITH max_price AS (SELECT user.id AS user_id, SUM(gift_certificate_order.cost) AS user_max_price " +
+                    "FROM gift_certificate_order LEFT JOIN user ON gift_certificate_order.user_id_fk = user.id " +
+                    "GROUP BY user.id) " +
+                    "SELECT t.id, t.name " +
+                    "FROM gift_certificate_order gco LEFT JOIN user ON gco.user_id_fk = user.id " +
+                    "LEFT JOIN gift_certificate gc on gco.gift_certificate_id_fk = gc.id " +
+                    "LEFT JOIN gift_certificate_has_tag gcht on gc.id = gcht.gift_certificate_id_fk " +
+                    "INNER JOIN tag t on gcht.tag_id_fk = t.id WHERE user.id IN ( SELECT user_id " +
+                    "FROM max_price HAVING MAX(user_max_price)) " +
+                    "GROUP BY t.name, user.id " +
+                    "ORDER BY COUNT(t.id) DESC LIMIT 1";
 
     @PersistenceContext
     EntityManager entityManager;
@@ -37,7 +49,7 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public Optional<Tag> findById(long id) {
-        return Optional.of(entityManager.find(Tag.class, id));
+        return Optional.ofNullable(entityManager.find(Tag.class, id));
     }
 
     @Override
@@ -56,5 +68,11 @@ public class TagDaoImpl implements TagDao {
     public void removeFromTableGiftCertificateHasTag(long id) {
         Query query = entityManager.createNativeQuery(GIFT_CERTIFICATE_HAS_TAG_REMOVE);
         query.setParameter(1, id).executeUpdate();
+    }
+
+    @Override
+    public Optional<Tag> findMostPopularTagFromUserWithMaxPurchases() {
+        Query query = entityManager.createNativeQuery(TAG_FIND_POPULAR_TAG_BY_MAX_USER_PRICE, Tag.class);
+        return query.getResultStream().findFirst();
     }
 }

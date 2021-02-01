@@ -15,12 +15,27 @@ import java.util.List;
  */
 public interface GiftCertificateService extends BaseService<GiftCertificateDto> {
     /**
+     * Remove gift certificate by id.
+     *
+     * @param id the id of gift certificate to remove
+     */
+    void remove(long id);
+
+    /**
      * Update gift certificate.
      *
      * @param giftCertificateDto the gift certificate DTO
      * @return the gift certificate DTO
      */
     GiftCertificateDto update(GiftCertificateDto giftCertificateDto);
+
+    /**
+     * Update part of gift certificate.
+     *
+     * @param giftCertificateDto the gift certificate DTO
+     * @return the gift certificate DTO
+     */
+    GiftCertificateDto updatePart(GiftCertificateDto giftCertificateDto);
 
     /**
      * Find gift-certificates list by parameters.

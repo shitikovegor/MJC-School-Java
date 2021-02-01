@@ -14,6 +14,7 @@ import java.util.Optional;
 @Repository
 public class OrderDaoImpl implements OrderDao {
     private static final String ORDER_FIND_BY_USER_ID = "SELECT o FROM Order o WHERE user_id_fk = ?1";
+    private static final String ORDER_DELETE_BY_USER_ID = "DELETE o FROM Order o WHERE user_id_fk = ?1";
 
     @PersistenceContext
     EntityManager entityManager;
@@ -34,7 +35,7 @@ public class OrderDaoImpl implements OrderDao {
 
     @Override
     public Optional<Order> findById(long id) {
-        return Optional.of(entityManager.find(Order.class, id));
+        return Optional.ofNullable(entityManager.find(Order.class, id));
     }
 
     @Override

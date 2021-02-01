@@ -6,14 +6,13 @@ import com.epam.esm.dto.GiftCertificateQueryParametersDto;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.GiftCertificateQueryParameters;
 import com.epam.esm.exception.ExceptionKey;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.TagService;
+import com.epam.esm.util.GiftCertificateQueryParameters;
 import com.epam.esm.util.Page;
 import com.epam.esm.validator.GiftCertificateValidator;
-import com.epam.esm.validator.TagValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -55,7 +54,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public GiftCertificateDto findById(long id) {
         Optional<GiftCertificate> foundGiftCertificate = giftCertificateDao.findById(id);
         return foundGiftCertificate.map(giftCertificate -> modelMapper.map(giftCertificate, GiftCertificateDto.class))
-                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.GIFT_CERTIFICATE_NOT_FOUND.getKey(),
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.GIFT_CERTIFICATE_NOT_FOUND,
                         String.valueOf(id)));
     }
 
@@ -64,13 +63,25 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public void remove(long id) {
         Optional<GiftCertificate> giftCertificateOptional = giftCertificateDao.findById(id);
         GiftCertificate giftCertificate = giftCertificateOptional.orElseThrow(() ->
-                new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND.getKey(), String.valueOf(id)));
+                new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND, String.valueOf(id)));
         giftCertificateDao.remove(giftCertificate);
     }
 
     @Transactional
     @Override
     public GiftCertificateDto update(GiftCertificateDto giftCertificateDto) {
+        GiftCertificateDto foundGiftCertificateDto = findById(giftCertificateDto.getId());
+        GiftCertificateValidator.validate(foundGiftCertificateDto);
+        findAndSetTags(foundGiftCertificateDto);
+
+        GiftCertificate foundGiftCertificate = modelMapper.map(foundGiftCertificateDto, GiftCertificate.class);
+        GiftCertificate updatedGiftCertificate = giftCertificateDao.update(foundGiftCertificate);
+        return modelMapper.map(updatedGiftCertificate, GiftCertificateDto.class);
+    }
+
+    @Transactional
+    @Override
+    public GiftCertificateDto updatePart(GiftCertificateDto giftCertificateDto) {
         GiftCertificateDto foundGiftCertificateDto = findById(giftCertificateDto.getId());
         fillUpdatedFields(giftCertificateDto, foundGiftCertificateDto);
         GiftCertificateValidator.validate(foundGiftCertificateDto);
@@ -84,19 +95,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public List<GiftCertificateDto> findCertificates(GiftCertificateQueryParametersDto giftCertificateQueryParametersDto,
                                                      PageDto pageDto) {
-        String tagName = giftCertificateQueryParametersDto.getTagName();
-        if (tagName != null) {
-            TagValidator.validateName(tagName);
-        }
-        String giftCertificateName = giftCertificateQueryParametersDto.getName();
-        if (giftCertificateName != null) {
-            GiftCertificateValidator.validateName(giftCertificateName);
-        }
-        String description = giftCertificateQueryParametersDto.getDescription();
-        if (description != null) {
-            GiftCertificateValidator.validateDescription(description);
-        }
-
         GiftCertificateQueryParameters parameters = modelMapper.map(giftCertificateQueryParametersDto,
                 GiftCertificateQueryParameters.class);
         Page page = modelMapper.map(pageDto, Page.class);

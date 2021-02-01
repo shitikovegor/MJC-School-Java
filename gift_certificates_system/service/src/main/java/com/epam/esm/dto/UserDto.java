@@ -11,7 +11,6 @@ import java.util.Objects;
  * @version 1.0
  */
 public class UserDto extends RepresentationModel<UserDto> {
-
     private long id;
     private String email;
 

@@ -85,15 +85,15 @@ public class OrderController {
      * Gets list of orders by user id.
      *
      * @param userId     the user id
-     * @param pageNumber the page number
+     * @param page the page number
      * @param size       the size
      * @return the orders by user id
      */
     @GetMapping("/users/{userId}")
     public List<OrderDto> getOrdersByUserId(@PathVariable long userId,
-                                            @RequestParam(required = false, defaultValue = "1") int pageNumber,
+                                            @RequestParam(required = false, defaultValue = "1") int page,
                                             @RequestParam(required = false, defaultValue = "5") int size) {
-        PageDto pageDto = new PageDto(size, pageNumber);
+        PageDto pageDto = new PageDto(size, page);
         List<OrderDto> orders = orderService.findByUserId(userId, pageDto);
         orders.forEach(this::addRelationship);
         return orders;

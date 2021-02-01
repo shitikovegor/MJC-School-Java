@@ -43,7 +43,7 @@ public class GiftCertificateValidator {
      */
     public static void validateId(long id) {
         if (id < MIN_NUMBER) {
-            throw new IncorrectParameterException(GIFT_CERTIFICATE_ID_INCORRECT.getKey(),
+            throw new IncorrectParameterException(GIFT_CERTIFICATE_ID_INCORRECT,
                     String.valueOf(id));
         }
     }
@@ -55,7 +55,7 @@ public class GiftCertificateValidator {
      */
     public static void validateName(String name) {
         if (name == null || !name.trim().matches(NAME_PATTERN)) {
-            throw new IncorrectParameterException(GIFT_CERTIFICATE_NAME_INCORRECT.getKey(), name);
+            throw new IncorrectParameterException(GIFT_CERTIFICATE_NAME_INCORRECT, name);
         }
     }
 
@@ -66,7 +66,7 @@ public class GiftCertificateValidator {
      */
     public static void validateDescription(String description) {
         if (description == null || !description.trim().matches(DESCRIPTION_PATTERN)) {
-            throw new IncorrectParameterException(GIFT_CERTIFICATE_DESCRIPTION_INCORRECT.getKey(), description);
+            throw new IncorrectParameterException(GIFT_CERTIFICATE_DESCRIPTION_INCORRECT, description);
         }
     }
 
@@ -77,7 +77,7 @@ public class GiftCertificateValidator {
      */
     public static void validatePrice(BigDecimal price) {
         if (price == null || price.compareTo(MIN_PRICE) == -1 || price.compareTo(MAX_PRICE) == 1) {
-            throw new IncorrectParameterException(GIFT_CERTIFICATE_PRICE_INCORRECT.getKey(), price.toString());
+            throw new IncorrectParameterException(GIFT_CERTIFICATE_PRICE_INCORRECT, price.toString());
         }
     }
 
@@ -88,7 +88,7 @@ public class GiftCertificateValidator {
      */
     public static void validateDuration(int duration) {
         if (duration < MIN_NUMBER || duration > MAX_DURATION) {
-            throw new IncorrectParameterException(GIFT_CERTIFICATE_DURATION_INCORRECT.getKey(), String.valueOf(duration));
+            throw new IncorrectParameterException(GIFT_CERTIFICATE_DURATION_INCORRECT, String.valueOf(duration));
         }
     }
 
@@ -100,7 +100,7 @@ public class GiftCertificateValidator {
      */
     public static void validateDates(LocalDateTime createDate, LocalDateTime lastUpdateDate) {
         if (createDate == null || lastUpdateDate == null || createDate.isAfter(lastUpdateDate)) {
-            throw new IncorrectParameterException(GIFT_CERTIFICATE_DATES_INCORRECT.getKey());
+            throw new IncorrectParameterException(GIFT_CERTIFICATE_DATES_INCORRECT);
         }
     }
 }

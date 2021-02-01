@@ -43,7 +43,7 @@ public class GiftCertificateQueryParametersDto {
         DESC;
     }
 
-    private String tagName;
+    private String[] tagNames;
     private String name;
     private String description;
     private SortType sortType;
@@ -58,26 +58,27 @@ public class GiftCertificateQueryParametersDto {
     /**
      * Instantiates a new Gift certificate query parameters DTO.
      *
-     * @param tagName     the tag name
+     * @param tagNames     the tag names
      * @param name        the name
      * @param description the description
      * @param sortType    the sort type
      * @param sortOrder   the sort order
      */
-    public GiftCertificateQueryParametersDto(String tagName, String name, String description, SortType sortType, SortOrder sortOrder) {
-        this.tagName = tagName;
+    public GiftCertificateQueryParametersDto(String[] tagNames, String name, String description, SortType sortType,
+                                             SortOrder sortOrder) {
+        this.tagNames = tagNames;
         this.name = name;
         this.description = description;
         this.sortType = sortType;
         this.sortOrder = sortOrder;
     }
 
-    public String getTagName() {
-        return tagName;
+    public String[] getTagNames() {
+        return tagNames;
     }
 
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
+    public void setTagNames(String[] tagNames) {
+        this.tagNames = tagNames;
     }
 
     public String getName() {

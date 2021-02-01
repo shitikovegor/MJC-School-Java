@@ -2,17 +2,13 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.GiftCertificateQueryParameters;
+import com.epam.esm.util.GiftCertificateQueryParameters;
 import com.epam.esm.util.CriteriaQueryCreator;
 import com.epam.esm.util.Page;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
@@ -41,7 +37,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
     @Override
     public Optional<GiftCertificate> findById(long id) {
-        return Optional.of(entityManager.find(GiftCertificate.class, id));
+        return Optional.ofNullable(entityManager.find(GiftCertificate.class, id));
     }
 
     @Override
@@ -59,7 +55,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
                                                        Page page) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<GiftCertificate> query =
-                CriteriaQueryCreator.generateCriteriaQueryBySearchParameters(giftCertificateQueryParameters, builder);
+                new CriteriaQueryCreator().generateCriteriaQueryBySearchParameters(giftCertificateQueryParameters,
+                        builder);
         return entityManager.createQuery(query)
                 .setFirstResult((page.getPageNumber() - 1) * page.getSize())
                 .setMaxResults(page.getSize())

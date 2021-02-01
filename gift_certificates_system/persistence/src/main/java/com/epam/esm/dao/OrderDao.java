@@ -15,6 +15,8 @@ public interface OrderDao extends BaseDao<Order> {
     /**
      * Find orders by user id list.
      *
+     * @param id   the id
+     * @param page the page
      * @return the list
      */
     List<Order> findOrdersByUserId(long id, Page page);

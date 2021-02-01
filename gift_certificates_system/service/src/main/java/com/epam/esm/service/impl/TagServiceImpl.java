@@ -41,7 +41,7 @@ public class TagServiceImpl implements TagService {
             Tag addedTag = tagDao.add(tag);
             return addedTag.getId();
         } else {
-            throw new IncorrectParameterException(ExceptionKey.TAG_EXISTS.getKey(), tag.getName());
+            throw new IncorrectParameterException(ExceptionKey.TAG_EXISTS, tag.getName());
         }
     }
 
@@ -57,14 +57,14 @@ public class TagServiceImpl implements TagService {
     public TagDto findById(long id) {
         Optional<Tag> foundTag = tagDao.findById(id);
         return foundTag.map(tag -> modelMapper.map(tag, TagDto.class))
-                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND.getKey(), String.valueOf(id)));
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND, String.valueOf(id)));
     }
 
     @Transactional
     @Override
     public void remove(long id) {
         Optional<Tag> tagOptional = tagDao.findById(id);
-        Tag tag = tagOptional.orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND.getKey(), String.valueOf(id)));
+        Tag tag = tagOptional.orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND, String.valueOf(id)));
 
         tagDao.removeFromTableGiftCertificateHasTag(tag.getId());
         tagDao.remove(tag);
@@ -72,8 +72,14 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Optional<TagDto> findByName(String name) {
-        TagValidator.validateName(name);
         Optional<Tag> foundTag = tagDao.findByName(name);
         return foundTag.map(tag -> modelMapper.map(tag, TagDto.class));
+    }
+
+    @Override
+    public TagDto findMostPopularTagFromUserWithMaxPurchases() {
+        Optional<Tag> foundTag = tagDao.findMostPopularTagFromUserWithMaxPurchases();
+        return foundTag.map(tag -> modelMapper.map(tag, TagDto.class))
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.TAG_DOES_NOT_EXIST));
     }
 }

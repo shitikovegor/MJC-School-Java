@@ -23,11 +23,4 @@ public interface BaseService<T> {
      * @return the found object
      */
     T findById(long id);
-
-    /**
-     * Remove object by id.
-     *
-     * @param id the id of object to remove
-     */
-    void remove(long id);
 }

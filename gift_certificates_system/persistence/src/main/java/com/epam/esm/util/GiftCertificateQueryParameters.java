@@ -1,4 +1,4 @@
-package com.epam.esm.entity;
+package com.epam.esm.util;
 
 /**
  * Class {@code GiftCertificateQueryParameters} represents a class with
@@ -58,7 +58,7 @@ public class GiftCertificateQueryParameters {
         DESC;
     }
 
-    private String tagName;
+    private String[] tagNames;
     private String name;
     private String description;
     private SortType sortType;
@@ -73,26 +73,27 @@ public class GiftCertificateQueryParameters {
     /**
      * Instantiates a new Gift certificate query parameters.
      *
-     * @param tagName     the tag name
+     * @param tagNames     the tag names
      * @param name        the name
      * @param description the description
      * @param sortType    the sort type
      * @param sortOrder   the sort order
      */
-    public GiftCertificateQueryParameters(String tagName, String name, String description, SortType sortType, SortOrder sortOrder) {
-        this.tagName = tagName;
+    public GiftCertificateQueryParameters(String[] tagNames, String name, String description, SortType sortType,
+                                          SortOrder sortOrder) {
+        this.tagNames = tagNames;
         this.name = name;
         this.description = description;
         this.sortType = sortType;
         this.sortOrder = sortOrder;
     }
 
-    public String getTagName() {
-        return tagName;
+    public String[] getTagNames() {
+        return tagNames;
     }
 
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
+    public void setTagNames(String[] tagNames) {
+        this.tagNames = tagNames;
     }
 
     public String getName() {

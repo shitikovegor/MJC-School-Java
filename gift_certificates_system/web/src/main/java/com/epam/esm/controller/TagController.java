@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -40,14 +41,14 @@ public class TagController {
     /**
      * Gets tags.
      *
-     * @param pageNumber the page number
+     * @param page the page number
      * @param size       the size
      * @return the tags
      */
     @GetMapping
-    public List<TagDto> getTags(@RequestParam(required = false, defaultValue = "1") int pageNumber,
+    public List<TagDto> getTags(@RequestParam(required = false, defaultValue = "1") int page,
                                 @RequestParam(required = false, defaultValue = "5") int size) {
-        PageDto pageDto = new PageDto(size, pageNumber);
+        PageDto pageDto = new PageDto(size, page);
         List<TagDto> tags = tagService.findAll(pageDto);
         tags.forEach(this::addRelationship);
         return tags;
@@ -60,7 +61,7 @@ public class TagController {
      * @return the tag DTO
      */
     @GetMapping("/{id}")
-    public TagDto getTagById(@PathVariable long id) {
+    public TagDto getTagById(@PathVariable @Valid long id) {
         return tagService.findById(id);
     }
 
@@ -97,5 +98,10 @@ public class TagController {
 
     private void addRelationship(TagDto tagDto) {
         tagDto.add(linkTo(methodOn(TagController.class).getTagById(tagDto.getId())).withSelfRel());
+    }
+
+    @GetMapping("/most_popular")
+    public TagDto getTagById() {
+        return tagService.findMostPopularTagFromUserWithMaxPurchases();
     }
 }

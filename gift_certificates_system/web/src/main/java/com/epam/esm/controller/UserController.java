@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -40,14 +41,14 @@ public class UserController {
     /**
      * Gets users.
      *
-     * @param pageNumber the page number
+     * @param page the page number
      * @param size       the size
      * @return the users
      */
     @GetMapping
-    public List<UserDto> getUsers(@RequestParam(required = false, defaultValue = "1") int pageNumber,
+    public List<UserDto> getUsers(@RequestParam(required = false, defaultValue = "1") int page,
                                   @RequestParam(required = false, defaultValue = "5") int size) {
-        PageDto pageDto = new PageDto(size, pageNumber);
+        PageDto pageDto = new PageDto(size, page);
         List<UserDto> users = userService.findAll(pageDto);
         users.forEach(this::addRelationship);
         return users;
@@ -73,7 +74,7 @@ public class UserController {
      * @return the response entity
      */
     @PostMapping
-    public ResponseEntity<String> addUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<String> addUser(@RequestBody @Valid UserDto userDto) {
         long userId = userService.add(userDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -84,17 +85,6 @@ public class UserController {
         headers.setLocation(location);
         addRelationship(userDto);
         return new ResponseEntity(headers, HttpStatus.CREATED);
-    }
-
-    /**
-     * Delete user by.
-     *
-     * @param id the user id
-     */
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable long id) {
-        userService.remove(id);
     }
 
     private void addRelationship(UserDto userDto) {

@@ -14,6 +14,13 @@ import java.util.List;
  */
 public interface OrderService extends BaseService<OrderDto> {
     /**
+     * Remove order by id.
+     *
+     * @param id the id of order to remove
+     */
+    void remove(long id);
+
+    /**
      * Findlist of orders by user id.
      *
      * @param id the id

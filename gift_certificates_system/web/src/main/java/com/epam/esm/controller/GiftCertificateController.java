@@ -48,26 +48,26 @@ public class GiftCertificateController {
      * @param description the description
      * @param sortType    the sort type
      * @param sortOrder   the sort order
-     * @param pageNumber  the page number
+     * @param page  the page number
      * @param size        the size
      * @return the gift certificates
      */
     @GetMapping
     public List<GiftCertificateDto> getGiftCertificates
-    (@RequestParam(required = false) String tagName,
+    (@RequestParam(required = false) String[] tagName,
      @RequestParam(required = false) String name,
      @RequestParam(required = false) String description,
      @RequestParam(required = false) SortType sortType,
      @RequestParam(required = false) SortOrder sortOrder,
-     @RequestParam(required = false, defaultValue = "1") int pageNumber,
+     @RequestParam(required = false, defaultValue = "1") int page,
      @RequestParam(required = false, defaultValue = "5") int size) {
         GiftCertificateQueryParametersDto giftCertificateQueryParametersDto = new GiftCertificateQueryParametersDto();
-        giftCertificateQueryParametersDto.setTagName(tagName);
+        giftCertificateQueryParametersDto.setTagNames(tagName);
         giftCertificateQueryParametersDto.setName(name);
         giftCertificateQueryParametersDto.setDescription(description);
         giftCertificateQueryParametersDto.setSortType(sortType);
         giftCertificateQueryParametersDto.setSortOrder(sortOrder);
-        PageDto pageDto = new PageDto(size, pageNumber);
+        PageDto pageDto = new PageDto(size, page);
 
         List<GiftCertificateDto> giftCertificates =
                 giftCertificateService.findCertificates(giftCertificateQueryParametersDto, pageDto);
@@ -84,7 +84,7 @@ public class GiftCertificateController {
     @GetMapping("/{id}")
     public GiftCertificateDto getGiftCertificateById(@PathVariable long id) {
         GiftCertificateDto foundGiftCertificate = giftCertificateService.findById(id);
-        addGiftCertificate(foundGiftCertificate);
+        addRelationship(foundGiftCertificate);
         return foundGiftCertificate;
     }
 
@@ -117,7 +117,20 @@ public class GiftCertificateController {
     @PutMapping
     public GiftCertificateDto updateGiftCertificate(@RequestBody GiftCertificateDto giftCertificateDto) {
         GiftCertificateDto updatedGiftCertificate = giftCertificateService.update(giftCertificateDto);
-        addGiftCertificate(updatedGiftCertificate);
+        addRelationship(updatedGiftCertificate);
+        return updatedGiftCertificate;
+    }
+
+    /**
+     * Update part of gift-certificate.
+     *
+     * @param giftCertificateDto the gift-certificate DTO
+     * @return the gift-certificate DTO
+     */
+    @PatchMapping
+    public GiftCertificateDto updatePartOfGiftCertificate(@RequestBody GiftCertificateDto giftCertificateDto) {
+        GiftCertificateDto updatedGiftCertificate = giftCertificateService.updatePart(giftCertificateDto);
+        addRelationship(updatedGiftCertificate);
         return updatedGiftCertificate;
     }
 
@@ -141,6 +154,5 @@ public class GiftCertificateController {
                 .deleteGiftCertificate(giftCertificateDto.getId())).withRel("delete"));
         giftCertificateDto.getTags().forEach(tagDto ->
                 tagDto.add(linkTo(methodOn(TagController.class).getTagById(tagDto.getId())).withSelfRel()));
-
     }
 }

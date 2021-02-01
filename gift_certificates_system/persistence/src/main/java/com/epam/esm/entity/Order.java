@@ -17,10 +17,10 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "user_id_fk", referencedColumnName = "id")
     private User user;
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "gift_certificate_id_fk", referencedColumnName = "id")
     private GiftCertificate giftCertificate;
     private BigDecimal cost;
