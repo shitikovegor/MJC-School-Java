@@ -20,20 +20,21 @@ public final class   ExceptionKey {
     public static final String GIFT_CERTIFICATE_DESCRIPTION_INCORRECT = "giftCertificate.incorrectDescription";
     public static final String GIFT_CERTIFICATE_PRICE_INCORRECT = "giftCertificate.incorrectPrice";
     public static final String GIFT_CERTIFICATE_DURATION_INCORRECT = "giftCertificate.incorrectDuration";
-    public static final String GIFT_CERTIFICATE_DATES_INCORRECT = "giftCertificate.incorrectDates";
+    public static final String GIFT_CERTIFICATE_NOT_COMPLETED = "giftCertificate.notCompleted";
 
+    public static final String USER_ID_INCORRECT = "user.incorrectId";
     public static final String USER_NOT_FOUND = "user.notFound";
     public static final String USER_EXISTS = "user.exists";
     public static final String EMAIL_INCORRECT = "user.emailIncorrect";
     public static final String ORDER_NOT_FOUND = "order.notFound";
+    public static final String USER_NOT_COMPLETED = "user.notCompleted";
 
-    public static final String INCORRECT_PAGE_NUMBER = "pagination.incorrectPageNumber";
+    public static final String INCORRECT_PAGE_FORMAT = "pagination.incorrectPage";
 
     public static final String INTERNAL_ERROR = "internalError";
     public static final String UNSUPPORTED_MEDIA_TYPE = "unsupportedMediaType";
     public static final String INCORRECT_PARAMETER = "incorrectParameter";
     public static final String HANDLER_NOT_FOUND = "handlerNotFound";
-
 
     private ExceptionKey() {
     }

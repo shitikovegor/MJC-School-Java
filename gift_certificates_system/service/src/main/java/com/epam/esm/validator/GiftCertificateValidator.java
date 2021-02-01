@@ -33,7 +33,6 @@ public class GiftCertificateValidator {
         validateDescription(giftCertificateDto.getDescription());
         validatePrice(giftCertificateDto.getPrice());
         validateDuration(giftCertificateDto.getDuration());
-        validateDates(giftCertificateDto.getCreateDate(), giftCertificateDto.getLastUpdateDate());
     }
 
     /**
@@ -89,18 +88,6 @@ public class GiftCertificateValidator {
     public static void validateDuration(int duration) {
         if (duration < MIN_NUMBER || duration > MAX_DURATION) {
             throw new IncorrectParameterException(GIFT_CERTIFICATE_DURATION_INCORRECT, String.valueOf(duration));
-        }
-    }
-
-    /**
-     * Validate create date and last update date of gift-certificate.
-     *
-     * @param createDate     the gift-certificate create date
-     * @param lastUpdateDate the gift-certificate last update date
-     */
-    public static void validateDates(LocalDateTime createDate, LocalDateTime lastUpdateDate) {
-        if (createDate == null || lastUpdateDate == null || createDate.isAfter(lastUpdateDate)) {
-            throw new IncorrectParameterException(GIFT_CERTIFICATE_DATES_INCORRECT);
         }
     }
 }

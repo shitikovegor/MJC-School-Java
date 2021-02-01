@@ -1,5 +1,7 @@
 package com.epam.esm.entity;
 
+import com.epam.esm.dao.audit.GiftCertificateAuditListener;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,6 +15,7 @@ import java.util.Objects;
  * @author Egor Shitikov
  * @version 1.0
  */
+@EntityListeners(GiftCertificateAuditListener.class)
 @Entity
 @Table(name = "gift_certificate")
 public class GiftCertificate implements Serializable {

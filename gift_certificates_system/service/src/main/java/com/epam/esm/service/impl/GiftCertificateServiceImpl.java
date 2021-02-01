@@ -13,12 +13,12 @@ import com.epam.esm.service.TagService;
 import com.epam.esm.util.GiftCertificateQueryParameters;
 import com.epam.esm.util.Page;
 import com.epam.esm.validator.GiftCertificateValidator;
+import com.epam.esm.validator.PageValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,8 +41,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public long add(GiftCertificateDto giftCertificateDto) {
         findAndSetTags(giftCertificateDto);
-        giftCertificateDto.setCreateDate(LocalDateTime.now());
-        giftCertificateDto.setLastUpdateDate(LocalDateTime.now());
         GiftCertificateValidator.validate(giftCertificateDto);
         GiftCertificate giftCertificate = modelMapper.map(giftCertificateDto, GiftCertificate.class);
         GiftCertificate addedGiftCertificate = giftCertificateDao.add(giftCertificate);
@@ -70,12 +68,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Transactional
     @Override
     public GiftCertificateDto update(GiftCertificateDto giftCertificateDto) {
-        GiftCertificateDto foundGiftCertificateDto = findById(giftCertificateDto.getId());
-        GiftCertificateValidator.validate(foundGiftCertificateDto);
-        findAndSetTags(foundGiftCertificateDto);
-
-        GiftCertificate foundGiftCertificate = modelMapper.map(foundGiftCertificateDto, GiftCertificate.class);
-        GiftCertificate updatedGiftCertificate = giftCertificateDao.update(foundGiftCertificate);
+        GiftCertificateDto foundGiftCertificate = findById(giftCertificateDto.getId());
+        GiftCertificateValidator.validate(giftCertificateDto);
+        giftCertificateDto.setCreateDate(foundGiftCertificate.getCreateDate());
+        findAndSetTags(giftCertificateDto);
+        GiftCertificate giftCertificate = modelMapper.map(giftCertificateDto, GiftCertificate.class);
+        GiftCertificate updatedGiftCertificate = giftCertificateDao.update(giftCertificate);
         return modelMapper.map(updatedGiftCertificate, GiftCertificateDto.class);
     }
 
@@ -86,7 +84,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         fillUpdatedFields(giftCertificateDto, foundGiftCertificateDto);
         GiftCertificateValidator.validate(foundGiftCertificateDto);
         findAndSetTags(foundGiftCertificateDto);
-
+        foundGiftCertificateDto.setLastUpdateDate(null);
         GiftCertificate foundGiftCertificate = modelMapper.map(foundGiftCertificateDto, GiftCertificate.class);
         GiftCertificate updatedGiftCertificate = giftCertificateDao.update(foundGiftCertificate);
         return modelMapper.map(updatedGiftCertificate, GiftCertificateDto.class);
@@ -97,6 +95,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                                                      PageDto pageDto) {
         GiftCertificateQueryParameters parameters = modelMapper.map(giftCertificateQueryParametersDto,
                 GiftCertificateQueryParameters.class);
+        PageValidator.validatePage(pageDto);
         Page page = modelMapper.map(pageDto, Page.class);
         List<GiftCertificate> giftCertificates = giftCertificateDao.findByQueryParameters(parameters, page);
         return giftCertificates.stream()
@@ -131,6 +130,5 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (updatedGiftCertificateDto.getTags() != null) {
             foundGiftCertificateDto.setTags(updatedGiftCertificateDto.getTags());
         }
-        foundGiftCertificateDto.setLastUpdateDate(LocalDateTime.now());
     }
 }

@@ -187,17 +187,4 @@ class GiftCertificateValidatorTest {
     void validateIncorrectDurationShouldThrowException(int duration) {
         assertThrows(IncorrectParameterException.class, () -> GiftCertificateValidator.validateDuration(duration));
     }
-
-    @Test
-    void validateCorrectDatesShouldNotThrowException() {
-        assertDoesNotThrow(() -> GiftCertificateValidator.validateDates(
-                LocalDateTime.of(2021, 1, 10, 15, 0, 0),
-                LocalDateTime.of(2021, 1, 25, 15, 0, 0)));
-    }
-
-    @ParameterizedTest
-    @MethodSource("createIncorrectDatesData")
-    void validateIncorrectDatesShouldThrowException(LocalDateTime createDate, LocalDateTime lastUpdateDate) {
-        assertThrows(IncorrectParameterException.class, () -> GiftCertificateValidator.validateDates(createDate, lastUpdateDate));
-    }
 }

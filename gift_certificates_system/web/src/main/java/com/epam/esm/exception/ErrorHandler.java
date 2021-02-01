@@ -85,22 +85,6 @@ public class ErrorHandler {
 
 
     /**
-     * Handle {@link RuntimeException}.
-     *
-     * @param exception the exception
-     * @param locale    the locale
-     * @return the error information
-     */
-    @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorInfo handleRuntimeException(RuntimeException exception, Locale locale) {
-        String errorMessage = createErrorMessage(
-                messageSource.getMessage(ExceptionKey.INTERNAL_ERROR, new Object[]{}, locale),
-                exception.getMessage());
-        return new ErrorInfo(errorMessage, INTERNAL_ERROR.getCode());
-    }
-
-    /**
      * Handle {@link HttpMessageNotReadableException}.
      *
      * @param exception the exception
@@ -130,6 +114,22 @@ public class ErrorHandler {
                 messageSource.getMessage(ExceptionKey.HANDLER_NOT_FOUND, new Object[]{}, locale),
                 exception.getMessage());
         return new ErrorInfo(errorMessage, NOT_FOUND.getCode());
+    }
+
+    /**
+     * Handle {@link RuntimeException}.
+     *
+     * @param exception the exception
+     * @param locale    the locale
+     * @return the error information
+     */
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorInfo handleRuntimeException(RuntimeException exception, Locale locale) {
+        String errorMessage = createErrorMessage(
+                messageSource.getMessage(ExceptionKey.INTERNAL_ERROR, new Object[]{}, locale),
+                exception.getMessage());
+        return new ErrorInfo(errorMessage, INTERNAL_ERROR.getCode());
     }
 
     private String createErrorMessage(String message, String parameter) {

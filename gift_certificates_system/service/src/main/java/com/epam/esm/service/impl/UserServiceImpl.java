@@ -9,6 +9,7 @@ import com.epam.esm.exception.IncorrectParameterException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.UserService;
 import com.epam.esm.util.Page;
+import com.epam.esm.validator.PageValidator;
 import com.epam.esm.validator.UserValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> findAll(PageDto pageDto) {
+        PageValidator.validatePage(pageDto);
         Page page = modelMapper.map(pageDto, Page.class);
         return userDao.findAll(page).stream()
                 .map(user -> modelMapper.map(user, UserDto.class))

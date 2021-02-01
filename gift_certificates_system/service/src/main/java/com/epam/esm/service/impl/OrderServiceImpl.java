@@ -9,6 +9,8 @@ import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.service.UserService;
 import com.epam.esm.util.Page;
+import com.epam.esm.validator.OrderValidator;
+import com.epam.esm.validator.PageValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public long add(OrderDto orderDto) {
+        OrderValidator.validateUser(orderDto.getUser());
+        OrderValidator.validateCertificate(orderDto.getGiftCertificate());
         orderDto.setGiftCertificate(giftCertificateService.findById(orderDto.getGiftCertificate().getId()));
         orderDto.setUser(userService.findById(orderDto.getUser().getId()));
         orderDto.setPurchaseDate(LocalDateTime.now());
@@ -67,6 +71,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> findByUserId(long id, PageDto pageDto) {
+        PageValidator.validatePage(pageDto);
         Page page = modelMapper.map(pageDto, Page.class);
         return orderDao.findOrdersByUserId(id, page).stream()
                 .map(order -> modelMapper.map(order, OrderDto.class))

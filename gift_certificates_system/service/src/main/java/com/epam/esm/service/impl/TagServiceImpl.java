@@ -9,6 +9,7 @@ import com.epam.esm.exception.IncorrectParameterException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.util.Page;
+import com.epam.esm.validator.PageValidator;
 import com.epam.esm.validator.TagValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<TagDto> findAll(PageDto pageDto) {
+        PageValidator.validatePage(pageDto);
         Page page = modelMapper.map(pageDto, Page.class);
         return tagDao.findAll(page).stream()
                 .map(tag -> modelMapper.map(tag, TagDto.class))
