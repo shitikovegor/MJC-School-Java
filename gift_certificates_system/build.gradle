@@ -32,7 +32,6 @@ subprojects {
 
     dependencies {
         implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-        testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
         implementation 'org.springframework.boot:spring-boot-starter-actuator:2.4.2'
     }
 }

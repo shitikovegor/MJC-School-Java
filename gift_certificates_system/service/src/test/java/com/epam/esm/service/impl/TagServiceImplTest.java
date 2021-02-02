@@ -9,8 +9,8 @@ import com.epam.esm.exception.IncorrectParameterException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.util.Page;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -23,12 +23,14 @@ import static org.mockito.Mockito.*;
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 class TagServiceImplTest {
-    private TagService tagService;
-    private TagDao tagDao;
-    private ModelMapper modelMapper;
+    private static TagService tagService;
+    private static TagDao tagDao;
+    private static ModelMapper modelMapper;
+    private static Page page;
+    private static PageDto pageDto;
 
-    @BeforeEach
-    void setUp() {
+    @BeforeAll
+    static void setUp() {
         tagDao = mock(TagDaoImpl.class);
         modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
@@ -37,13 +39,17 @@ class TagServiceImplTest {
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
         tagService = new TagServiceImpl(modelMapper, tagDao);
+        page = new Page(5, 1);
+        pageDto = new PageDto(5, 1);
     }
 
-    @AfterEach
-    void tearDown() {
+    @AfterAll
+    static void tearDown() {
         tagService = null;
         tagDao = null;
         modelMapper = null;
+        page = null;
+        pageDto = null;
     }
 
     @Test
@@ -74,8 +80,8 @@ class TagServiceImplTest {
         TagDto tagDto2 = new TagDto(23, "Rest");
         List<TagDto> tagsDto = List.of(tagDto1, tagDto2);
 
-        when(tagDao.findAll(new Page(5,1))).thenReturn(tags);
-        assertEquals(tagsDto, tagService.findAll(new PageDto(5,1)));
+        when(tagDao.findAll(page)).thenReturn(tags);
+        assertEquals(tagsDto, tagService.findAll(pageDto));
     }
 
     @Test
@@ -95,14 +101,6 @@ class TagServiceImplTest {
     }
 
     @Test
-    void findByIdIncorrectDataShouldThrowException() {
-        Tag tag = new Tag(2, "Rest");
-        when(tagDao.findById(anyLong())).thenReturn(Optional.of(tag));
-        long id = -2L;
-        assertThrows(IncorrectParameterException.class, () -> tagService.findById(id));
-    }
-
-    @Test
     void removeCorrectDataShouldNotThrowException() {
         Tag tag = new Tag(1L, "Food");
         when(tagDao.findById(anyLong())).thenReturn(Optional.of(tag));
@@ -112,19 +110,10 @@ class TagServiceImplTest {
     }
 
     @Test
-    void removeIncorrectDataShouldThrowIncorrectException() {
-        Tag tag = new Tag(1L, "Food");
-        when(tagDao.findById(anyLong())).thenReturn(Optional.of(tag));
-        doNothing().when(tagDao).remove(any(Tag.class));
-        doNothing().when(tagDao).removeFromTableGiftCertificateHasTag(anyLong());
-        long id = -2L;
-        assertThrows(IncorrectParameterException.class, () -> tagService.remove(id));
-    }
-
-    @Test
     void removeIncorrectDataShouldThrowResourceNotFoundException() {
         when(tagDao.findById(anyLong())).thenReturn(Optional.empty());
         doNothing().when(tagDao).remove(any(Tag.class));
+        doNothing().when(tagDao).removeFromTableGiftCertificateHasTag(anyLong());
         long id = 2L;
         assertThrows(ResourceNotFoundException.class, () -> tagService.remove(id));
     }
@@ -136,13 +125,5 @@ class TagServiceImplTest {
         Optional<TagDto> expected = Optional.of(new TagDto(2, "Rest"));
         String actualName = "Rest";
         assertEquals(expected, tagService.findByName(actualName));
-    }
-
-    @Test
-    void findByNameIncorrectDataShouldThrowException() {
-        Tag tag = new Tag(2, "Rest");
-        when(tagDao.findByName(anyString())).thenReturn(Optional.of(tag));
-        String incorrectName = "<\\name_incorrect";
-        assertThrows(IncorrectParameterException.class, () -> tagService.findByName(incorrectName));
     }
 }

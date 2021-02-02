@@ -26,7 +26,7 @@ public class TagDaoImpl implements TagDao {
                     "LEFT JOIN gift_certificate gc on gco.gift_certificate_id_fk = gc.id " +
                     "LEFT JOIN gift_certificate_has_tag gcht on gc.id = gcht.gift_certificate_id_fk " +
                     "INNER JOIN tag t on gcht.tag_id_fk = t.id WHERE user.id IN ( SELECT user_id " +
-                    "FROM max_price HAVING MAX(user_max_price)) " +
+                    "FROM max_price GROUP BY user_id HAVING MAX(user_max_price)) " +
                     "GROUP BY t.name, user.id " +
                     "ORDER BY COUNT(t.id) DESC LIMIT 1";
 

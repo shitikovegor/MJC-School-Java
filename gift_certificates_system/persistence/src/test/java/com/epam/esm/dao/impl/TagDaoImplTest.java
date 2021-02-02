@@ -1,16 +1,14 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.TagDao;
-import com.epam.esm.dao.configuration.DaoTestConfiguration;
+import com.epam.esm.dao.configuration.PersistenceTestConfiguration;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.util.Page;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -18,8 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = DaoTestConfiguration.class)
+@SpringBootTest(classes = PersistenceTestConfiguration.class)
 @Transactional
 class TagDaoImplTest {
     private static Page page;
@@ -83,6 +80,14 @@ class TagDaoImplTest {
     @Test
     void findByNameCorrectDataShouldReturnTag() {
         Optional<Tag> actualOptional = tagDao.findByName("rest");
+        Tag actual = actualOptional.orElse(null);
+
+        assertEquals(tag3, actual);
+    }
+
+    @Test
+    void findMostPopularTagFromUserWithMaxPurchasesShouldReturnMostPopularTag() {
+        Optional<Tag> actualOptional = tagDao.findMostPopularTagFromUserWithMaxPurchases();
         Tag actual = actualOptional.orElse(null);
 
         assertEquals(tag3, actual);

@@ -2,9 +2,7 @@ package com.epam.esm.validator;
 
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.exception.IncorrectParameterException;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -14,7 +12,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class GiftCertificateValidatorTest {
 
@@ -69,13 +66,6 @@ class GiftCertificateValidatorTest {
                 "massage in Minsk-City", new BigDecimal(15), 400,
                 LocalDateTime.of(2021, 1, 10, 15, 0, 0),
                 LocalDateTime.of(2021, 1, 15, 15, 0, 0), null);
-        GiftCertificateDto incorrectDates = new GiftCertificateDto(3, "massage",
-                "massage in Minsk-City", new BigDecimal(15), 12,
-                LocalDateTime.of(2021, 1, 10, 15, 0, 0),
-                LocalDateTime.of(2021, 1, 5, 15, 0, 0), null);
-        GiftCertificateDto nullDate = new GiftCertificateDto(3, "massage",
-                "massage in Minsk-City", new BigDecimal(15), 12,
-                null, LocalDateTime.of(2021, 1, 5, 15, 0, 0), null);
 
         return Stream.of(
                 incorrectName,
@@ -83,9 +73,7 @@ class GiftCertificateValidatorTest {
                 incorrectPriceMin,
                 incorrectPriceMax,
                 incorrectDurationMin,
-                incorrectDurationMax,
-                incorrectDates,
-                nullDate
+                incorrectDurationMax
         );
     }
 
@@ -102,18 +90,6 @@ class GiftCertificateValidatorTest {
         return Stream.of(new BigDecimal(-2),
                 new BigDecimal(0),
                 new BigDecimal(1200000));
-    }
-
-    private static Stream<Arguments> createIncorrectDatesData() {
-        return Stream.of(
-                arguments(
-                        LocalDateTime.of(2021, 1, 10, 15, 0, 0),
-                        LocalDateTime.of(2021, 1, 5, 15, 0, 0)
-                ),
-                arguments(null, LocalDateTime.of(2021, 1, 10, 15, 0, 0)),
-                arguments(LocalDateTime.of(2021, 1, 10, 15, 0, 0), null)
-
-        );
     }
 
     @ParameterizedTest

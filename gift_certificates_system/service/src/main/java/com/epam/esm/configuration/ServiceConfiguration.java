@@ -2,8 +2,12 @@ package com.epam.esm.configuration;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
@@ -15,6 +19,7 @@ import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
  * @version 1.0
  */
 @SpringBootApplication(scanBasePackages = "com.epam.esm")
+@EntityScan(basePackages = "com.epam.esm")
 @EnableTransactionManagement
 public class ServiceConfiguration {
 

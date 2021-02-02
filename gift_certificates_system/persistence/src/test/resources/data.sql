@@ -24,7 +24,7 @@ INSERT INTO gift_certificate_has_tag VALUES (1, 1);
 INSERT INTO gift_certificate_has_tag VALUES (1, 3);
 INSERT INTO gift_certificate_has_tag VALUES (3, 4);
 INSERT INTO gift_certificate_has_tag VALUES (4, 4);
-INSERT INTO gift_certificate_has_tag VALUES (5, 2);
+INSERT INTO gift_certificate_has_tag VALUES (5, 1);
 
 INSERT INTO user(email)
 VALUES ('shitikov.egor@gmail.com');
@@ -36,7 +36,7 @@ VALUES ('name_surname@tut.by');
 INSERT INTO gift_certificate_order(user_id_fk, gift_certificate_id_fk, cost, purchase_date)
 VALUES(1, 1, 150.45, '2021-02-01 10:00:00');
 INSERT INTO gift_certificate_order(user_id_fk, gift_certificate_id_fk, cost, purchase_date)
-VALUES(1, 2, 250, '2021-02-03 10:00:00');
+VALUES(1, 5, 250, '2021-02-03 10:00:00');
 INSERT INTO gift_certificate_order(user_id_fk, gift_certificate_id_fk, cost, purchase_date)
 VALUES(2, 3, 50.99, '2021-01-30 10:00:00');
 INSERT INTO gift_certificate_order(user_id_fk, gift_certificate_id_fk, cost, purchase_date)
