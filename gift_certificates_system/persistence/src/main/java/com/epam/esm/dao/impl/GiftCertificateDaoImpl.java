@@ -2,15 +2,13 @@ package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.util.GiftCertificateQueryParameters;
 import com.epam.esm.util.CriteriaQueryCreator;
+import com.epam.esm.util.GiftCertificateQueryParameters;
 import com.epam.esm.util.Page;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;

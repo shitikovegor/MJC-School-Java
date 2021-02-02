@@ -29,15 +29,6 @@ public class TagDaoImpl implements TagDao {
                     "FROM max_price HAVING MAX(user_max_price)) " +
                     "GROUP BY t.name, user.id " +
                     "ORDER BY COUNT(t.id) DESC LIMIT 1";
-//
-//    private static final String TAG_FIND_POPULAR_TAG_BY_MAX_USER_PRICE =
-//            "SELECT t " +
-//                    "FROM Order gco LEFT JOIN gco.user u " +
-//                    "LEFT JOIN gco.giftCertificate gc " +
-//                    "INNER JOIN gc.tags t WHERE u.id IN (SELECT us.id FROM Order gcor " +
-//                    "LEFT JOIN gcor.user us GROUP BY us.id ORDER BY SUM(gcor.cost) DESC) " +
-//                    "GROUP BY t.id " +
-//                    "ORDER BY COUNT(t.id) DESC";
 
     @PersistenceContext
     EntityManager entityManager;

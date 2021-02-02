@@ -1,10 +1,13 @@
 package com.epam.esm.validator;
 
 import com.epam.esm.dto.GiftCertificateDto;
+import com.epam.esm.dto.TagDto;
 import com.epam.esm.exception.IncorrectParameterException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.epam.esm.exception.ExceptionKey.*;
 
@@ -33,6 +36,7 @@ public class GiftCertificateValidator {
         validateDescription(giftCertificateDto.getDescription());
         validatePrice(giftCertificateDto.getPrice());
         validateDuration(giftCertificateDto.getDuration());
+        validateTags(giftCertificateDto);
     }
 
     /**
@@ -88,6 +92,17 @@ public class GiftCertificateValidator {
     public static void validateDuration(int duration) {
         if (duration < MIN_NUMBER || duration > MAX_DURATION) {
             throw new IncorrectParameterException(GIFT_CERTIFICATE_DURATION_INCORRECT, String.valueOf(duration));
+        }
+    }
+
+    /**
+     * Validate tags.
+     *
+     * @param giftCertificateDto the gift certificate dto
+     */
+    public static void validateTags(GiftCertificateDto giftCertificateDto) {
+        if (giftCertificateDto.getTags() == null) {
+            giftCertificateDto.setTags(new ArrayList<>());
         }
     }
 }

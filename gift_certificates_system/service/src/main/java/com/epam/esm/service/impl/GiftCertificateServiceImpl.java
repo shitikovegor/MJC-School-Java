@@ -40,8 +40,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Transactional
     @Override
     public long add(GiftCertificateDto giftCertificateDto) {
-        findAndSetTags(giftCertificateDto);
         GiftCertificateValidator.validate(giftCertificateDto);
+        findAndSetTags(giftCertificateDto);
         GiftCertificate giftCertificate = modelMapper.map(giftCertificateDto, GiftCertificate.class);
         GiftCertificate addedGiftCertificate = giftCertificateDao.add(giftCertificate);
 

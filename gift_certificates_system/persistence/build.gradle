@@ -4,7 +4,7 @@ version '1.0-SNAPSHOT'
 dependencies {
     implementation 'mysql:mysql-connector-java:8.0.23'
     implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
-    testImplementation 'com.h2database:h2:1.4.200'
+    testImplementation 'com.h2database:h2:1.4.197'
     annotationProcessor("org.hibernate:hibernate-jpamodelgen:5.4.27.Final")
 }
 

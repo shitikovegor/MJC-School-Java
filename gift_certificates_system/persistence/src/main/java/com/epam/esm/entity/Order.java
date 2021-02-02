@@ -1,5 +1,7 @@
 package com.epam.esm.entity;
 
+import com.epam.esm.dao.audit.OrderAuditListener;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -11,6 +13,7 @@ import java.util.Objects;
  * @author Egor Shitikov
  * @version 1.0
  */
+@EntityListeners(OrderAuditListener.class)
 @Entity
 @Table(name = "gift_certificate_order")
 public class Order {

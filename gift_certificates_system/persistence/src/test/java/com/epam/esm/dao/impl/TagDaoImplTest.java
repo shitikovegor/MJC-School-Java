@@ -1,92 +1,90 @@
-//package com.epam.esm.dao.impl;
-//
-//import com.epam.esm.dao.TagDao;
-//import com.epam.esm.dao.mapper.TagMapper;
-//import com.epam.esm.entity.Tag;
-//import org.junit.jupiter.api.AfterEach;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.jdbc.core.JdbcTemplate;
-//import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-//import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-//import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-//
-//import java.util.List;
-//import java.util.Optional;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//class TagDaoImplTest {
-//    private TagDao tagDao;
-//    private EmbeddedDatabase database;
-//
-//
-//    @BeforeEach
-//    void setUp() {
-//        database = new EmbeddedDatabaseBuilder()
-//                .setType(EmbeddedDatabaseType.H2)
-//                .addScript("db_script/tag_create_table.sql")
-//                .addScript("db_script/tag_insert_data.sql")
-//                .build();
-//        JdbcTemplate template = new JdbcTemplate(database);
-//        tagDao = new TagDaoImpl(template, new TagMapper());
-//
-//    }
-//
-//    @AfterEach
-//    void tearDown() {
-//        database.shutdown();
-//        tagDao = null;
-//    }
-//
-//    @Test
-//    void addCorrectDataShouldReturnTag() {
-//        Tag tag = new Tag();
-//        tag.setName("New tag");
-//        Tag actual = tagDao.add(tag);
-//        assertNotNull(actual);
-//    }
-//
-//    @Test
-//    void addCorrectDataShouldReturnValidId() {
-//        Tag tag = new Tag();
-//        tag.setName("Title");
-//        Tag actual = tagDao.add(tag);
-//        assertTrue(actual.getId() != 0);
-//    }
-//
-//    @Test
-//    void findAllCorrectDataShouldReturnListOfTags() {
-//        List<Tag> tags = tagDao.findAll();
-//        int actual = tags.size();
-//        int expected = 5;
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void findByIdCorrectDataShouldReturnTag() {
-//        Tag expected = new Tag(3, "food");
-//
-//        Optional<Tag> actualOptional = tagDao.findById(3);
-//        Tag actual = actualOptional.orElse(null);
-//        assertEquals(expected, actual);
-//    }
-//
-//    @Test
-//    void findByIdNotExistingTagShouldReturnEmptyValue() {
-//        Optional<Tag> actual = tagDao.findById(6);
-//        assertEquals(Optional.empty(), actual);
-//    }
-//
-//    @Test
-//    void removeCorrectDataShouldReturnTrue() {
-//        boolean actual = tagDao.remove(3);
-//        assertTrue(actual);
-//    }
-//
-//    @Test
-//    void removeNotExistingDataShouldReturnFalse() {
-//        boolean actual = tagDao.remove(15);
-//        assertFalse(actual);
-//    }
-//}
+package com.epam.esm.dao.impl;
+
+import com.epam.esm.dao.TagDao;
+import com.epam.esm.dao.configuration.DaoTestConfiguration;
+import com.epam.esm.entity.Tag;
+import com.epam.esm.util.Page;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(classes = DaoTestConfiguration.class)
+@Transactional
+class TagDaoImplTest {
+    private static Page page;
+    private static Tag tag1;
+    private static Tag tag2;
+    private static Tag tag3;
+    private TagDao tagDao;
+
+    @Autowired
+    public TagDaoImplTest(TagDao tagDao) {
+        this.tagDao = tagDao;
+    }
+
+    @BeforeAll
+    static void setUp() {
+        tag1 = new Tag();
+        tag1.setName("New tag");
+        tag2 = new Tag(3L, "food");
+        tag3 = new Tag(1L, "rest");
+        page = new Page(5, 1);
+    }
+
+    @AfterAll
+    static void tearDown() {
+        page = null;
+        tag1 = null;
+        tag2 = null;
+        tag3 = null;
+    }
+
+    @Test
+    void addCorrectDataShouldReturnTag() {
+        Tag actual = tagDao.add(tag1);
+
+        assertNotNull(actual);
+    }
+
+    @Test
+    void findAllCorrectDataShouldReturnListOfTags() {
+        List<Tag> tags = tagDao.findAll(page);
+        int actual = tags.size();
+        int expected = 5;
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void findByIdCorrectDataShouldReturnTag() {
+        Optional<Tag> actualOptional = tagDao.findById(3);
+        Tag actual = actualOptional.orElse(null);
+
+        assertEquals(tag2, actual);
+    }
+
+    @Test
+    void findByIdNotExistingTagShouldReturnEmptyValue() {
+        Optional<Tag> actual = tagDao.findById(6);
+        assertEquals(Optional.empty(), actual);
+    }
+
+    @Test
+    void findByNameCorrectDataShouldReturnTag() {
+        Optional<Tag> actualOptional = tagDao.findByName("rest");
+        Tag actual = actualOptional.orElse(null);
+
+        assertEquals(tag3, actual);
+    }
+}
