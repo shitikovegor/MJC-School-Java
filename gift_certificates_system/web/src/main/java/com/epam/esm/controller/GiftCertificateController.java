@@ -169,24 +169,24 @@ public class GiftCertificateController {
                     .getGiftCertificates(parameters.getTagNames(), parameters.getName(), parameters.getDescription(),
                             parameters.getSortType(), parameters.getSortOrder(),
                             PageFormatter.calculateNextPage(pageDto), pageDto.getSize()))
-                    .withRel("next_page"));
+                    .withRel("next_page").expand());
         }
         if (pageDto.getPageNumber() > 1) {
             giftCertificateCollection.add(linkTo(methodOn(GiftCertificateController.class)
                     .getGiftCertificates(parameters.getTagNames(), parameters.getName(), parameters.getDescription(),
                             parameters.getSortType(), parameters.getSortOrder(),
                             PageFormatter.calculatePrevPage(pageDto), pageDto.getSize()))
-                    .withRel("previous_page"));
+                    .withRel("previous_page").expand());
         }
         giftCertificateCollection.add(linkTo(methodOn(GiftCertificateController.class)
                 .getGiftCertificates(parameters.getTagNames(), parameters.getName(), parameters.getDescription(),
                         parameters.getSortType(), parameters.getSortOrder(),
                         PageDto.FIRST_PAGE, pageDto.getSize()))
-                .withRel("first_page"));
+                .withRel("first_page").expand());
         giftCertificateCollection.add(linkTo(methodOn(GiftCertificateController.class)
                 .getGiftCertificates(parameters.getTagNames(), parameters.getName(), parameters.getDescription(),
                         parameters.getSortType(), parameters.getSortOrder(),
                         lastPage, pageDto.getSize()))
-                .withRel("last_page"));
+                .withRel("last_page").expand());
     }
 }
