@@ -29,6 +29,7 @@ public class TagDaoImpl implements TagDao {
                     "FROM max_price GROUP BY user_id HAVING MAX(user_max_price)) " +
                     "GROUP BY t.name, user.id " +
                     "ORDER BY COUNT(t.id) DESC LIMIT 1";
+    private static final String TAG_TOTAL_RECORDS = "SELECT COUNT(*) FROM Tag";
 
     @PersistenceContext
     EntityManager entityManager;
@@ -74,5 +75,11 @@ public class TagDaoImpl implements TagDao {
     public Optional<Tag> findMostPopularTagFromUserWithMaxPurchases() {
         Query query = entityManager.createNativeQuery(TAG_FIND_POPULAR_TAG_BY_MAX_USER_PRICE, Tag.class);
         return query.getResultStream().findFirst();
+    }
+
+    @Override
+    public int findTotalRecords() {
+        Long totalRecords = (Long) entityManager.createQuery(TAG_TOTAL_RECORDS).getSingleResult();
+        return totalRecords.intValue();
     }
 }

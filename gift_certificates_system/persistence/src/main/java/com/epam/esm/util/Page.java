@@ -11,6 +11,7 @@ import java.util.Objects;
 public class Page {
     private int size;
     private int pageNumber;
+    private int totalRecords;
 
     /**
      * Instantiates a new Page.
@@ -21,8 +22,21 @@ public class Page {
     /**
      * Instantiates a new Page.
      *
-     * @param size the size
-     * @param pageNumber the page
+     * @param size         the size
+     * @param pageNumber   the page number
+     * @param totalRecords the total records
+     */
+    public Page(int size, int pageNumber, int totalRecords) {
+        this.size = size;
+        this.pageNumber = pageNumber;
+        this.totalRecords = totalRecords;
+    }
+
+    /**
+     * Instantiates a new Page.
+     *
+     * @param size       the size
+     * @param pageNumber the page number
      */
     public Page(int size, int pageNumber) {
         this.size = size;
@@ -45,6 +59,14 @@ public class Page {
         this.pageNumber = pageNumber;
     }
 
+    public int getTotalRecords() {
+        return totalRecords;
+    }
+
+    public void setTotalRecords(int totalRecords) {
+        this.totalRecords = totalRecords;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -53,21 +75,23 @@ public class Page {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Page page1 = (Page) o;
-        return size == page1.size &&
-                pageNumber == page1.pageNumber;
+        Page page = (Page) o;
+        return size == page.size &&
+                pageNumber == page.pageNumber &&
+                totalRecords == page.totalRecords;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(size, pageNumber);
+        return Objects.hash(size, pageNumber, totalRecords);
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Page{");
         sb.append("size=").append(size);
-        sb.append(", page=").append(pageNumber);
+        sb.append(", pageNumber=").append(pageNumber);
+        sb.append(", totalRecords=").append(totalRecords);
         sb.append('}');
         return sb.toString();
     }

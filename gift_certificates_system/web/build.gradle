@@ -9,4 +9,6 @@ dependencies {
     implementation project(':service')
     implementation "org.springframework.boot:spring-boot-starter-data-rest:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-hateoas:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-parent:${springBootVersion}"
 }

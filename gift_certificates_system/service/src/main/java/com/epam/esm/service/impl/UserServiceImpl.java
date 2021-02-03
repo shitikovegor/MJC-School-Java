@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> findAll(PageDto pageDto) {
         PageValidator.validatePage(pageDto);
+        pageDto.setTotalRecords(userDao.findTotalRecords());
         Page page = modelMapper.map(pageDto, Page.class);
         return userDao.findAll(page).stream()
                 .map(user -> modelMapper.map(user, UserDto.class))

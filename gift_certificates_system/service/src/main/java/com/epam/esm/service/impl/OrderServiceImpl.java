@@ -71,6 +71,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> findByUserId(long id, PageDto pageDto) {
         PageValidator.validatePage(pageDto);
+        pageDto.setTotalRecords(orderDao.findTotalRecords());
         Page page = modelMapper.map(pageDto, Page.class);
         return orderDao.findOrdersByUserId(id, page).stream()
                 .map(order -> modelMapper.map(order, OrderDto.class))

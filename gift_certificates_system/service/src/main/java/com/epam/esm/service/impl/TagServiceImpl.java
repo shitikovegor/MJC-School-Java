@@ -49,6 +49,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<TagDto> findAll(PageDto pageDto) {
         PageValidator.validatePage(pageDto);
+        pageDto.setTotalRecords(tagDao.findTotalRecords());
         Page page = modelMapper.map(pageDto, Page.class);
         return tagDao.findAll(page).stream()
                 .map(tag -> modelMapper.map(tag, TagDto.class))

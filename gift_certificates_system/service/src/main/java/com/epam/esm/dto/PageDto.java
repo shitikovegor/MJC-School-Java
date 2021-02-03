@@ -9,8 +9,11 @@ import java.util.Objects;
  * @version 1.0
  */
 public class PageDto {
+    public static final int FIRST_PAGE = 1;
+
     private int size;
     private int pageNumber;
+    private int totalRecords;
 
     /**
      * Instantiates a new Page DTO.
@@ -19,10 +22,23 @@ public class PageDto {
     }
 
     /**
-     * Instantiates a new Page DTO.
+     * Instantiates a new Page dto.
      *
-     * @param size the size
-     * @param pageNumber the page
+     * @param size         the size
+     * @param pageNumber   the page number
+     * @param totalRecords the total records
+     */
+    public PageDto(int size, int pageNumber, int totalRecords) {
+        this.size = size;
+        this.pageNumber = pageNumber;
+        this.totalRecords = totalRecords;
+    }
+
+    /**
+     * Instantiates a new Page dto.
+     *
+     * @param size       the size
+     * @param pageNumber the page number
      */
     public PageDto(int size, int pageNumber) {
         this.size = size;
@@ -45,6 +61,14 @@ public class PageDto {
         this.pageNumber = pageNumber;
     }
 
+    public int getTotalRecords() {
+        return totalRecords;
+    }
+
+    public void setTotalRecords(int totalRecords) {
+        this.totalRecords = totalRecords;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -53,21 +77,23 @@ public class PageDto {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        PageDto page1 = (PageDto) o;
-        return size == page1.size &&
-                pageNumber == page1.pageNumber;
+        PageDto pageDto = (PageDto) o;
+        return size == pageDto.size &&
+                pageNumber == pageDto.pageNumber &&
+                totalRecords == pageDto.totalRecords;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(size, pageNumber);
+        return Objects.hash(size, pageNumber, totalRecords);
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Page{");
+        final StringBuilder sb = new StringBuilder("PageDto{");
         sb.append("size=").append(size);
-        sb.append(", page=").append(pageNumber);
+        sb.append(", pageNumber=").append(pageNumber);
+        sb.append(", totalRecords=").append(totalRecords);
         sb.append('}');
         return sb.toString();
     }

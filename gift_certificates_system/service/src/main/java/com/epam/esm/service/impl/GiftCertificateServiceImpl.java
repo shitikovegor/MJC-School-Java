@@ -84,7 +84,6 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         fillUpdatedFields(giftCertificateDto, foundGiftCertificateDto);
         GiftCertificateValidator.validate(foundGiftCertificateDto);
         findAndSetTags(foundGiftCertificateDto);
-        foundGiftCertificateDto.setLastUpdateDate(null);
         GiftCertificate foundGiftCertificate = modelMapper.map(foundGiftCertificateDto, GiftCertificate.class);
         GiftCertificate updatedGiftCertificate = giftCertificateDao.update(foundGiftCertificate);
         return modelMapper.map(updatedGiftCertificate, GiftCertificateDto.class);
@@ -96,6 +95,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         GiftCertificateQueryParameters parameters = modelMapper.map(giftCertificateQueryParametersDto,
                 GiftCertificateQueryParameters.class);
         PageValidator.validatePage(pageDto);
+        pageDto.setTotalRecords(giftCertificateDao.findTotalRecords());
         Page page = modelMapper.map(pageDto, Page.class);
         List<GiftCertificate> giftCertificates = giftCertificateDao.findByQueryParameters(parameters, page);
         return giftCertificates.stream()

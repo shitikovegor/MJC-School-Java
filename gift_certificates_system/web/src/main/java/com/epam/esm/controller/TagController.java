@@ -3,7 +3,10 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.service.TagService;
+import com.epam.esm.util.PageFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.WebProperties;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,16 +45,18 @@ public class TagController {
      * Gets tags.
      *
      * @param page the page number
-     * @param size       the size
+     * @param size the size
      * @return the tags
      */
     @GetMapping
-    public List<TagDto> getTags(@RequestParam(required = false, defaultValue = "1") int page,
+    public ResponseEntity<CollectionModel<TagDto>> getTags(@RequestParam(required = false, defaultValue = "1") int page,
                                 @RequestParam(required = false, defaultValue = "5") int size) {
         PageDto pageDto = new PageDto(size, page);
         List<TagDto> tags = tagService.findAll(pageDto);
+        CollectionModel<TagDto> collectionModel = CollectionModel.of(tags);
         tags.forEach(this::addRelationship);
-        return tags;
+        addPageRelationship(collectionModel, pageDto);
+        return ResponseEntity.ok(collectionModel);
     }
 
     /**
@@ -89,19 +94,46 @@ public class TagController {
      * Delete tag by.
      *
      * @param id the tag id
+     * @return the response entity
      */
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTag(@PathVariable long id) {
+    public ResponseEntity deleteTag(@PathVariable long id) {
         tagService.remove(id);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    /**
+     * Gets tag by id.
+     *
+     * @return the tag by id
+     */
+    @GetMapping("/most_popular")
+    public TagDto getMostPopularTagFromUserWithMaxPurchases() {
+        return tagService.findMostPopularTagFromUserWithMaxPurchases();
     }
 
     private void addRelationship(TagDto tagDto) {
         tagDto.add(linkTo(methodOn(TagController.class).getTagById(tagDto.getId())).withSelfRel());
+        tagDto.add(linkTo(methodOn(TagController.class).deleteTag(tagDto.getId())).withRel("delete"));
     }
 
-    @GetMapping("/most_popular")
-    public TagDto getTagById() {
-        return tagService.findMostPopularTagFromUserWithMaxPurchases();
+    private void addPageRelationship(CollectionModel tagCollection, PageDto pageDto) {
+        int lastPage = PageFormatter.calculateLastPage(pageDto);
+        if (pageDto.getPageNumber() < lastPage) {
+            tagCollection.add(linkTo(methodOn(TagController.class)
+                    .getTags(PageFormatter.calculateNextPage(pageDto), pageDto.getSize()))
+                    .withRel("next_page"));
+        }
+        if (pageDto.getPageNumber() > 1) {
+            tagCollection.add(linkTo(methodOn(TagController.class)
+                    .getTags(PageFormatter.calculatePrevPage(pageDto), pageDto.getSize()))
+                    .withRel("previous_page"));
+        }
+        tagCollection.add(linkTo(methodOn(TagController.class)
+                .getTags(PageDto.FIRST_PAGE, pageDto.getSize()))
+                .withRel("first_page"));
+        tagCollection.add(linkTo(methodOn(TagController.class)
+                .getTags(lastPage, pageDto.getSize()))
+                .withRel("last_page"));
     }
 }

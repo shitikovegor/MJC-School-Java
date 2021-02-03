@@ -1,9 +1,12 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.dto.PageDto;
+import com.epam.esm.dto.TagDto;
 import com.epam.esm.dto.UserDto;
 import com.epam.esm.service.UserService;
+import com.epam.esm.util.PageFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,12 +49,14 @@ public class UserController {
      * @return the users
      */
     @GetMapping
-    public List<UserDto> getUsers(@RequestParam(required = false, defaultValue = "1") int page,
-                                  @RequestParam(required = false, defaultValue = "5") int size) {
+    public ResponseEntity<CollectionModel<UserDto>> getUsers(@RequestParam(required = false, defaultValue = "1") int page,
+                                                            @RequestParam(required = false, defaultValue = "5") int size) {
         PageDto pageDto = new PageDto(size, page);
         List<UserDto> users = userService.findAll(pageDto);
+        CollectionModel<UserDto> collectionModel = CollectionModel.of(users);
         users.forEach(this::addRelationship);
-        return users;
+        addPageRelationship(collectionModel, pageDto);
+        return ResponseEntity.ok(collectionModel);
     }
 
     /**
@@ -89,5 +94,25 @@ public class UserController {
 
     private void addRelationship(UserDto userDto) {
         userDto.add(linkTo(methodOn(UserController.class).getUserById(userDto.getId())).withSelfRel());
+    }
+
+    private void addPageRelationship(CollectionModel userCollection, PageDto pageDto) {
+        int lastPage = PageFormatter.calculateLastPage(pageDto);
+        if (pageDto.getPageNumber() < lastPage) {
+            userCollection.add(linkTo(methodOn(UserController.class)
+                    .getUsers(PageFormatter.calculateNextPage(pageDto), pageDto.getSize()))
+                    .withRel("next_page"));
+        }
+        if (pageDto.getPageNumber() > 1) {
+            userCollection.add(linkTo(methodOn(UserController.class)
+                    .getUsers(PageFormatter.calculatePrevPage(pageDto), pageDto.getSize()))
+                    .withRel("previous_page"));
+        }
+        userCollection.add(linkTo(methodOn(UserController.class)
+                .getUsers(PageDto.FIRST_PAGE, pageDto.getSize()))
+                .withRel("first_page"));
+        userCollection.add(linkTo(methodOn(UserController.class)
+                .getUsers(lastPage, pageDto.getSize()))
+                .withRel("last_page"));
     }
 }

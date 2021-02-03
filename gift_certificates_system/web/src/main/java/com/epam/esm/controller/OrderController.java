@@ -2,8 +2,11 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.OrderDto;
 import com.epam.esm.dto.PageDto;
+import com.epam.esm.dto.TagDto;
 import com.epam.esm.service.OrderService;
+import com.epam.esm.util.PageFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,16 +93,38 @@ public class OrderController {
      * @return the orders by user id
      */
     @GetMapping("/users/{userId}")
-    public List<OrderDto> getOrdersByUserId(@PathVariable long userId,
-                                            @RequestParam(required = false, defaultValue = "1") int page,
-                                            @RequestParam(required = false, defaultValue = "5") int size) {
+    public ResponseEntity<CollectionModel<OrderDto>> getOrdersByUserId(@PathVariable long userId,
+                                                                     @RequestParam(required = false, defaultValue = "1") int page,
+                                                                     @RequestParam(required = false, defaultValue = "5") int size) {
         PageDto pageDto = new PageDto(size, page);
         List<OrderDto> orders = orderService.findByUserId(userId, pageDto);
+        CollectionModel<OrderDto> collectionModel = CollectionModel.of(orders);
         orders.forEach(this::addRelationship);
-        return orders;
+        addPageRelationship(collectionModel, pageDto, userId);
+        return ResponseEntity.ok(collectionModel);
     }
 
     private void addRelationship(OrderDto orderDto) {
         orderDto.add(linkTo(methodOn(OrderController.class).getOrderById(orderDto.getId())).withSelfRel());
+    }
+
+    private void addPageRelationship(CollectionModel orderCollection, PageDto pageDto, long userId) {
+        int lastPage = PageFormatter.calculateLastPage(pageDto);
+        if (pageDto.getPageNumber() < lastPage) {
+            orderCollection.add(linkTo(methodOn(OrderController.class)
+                    .getOrdersByUserId(userId, PageFormatter.calculateNextPage(pageDto), pageDto.getSize()))
+                    .withRel("next_page"));
+        }
+        if (pageDto.getPageNumber() > 1) {
+            orderCollection.add(linkTo(methodOn(OrderController.class)
+                    .getOrdersByUserId(userId, PageFormatter.calculatePrevPage(pageDto), pageDto.getSize()))
+                    .withRel("previous_page"));
+        }
+        orderCollection.add(linkTo(methodOn(OrderController.class)
+                .getOrdersByUserId(userId, PageDto.FIRST_PAGE, pageDto.getSize()))
+                .withRel("first_page"));
+        orderCollection.add(linkTo(methodOn(OrderController.class)
+                .getOrdersByUserId(userId, lastPage, pageDto.getSize()))
+                .withRel("last_page"));
     }
 }

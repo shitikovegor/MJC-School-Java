@@ -3,8 +3,11 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.GiftCertificateQueryParametersDto;
 import com.epam.esm.dto.PageDto;
+import com.epam.esm.dto.UserDto;
 import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.util.PageFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +46,7 @@ public class GiftCertificateController {
     /**
      * Gets gift certificates.
      *
-     * @param tagName     the tag name
+     * @param tagName     the tag names
      * @param name        the name
      * @param description the description
      * @param sortType    the sort type
@@ -53,7 +56,7 @@ public class GiftCertificateController {
      * @return the gift certificates
      */
     @GetMapping
-    public List<GiftCertificateDto> getGiftCertificates
+    public ResponseEntity<CollectionModel<GiftCertificateDto>> getGiftCertificates
     (@RequestParam(required = false) String[] tagName,
      @RequestParam(required = false) String name,
      @RequestParam(required = false) String description,
@@ -71,8 +74,10 @@ public class GiftCertificateController {
 
         List<GiftCertificateDto> giftCertificates =
                 giftCertificateService.findCertificates(giftCertificateQueryParametersDto, pageDto);
+        CollectionModel<GiftCertificateDto> collectionModel = CollectionModel.of(giftCertificates);
         giftCertificates.forEach(this::addRelationship);
-        return giftCertificates;
+        addPageRelationship(collectionModel, pageDto, giftCertificateQueryParametersDto);
+        return ResponseEntity.ok(collectionModel);
     }
 
     /**
@@ -154,5 +159,34 @@ public class GiftCertificateController {
                 .deleteGiftCertificate(giftCertificateDto.getId())).withRel("delete"));
         giftCertificateDto.getTags().forEach(tagDto ->
                 tagDto.add(linkTo(methodOn(TagController.class).getTagById(tagDto.getId())).withSelfRel()));
+    }
+
+    private void addPageRelationship(CollectionModel giftCertificateCollection, PageDto pageDto,
+                                     GiftCertificateQueryParametersDto parameters) {
+        int lastPage = PageFormatter.calculateLastPage(pageDto);
+        if (pageDto.getPageNumber() < lastPage) {
+            giftCertificateCollection.add(linkTo(methodOn(GiftCertificateController.class)
+                    .getGiftCertificates(parameters.getTagNames(), parameters.getName(), parameters.getDescription(),
+                            parameters.getSortType(), parameters.getSortOrder(),
+                            PageFormatter.calculateNextPage(pageDto), pageDto.getSize()))
+                    .withRel("next_page"));
+        }
+        if (pageDto.getPageNumber() > 1) {
+            giftCertificateCollection.add(linkTo(methodOn(GiftCertificateController.class)
+                    .getGiftCertificates(parameters.getTagNames(), parameters.getName(), parameters.getDescription(),
+                            parameters.getSortType(), parameters.getSortOrder(),
+                            PageFormatter.calculatePrevPage(pageDto), pageDto.getSize()))
+                    .withRel("previous_page"));
+        }
+        giftCertificateCollection.add(linkTo(methodOn(GiftCertificateController.class)
+                .getGiftCertificates(parameters.getTagNames(), parameters.getName(), parameters.getDescription(),
+                        parameters.getSortType(), parameters.getSortOrder(),
+                        PageDto.FIRST_PAGE, pageDto.getSize()))
+                .withRel("first_page"));
+        giftCertificateCollection.add(linkTo(methodOn(GiftCertificateController.class)
+                .getGiftCertificates(parameters.getTagNames(), parameters.getName(), parameters.getDescription(),
+                        parameters.getSortType(), parameters.getSortOrder(),
+                        lastPage, pageDto.getSize()))
+                .withRel("last_page"));
     }
 }

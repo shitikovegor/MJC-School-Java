@@ -15,6 +15,7 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
     private static final String USER_FIND_BY_EMAIL = "SELECT u FROM User u WHERE email = ?1";
     private static final String USER_FIND_ALL = "SELECT u FROM User u";
+    private static final String USER_TOTAL_RECORDS = "SELECT COUNT(*) FROM User";
 
     @PersistenceContext
     EntityManager entityManager;
@@ -48,5 +49,11 @@ public class UserDaoImpl implements UserDao {
         Query query = entityManager.createQuery(USER_FIND_BY_EMAIL);
         query.setParameter(1, email);
         return query.getResultStream().findFirst();
+    }
+
+    @Override
+    public int findTotalRecords() {
+        Long totalRecords = (Long) entityManager.createQuery(USER_TOTAL_RECORDS).getSingleResult();
+        return totalRecords.intValue();
     }
 }
