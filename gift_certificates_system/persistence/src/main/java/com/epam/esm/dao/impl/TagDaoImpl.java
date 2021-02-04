@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class TagDaoImpl implements TagDao {
+public class TagDaoImpl extends BaseDaoImpl<Tag> implements TagDao {
     private static final String TAG_FIND_BY_NAME = "SELECT t FROM Tag t WHERE name = ?1";
     private static final String TAG_FIND_ALL = "SELECT t FROM Tag t";
     private static final String GIFT_CERTIFICATE_HAS_TAG_REMOVE = "DELETE FROM gift_certificate_has_tag WHERE " +
@@ -35,12 +35,6 @@ public class TagDaoImpl implements TagDao {
     EntityManager entityManager;
 
     @Override
-    public Tag add(Tag tag) {
-        entityManager.persist(tag);
-        return tag;
-    }
-
-    @Override
     public List<Tag> findAll(Page page) {
         return entityManager.createQuery(TAG_FIND_ALL)
                 .setFirstResult((page.getPageNumber() - 1) * page.getSize())
@@ -51,11 +45,6 @@ public class TagDaoImpl implements TagDao {
     @Override
     public Optional<Tag> findById(long id) {
         return Optional.ofNullable(entityManager.find(Tag.class, id));
-    }
-
-    @Override
-    public void remove(Tag tag) {
-        entityManager.remove(tag);
     }
 
     @Override

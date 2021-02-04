@@ -15,17 +15,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class GiftCertificateDaoImpl implements GiftCertificateDao {
+public class GiftCertificateDaoImpl extends BaseDaoImpl<GiftCertificate> implements GiftCertificateDao {
     private static final String GIFT_CERTIFICATE_FIND_ALL = "SELECT g FROM GiftCertificate g";
 
     @PersistenceContext
     EntityManager entityManager;
-
-    @Override
-    public GiftCertificate add(GiftCertificate giftCertificate) {
-        entityManager.persist(giftCertificate);
-        return giftCertificate;
-    }
 
     @Override
     public List<GiftCertificate> findAll(Page page) {
@@ -43,11 +37,6 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     @Override
     public GiftCertificate update(GiftCertificate giftCertificate) {
         return entityManager.merge(giftCertificate);
-    }
-
-    @Override
-    public void remove(GiftCertificate giftCertificate) {
-        entityManager.remove(giftCertificate);
     }
 
     @Override

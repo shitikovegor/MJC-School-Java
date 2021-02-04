@@ -12,19 +12,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     private static final String USER_FIND_BY_EMAIL = "SELECT u FROM User u WHERE email = ?1";
     private static final String USER_FIND_ALL = "SELECT u FROM User u";
     private static final String USER_TOTAL_RECORDS = "SELECT COUNT(*) FROM User";
 
     @PersistenceContext
     EntityManager entityManager;
-
-    @Override
-    public User add(User user) {
-        entityManager.persist(user);
-        return user;
-    }
 
     @Override
     public List<User> findAll(Page page) {

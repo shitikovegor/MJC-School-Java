@@ -12,19 +12,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class OrderDaoImpl implements OrderDao {
+public class OrderDaoImpl extends BaseDaoImpl<Order> implements OrderDao {
     private static final String ORDER_FIND_BY_USER_ID = "SELECT o FROM Order o WHERE user_id_fk = ?1";
     private static final String ORDER_TOTAL_RECORDS = "SELECT COUNT(*) FROM Order";
     private static final String ORDER_TOTAL_RECORDS_BY_USER_ID = "SELECT COUNT(*) FROM Order WHERE user_id_fk = ?1";
 
     @PersistenceContext
     EntityManager entityManager;
-
-    @Override
-    public Order add(Order order) {
-        entityManager.persist(order);
-        return order;
-    }
 
     @Override
     public List<Order> findAll(Page page) {
@@ -37,11 +31,6 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Optional<Order> findById(long id) {
         return Optional.ofNullable(entityManager.find(Order.class, id));
-    }
-
-    @Override
-    public void remove(Order order) {
-        entityManager.remove(order);
     }
 
     @Override
