@@ -25,6 +25,7 @@ public interface TagService extends BaseService<TagDto> {
     /**
      * Find all tags.
      *
+     * @param pageDto the page DTO
      * @return the list of tags DTO
      */
     List<TagDto> findAll(PageDto pageDto);
