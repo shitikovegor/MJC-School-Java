@@ -23,8 +23,8 @@ public interface OrderService extends BaseService<OrderDto> {
     /**
      * Findlist of orders by user id.
      *
-     * @param id the id
+     * @param userId the user id
      * @return the list of orders
      */
-    List<OrderDto> findByUserId(long id, PageDto pageDto);
+    List<OrderDto> findByUserId(long userId, PageDto pageDto);
 }

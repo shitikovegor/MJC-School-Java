@@ -30,6 +30,7 @@ public final class   ExceptionKey {
     public static final String USER_NOT_COMPLETED = "user.notCompleted";
 
     public static final String INCORRECT_PAGE_FORMAT = "pagination.incorrectPage";
+    public static final String PAGE_DOES_NOT_EXIST = "pagination.notExists";
 
     public static final String INTERNAL_ERROR = "internalError";
     public static final String UNSUPPORTED_MEDIA_TYPE = "unsupportedMediaType";

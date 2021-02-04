@@ -23,7 +23,7 @@ public class CriteriaQueryCreator {
      * @param builder                        the CriteriaBuilder
      * @return the criteria query
      */
-    public CriteriaQuery generateCriteriaQueryBySearchParameters
+    public CriteriaQuery<GiftCertificate> generateCriteriaQueryBySearchParameters
             (GiftCertificateQueryParameters giftCertificateQueryParameters, CriteriaBuilder builder) {
         CriteriaQuery<GiftCertificate> query = builder.createQuery(GiftCertificate.class);
         Root<GiftCertificate> root = query.from(GiftCertificate.class);
@@ -35,7 +35,20 @@ public class CriteriaQueryCreator {
 
         query.select(root).where(predicates.toArray(Predicate[]::new));
         setSortType(giftCertificateQueryParameters, builder, root, query);
+        return query;
+    }
 
+    public CriteriaQuery<Long> generateCountCriteriaQueryBySearchParameters
+            (GiftCertificateQueryParameters giftCertificateQueryParameters, CriteriaBuilder builder) {
+        CriteriaQuery<Long> query = builder.createQuery(Long.class);
+        Root<GiftCertificate> root = query.from(GiftCertificate.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.addAll(addTagNames(giftCertificateQueryParameters, builder, root));
+        predicates.addAll(addName(giftCertificateQueryParameters, builder, root));
+        predicates.addAll(addDescription(giftCertificateQueryParameters, builder, root));
+
+        query.select(builder.count(root)).where(predicates.toArray(Predicate[]::new));
         return query;
     }
 
@@ -44,7 +57,6 @@ public class CriteriaQueryCreator {
         List<Predicate> predicates = new ArrayList<>();
         String[] tagNames = giftCertificateQueryParameters.getTagNames();
         if (tagNames != null) {
-//            ListJoin<GiftCertificate, Tag> tags = root.join(GiftCertificate_.tags, JoinType.LEFT);
             predicates.addAll(Arrays.stream(tagNames)
                     .map(tagName -> builder.equal(root.join(GiftCertificate_.tags).get(Tag_.NAME), tagName))
                     .collect(Collectors.toList()));

@@ -2,11 +2,10 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.OrderDto;
 import com.epam.esm.dto.PageDto;
-import com.epam.esm.dto.TagDto;
 import com.epam.esm.service.OrderService;
+import com.epam.esm.util.PageCollection;
 import com.epam.esm.util.PageFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +69,7 @@ public class OrderController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(location);
         addRelationship(orderDto);
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     /**
@@ -87,28 +86,28 @@ public class OrderController {
     /**
      * Gets list of orders by user id.
      *
-     * @param userId     the user id
-     * @param page the page number
-     * @param size       the size
+     * @param userId the user id
+     * @param page   the page number
+     * @param size   the size
      * @return the orders by user id
      */
     @GetMapping("/users/{userId}")
-    public ResponseEntity<CollectionModel<OrderDto>> getOrdersByUserId(@PathVariable long userId,
-                                                                     @RequestParam(required = false, defaultValue = "1") int page,
-                                                                     @RequestParam(required = false, defaultValue = "5") int size) {
+    public ResponseEntity<PageCollection<OrderDto>> getOrdersByUserId(@PathVariable long userId,
+                                                                      @RequestParam(required = false, defaultValue = "1") int page,
+                                                                      @RequestParam(required = false, defaultValue = "5") int size) {
         PageDto pageDto = new PageDto(size, page);
         List<OrderDto> orders = orderService.findByUserId(userId, pageDto);
-        CollectionModel<OrderDto> collectionModel = CollectionModel.of(orders);
+        PageCollection<OrderDto> collection = new PageCollection<>(orders, pageDto.getTotalRecords());
         orders.forEach(this::addRelationship);
-        addPageRelationship(collectionModel, pageDto, userId);
-        return ResponseEntity.ok(collectionModel);
+        addPageRelationship(collection, pageDto, userId);
+        return ResponseEntity.ok(collection);
     }
 
     private void addRelationship(OrderDto orderDto) {
         orderDto.add(linkTo(methodOn(OrderController.class).getOrderById(orderDto.getId())).withSelfRel());
     }
 
-    private void addPageRelationship(CollectionModel orderCollection, PageDto pageDto, long userId) {
+    private void addPageRelationship(PageCollection<OrderDto> orderCollection, PageDto pageDto, long userId) {
         int lastPage = PageFormatter.calculateLastPage(pageDto);
         if (pageDto.getPageNumber() < lastPage) {
             orderCollection.add(linkTo(methodOn(OrderController.class)

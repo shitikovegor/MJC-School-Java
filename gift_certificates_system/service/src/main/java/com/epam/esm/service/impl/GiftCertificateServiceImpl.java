@@ -94,8 +94,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                                                      PageDto pageDto) {
         GiftCertificateQueryParameters parameters = modelMapper.map(giftCertificateQueryParametersDto,
                 GiftCertificateQueryParameters.class);
+        pageDto.setTotalRecords(giftCertificateDao.findTotalRecordsByQueryParameters(parameters));
         PageValidator.validatePage(pageDto);
-        pageDto.setTotalRecords(giftCertificateDao.findTotalRecords());
         Page page = modelMapper.map(pageDto, Page.class);
         List<GiftCertificate> giftCertificates = giftCertificateDao.findByQueryParameters(parameters, page);
         return giftCertificates.stream()

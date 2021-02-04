@@ -17,7 +17,6 @@ import java.util.Optional;
 @Repository
 public class GiftCertificateDaoImpl implements GiftCertificateDao {
     private static final String GIFT_CERTIFICATE_FIND_ALL = "SELECT g FROM GiftCertificate g";
-    private static final String GIFT_CERTIFICATE_FIND_TOTAL_RECORDS = "SELECT COUNT(*) FROM GiftCertificate";
 
     @PersistenceContext
     EntityManager entityManager;
@@ -65,8 +64,11 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
     }
 
     @Override
-    public int findTotalRecords() {
-        Long totalRecords = (Long) entityManager.createQuery(GIFT_CERTIFICATE_FIND_TOTAL_RECORDS).getSingleResult();
-        return totalRecords.intValue();
+    public int findTotalRecordsByQueryParameters(GiftCertificateQueryParameters giftCertificateQueryParameters) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query =
+                new CriteriaQueryCreator().generateCountCriteriaQueryBySearchParameters(giftCertificateQueryParameters,
+                        builder);
+        return entityManager.createQuery(query).getSingleResult().intValue();
     }
 }

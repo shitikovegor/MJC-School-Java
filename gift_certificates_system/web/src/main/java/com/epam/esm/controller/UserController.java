@@ -1,12 +1,11 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.dto.PageDto;
-import com.epam.esm.dto.TagDto;
 import com.epam.esm.dto.UserDto;
 import com.epam.esm.service.UserService;
+import com.epam.esm.util.PageCollection;
 import com.epam.esm.util.PageFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,18 +44,18 @@ public class UserController {
      * Gets users.
      *
      * @param page the page number
-     * @param size       the size
+     * @param size the size
      * @return the users
      */
     @GetMapping
-    public ResponseEntity<CollectionModel<UserDto>> getUsers(@RequestParam(required = false, defaultValue = "1") int page,
+    public ResponseEntity<PageCollection<UserDto>> getUsers(@RequestParam(required = false, defaultValue = "1") int page,
                                                             @RequestParam(required = false, defaultValue = "5") int size) {
         PageDto pageDto = new PageDto(size, page);
         List<UserDto> users = userService.findAll(pageDto);
-        CollectionModel<UserDto> collectionModel = CollectionModel.of(users);
+        PageCollection<UserDto> collection = new PageCollection<>(users, pageDto.getTotalRecords());
         users.forEach(this::addRelationship);
-        addPageRelationship(collectionModel, pageDto);
-        return ResponseEntity.ok(collectionModel);
+        addPageRelationship(collection, pageDto);
+        return ResponseEntity.ok(collection);
     }
 
     /**
@@ -89,14 +88,14 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(location);
         addRelationship(userDto);
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     private void addRelationship(UserDto userDto) {
         userDto.add(linkTo(methodOn(UserController.class).getUserById(userDto.getId())).withSelfRel());
     }
 
-    private void addPageRelationship(CollectionModel userCollection, PageDto pageDto) {
+    private void addPageRelationship(PageCollection<UserDto> userCollection, PageDto pageDto) {
         int lastPage = PageFormatter.calculateLastPage(pageDto);
         if (pageDto.getPageNumber() < lastPage) {
             userCollection.add(linkTo(methodOn(UserController.class)

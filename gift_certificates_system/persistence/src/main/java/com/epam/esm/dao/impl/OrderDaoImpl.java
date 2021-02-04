@@ -14,8 +14,8 @@ import java.util.Optional;
 @Repository
 public class OrderDaoImpl implements OrderDao {
     private static final String ORDER_FIND_BY_USER_ID = "SELECT o FROM Order o WHERE user_id_fk = ?1";
-    private static final String ORDER_DELETE_BY_USER_ID = "DELETE o FROM Order o WHERE user_id_fk = ?1";
     private static final String ORDER_TOTAL_RECORDS = "SELECT COUNT(*) FROM Order";
+    private static final String ORDER_TOTAL_RECORDS_BY_USER_ID = "SELECT COUNT(*) FROM Order WHERE user_id_fk = ?1";
 
     @PersistenceContext
     EntityManager entityManager;
@@ -58,5 +58,12 @@ public class OrderDaoImpl implements OrderDao {
     public int findTotalRecords() {
         Long totalRecords = (Long) entityManager.createQuery(ORDER_TOTAL_RECORDS).getSingleResult();
         return totalRecords.intValue();
+    }
+
+    @Override
+    public int findTotalRecordsByUserId(long userId) {
+        Query query = entityManager.createQuery(ORDER_TOTAL_RECORDS_BY_USER_ID);
+        query.setParameter(1, userId);
+        return ((Long) query.getSingleResult()).intValue();
     }
 }

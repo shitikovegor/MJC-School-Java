@@ -3,11 +3,10 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.GiftCertificateQueryParametersDto;
 import com.epam.esm.dto.PageDto;
-import com.epam.esm.dto.UserDto;
+import com.epam.esm.util.PageCollection;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.util.PageFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +55,7 @@ public class GiftCertificateController {
      * @return the gift certificates
      */
     @GetMapping
-    public ResponseEntity<CollectionModel<GiftCertificateDto>> getGiftCertificates
+    public ResponseEntity<PageCollection<GiftCertificateDto>> getGiftCertificates
     (@RequestParam(required = false) String[] tagName,
      @RequestParam(required = false) String name,
      @RequestParam(required = false) String description,
@@ -74,10 +73,11 @@ public class GiftCertificateController {
 
         List<GiftCertificateDto> giftCertificates =
                 giftCertificateService.findCertificates(giftCertificateQueryParametersDto, pageDto);
-        CollectionModel<GiftCertificateDto> collectionModel = CollectionModel.of(giftCertificates);
         giftCertificates.forEach(this::addRelationship);
-        addPageRelationship(collectionModel, pageDto, giftCertificateQueryParametersDto);
-        return ResponseEntity.ok(collectionModel);
+        PageCollection<GiftCertificateDto> collection = new PageCollection<>(giftCertificates,
+                pageDto.getTotalRecords());
+        addPageRelationship(collection, pageDto, giftCertificateQueryParametersDto);
+        return ResponseEntity.ok(collection);
     }
 
     /**
@@ -110,7 +110,7 @@ public class GiftCertificateController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(location);
         addRelationship(giftCertificateDto);
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     /**
@@ -161,7 +161,7 @@ public class GiftCertificateController {
                 tagDto.add(linkTo(methodOn(TagController.class).getTagById(tagDto.getId())).withSelfRel()));
     }
 
-    private void addPageRelationship(CollectionModel giftCertificateCollection, PageDto pageDto,
+    private void addPageRelationship(PageCollection<GiftCertificateDto> giftCertificateCollection, PageDto pageDto,
                                      GiftCertificateQueryParametersDto parameters) {
         int lastPage = PageFormatter.calculateLastPage(pageDto);
         if (pageDto.getPageNumber() < lastPage) {

@@ -30,4 +30,12 @@ public interface GiftCertificateDao extends BaseDao<GiftCertificate> {
      */
     List<GiftCertificate> findByQueryParameters(GiftCertificateQueryParameters giftCertificateQueryParameters,
                                                 Page page);
+
+    /**
+     * Find total records in database by query parameters int.
+     *
+     * @param giftCertificateQueryParameters the gift certificate query parameters
+     * @return the int
+     */
+    int findTotalRecordsByQueryParameters(GiftCertificateQueryParameters giftCertificateQueryParameters);
 }

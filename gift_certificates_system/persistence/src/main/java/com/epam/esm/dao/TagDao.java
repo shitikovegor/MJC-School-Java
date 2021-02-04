@@ -2,7 +2,6 @@ package com.epam.esm.dao;
 
 import com.epam.esm.entity.Tag;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -28,5 +27,17 @@ public interface TagDao extends BaseDao<Tag> {
      */
     void removeFromTableGiftCertificateHasTag(long id);
 
+    /**
+     * Find most popular tag from user with max purchases optional.
+     *
+     * @return the optional
+     */
     Optional<Tag> findMostPopularTagFromUserWithMaxPurchases();
+
+    /**
+     * Find total records in database.
+     *
+     * @return the int
+     */
+    int findTotalRecords();
 }

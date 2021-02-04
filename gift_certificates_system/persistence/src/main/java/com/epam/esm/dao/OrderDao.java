@@ -20,4 +20,13 @@ public interface OrderDao extends BaseDao<Order> {
      * @return the list
      */
     List<Order> findOrdersByUserId(long id, Page page);
+
+    /**
+     * Find total records in database.
+     *
+     * @return the int
+     */
+    int findTotalRecords();
+
+    int findTotalRecordsByUserId(long userId);
 }

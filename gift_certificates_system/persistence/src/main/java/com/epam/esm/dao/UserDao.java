@@ -19,4 +19,11 @@ public interface UserDao extends BaseDao<User> {
      * @return the optional
      */
     Optional<User> findByEmail(String email);
+
+    /**
+     * Find total records in database.
+     *
+     * @return the int
+     */
+    int findTotalRecords();
 }

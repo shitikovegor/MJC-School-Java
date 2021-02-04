@@ -69,11 +69,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> findByUserId(long id, PageDto pageDto) {
+    public List<OrderDto> findByUserId(long userId, PageDto pageDto) {
+        pageDto.setTotalRecords(orderDao.findTotalRecordsByUserId(userId));
         PageValidator.validatePage(pageDto);
-        pageDto.setTotalRecords(orderDao.findTotalRecords());
         Page page = modelMapper.map(pageDto, Page.class);
-        return orderDao.findOrdersByUserId(id, page).stream()
+        return orderDao.findOrdersByUserId(userId, page).stream()
                 .map(order -> modelMapper.map(order, OrderDto.class))
                 .collect(Collectors.toList());
     }

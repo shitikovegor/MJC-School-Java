@@ -18,7 +18,7 @@ public class TagDaoImpl implements TagDao {
     private static final String GIFT_CERTIFICATE_HAS_TAG_REMOVE = "DELETE FROM gift_certificate_has_tag WHERE " +
             "tag_id_fk = ?";
     private static final String TAG_FIND_POPULAR_TAG_BY_MAX_USER_PRICE =
-            "WITH max_price AS (SELECT user.id AS user_id, SUM(gift_certificate_order.cost) AS user_max_price " +
+            "WITH max_price AS (SELECT user.id AS user_id, SUM(gift_certificate_order.cost) AS user_sum_cost " +
                     "FROM gift_certificate_order LEFT JOIN user ON gift_certificate_order.user_id_fk = user.id " +
                     "GROUP BY user.id) " +
                     "SELECT t.id, t.name " +
@@ -26,8 +26,8 @@ public class TagDaoImpl implements TagDao {
                     "LEFT JOIN gift_certificate gc on gco.gift_certificate_id_fk = gc.id " +
                     "LEFT JOIN gift_certificate_has_tag gcht on gc.id = gcht.gift_certificate_id_fk " +
                     "INNER JOIN tag t on gcht.tag_id_fk = t.id WHERE user.id IN ( SELECT user_id " +
-                    "FROM max_price GROUP BY user_id HAVING MAX(user_max_price)) " +
-                    "GROUP BY t.name, user.id " +
+                    "FROM max_price HAVING MAX(user_sum_cost)) " +
+                    "GROUP BY t.id, user.id " +
                     "ORDER BY COUNT(t.id) DESC LIMIT 1";
     private static final String TAG_TOTAL_RECORDS = "SELECT COUNT(*) FROM Tag";
 

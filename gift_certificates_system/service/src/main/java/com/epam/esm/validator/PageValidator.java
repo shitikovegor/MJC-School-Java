@@ -9,6 +9,8 @@ public class PageValidator {
     private static int DEFAULT_PAGE = 1;
     private static int DEFAULT_SIZE = 5;
 
+    private PageValidator(){}
+
     /**
      * Validate page.
      *
@@ -22,6 +24,9 @@ public class PageValidator {
         if (pageDto.getSize() < MIN_NUMBER) {
             throw new IncorrectParameterException(ExceptionKey.INCORRECT_PAGE_FORMAT, String.valueOf(pageDto.getSize()));
         }
+        if (pageDto.getPageNumber() > calculateLastPage(pageDto)) {
+            throw new IncorrectParameterException(ExceptionKey.PAGE_DOES_NOT_EXIST, String.valueOf(pageDto.getSize()));
+        }
     }
 
     private static void fillEmptyFields(PageDto pageDto) {
@@ -31,5 +36,15 @@ public class PageValidator {
         if (pageDto.getSize() == 0) {
             pageDto.setSize(DEFAULT_SIZE);
         }
+    }
+
+    private static int calculateLastPage(PageDto pageDto) {
+        int endPage;
+        if (pageDto.getTotalRecords() % pageDto.getSize() == 0) {
+            endPage = pageDto.getTotalRecords() / pageDto.getSize();
+        } else {
+            endPage = pageDto.getTotalRecords() / pageDto.getSize() + 1;
+        }
+        return endPage;
     }
 }

@@ -42,11 +42,4 @@ public interface BaseDao<T> {
      * @param entity the entity to delete
      */
     void remove (T entity);
-
-    /**
-     * Find total records in database.
-     *
-     * @return the int
-     */
-    int findTotalRecords();
 }
