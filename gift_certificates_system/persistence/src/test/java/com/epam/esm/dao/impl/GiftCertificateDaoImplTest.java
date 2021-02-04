@@ -9,8 +9,10 @@ import com.epam.esm.util.Page;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -22,6 +24,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = PersistenceTestConfiguration.class)
 @Transactional
 class GiftCertificateDaoImplTest {
@@ -31,6 +34,7 @@ class GiftCertificateDaoImplTest {
     private static Page page;
     private static GiftCertificateQueryParameters parameters;
     private GiftCertificateDao giftCertificateDao;
+
 
     @Autowired
     public GiftCertificateDaoImplTest(GiftCertificateDao giftCertificateDao) {

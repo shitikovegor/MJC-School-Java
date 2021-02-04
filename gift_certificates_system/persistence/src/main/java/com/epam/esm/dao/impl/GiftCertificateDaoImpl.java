@@ -7,8 +7,6 @@ import com.epam.esm.util.GiftCertificateQueryParameters;
 import com.epam.esm.util.Page;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
@@ -17,9 +15,6 @@ import java.util.Optional;
 @Repository
 public class GiftCertificateDaoImpl extends BaseDaoImpl<GiftCertificate> implements GiftCertificateDao {
     private static final String GIFT_CERTIFICATE_FIND_ALL = "SELECT g FROM GiftCertificate g";
-
-    @PersistenceContext
-    EntityManager entityManager;
 
     @Override
     public List<GiftCertificate> findAll(Page page) {

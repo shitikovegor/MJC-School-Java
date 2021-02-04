@@ -5,8 +5,6 @@ import com.epam.esm.entity.Tag;
 import com.epam.esm.util.Page;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
@@ -30,9 +28,6 @@ public class TagDaoImpl extends BaseDaoImpl<Tag> implements TagDao {
                     "GROUP BY t.id, user.id " +
                     "ORDER BY COUNT(t.id) DESC LIMIT 1";
     private static final String TAG_TOTAL_RECORDS = "SELECT COUNT(*) FROM Tag";
-
-    @PersistenceContext
-    EntityManager entityManager;
 
     @Override
     public List<Tag> findAll(Page page) {

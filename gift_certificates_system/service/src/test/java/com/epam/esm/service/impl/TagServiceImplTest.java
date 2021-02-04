@@ -39,8 +39,8 @@ class TagServiceImplTest {
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
         tagService = new TagServiceImpl(modelMapper, tagDao);
-        page = new Page(5, 1);
-        pageDto = new PageDto(5, 1);
+        page = new Page(5, 1, 10);
+        pageDto = new PageDto(5, 1, 10);
     }
 
     @AfterAll
@@ -81,6 +81,7 @@ class TagServiceImplTest {
         List<TagDto> tagsDto = List.of(tagDto1, tagDto2);
 
         when(tagDao.findAll(page)).thenReturn(tags);
+        when(tagDao.findTotalRecords()).thenReturn(10);
         assertEquals(tagsDto, tagService.findAll(pageDto));
     }
 

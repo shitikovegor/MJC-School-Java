@@ -5,8 +5,6 @@ import com.epam.esm.entity.User;
 import com.epam.esm.util.Page;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
@@ -16,9 +14,6 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     private static final String USER_FIND_BY_EMAIL = "SELECT u FROM User u WHERE email = ?1";
     private static final String USER_FIND_ALL = "SELECT u FROM User u";
     private static final String USER_TOTAL_RECORDS = "SELECT COUNT(*) FROM User";
-
-    @PersistenceContext
-    EntityManager entityManager;
 
     @Override
     public List<User> findAll(Page page) {
