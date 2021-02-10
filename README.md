@@ -1,1 +1,1 @@
-# MJC-School-Java Module 3
+# MJC-School-Java
