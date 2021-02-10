@@ -56,11 +56,9 @@ public class CriteriaQueryCreator {
                                         CriteriaBuilder builder, Root<GiftCertificate> root) {
         List<Predicate> predicates = new ArrayList<>();
         String[] tagNames = giftCertificateQueryParameters.getTagNames();
-        if (tagNames != null) {
-            predicates.addAll(Arrays.stream(tagNames)
+        predicates.addAll(Arrays.stream(tagNames)
                     .map(tagName -> builder.equal(root.join(GiftCertificate_.tags).get(Tag_.NAME), tagName))
                     .collect(Collectors.toList()));
-        }
         return predicates;
     }
 

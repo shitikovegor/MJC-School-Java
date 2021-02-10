@@ -89,7 +89,7 @@ public class GiftCertificateQueryParameters {
     }
 
     public String[] getTagNames() {
-        return tagNames;
+        return (tagNames != null) ? tagNames : new String[0];
     }
 
     public void setTagNames(String[] tagNames) {
