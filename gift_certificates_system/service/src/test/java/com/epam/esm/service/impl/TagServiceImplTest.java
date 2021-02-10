@@ -12,6 +12,7 @@ import com.epam.esm.util.Page;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 
@@ -22,15 +23,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TagServiceImplTest {
-    private static TagService tagService;
-    private static TagDao tagDao;
-    private static ModelMapper modelMapper;
-    private static Page page;
-    private static PageDto pageDto;
+    private TagService tagService;
+    private TagDao tagDao;
+    private ModelMapper modelMapper;
+    private Page page;
+    private PageDto pageDto;
 
     @BeforeAll
-    static void setUp() {
+    void setUp() {
         tagDao = mock(TagDaoImpl.class);
         modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
@@ -44,7 +46,7 @@ class TagServiceImplTest {
     }
 
     @AfterAll
-    static void tearDown() {
+    void tearDown() {
         tagService = null;
         tagDao = null;
         modelMapper = null;
