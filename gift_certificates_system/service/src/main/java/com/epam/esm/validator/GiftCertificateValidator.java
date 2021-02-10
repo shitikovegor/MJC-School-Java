@@ -21,8 +21,8 @@ import static com.epam.esm.exception.ExceptionKey.*;
 public class GiftCertificateValidator {
     private static int MIN_NUMBER = 1;
     private static int MAX_DURATION = 365;
-    private static String NAME_PATTERN = "[\\p{L}0-9\\s-]{1,100}";
-    private static String DESCRIPTION_PATTERN = "[\\p{L}0-9\\s-,._!?&]{1,500}";
+    private static String NAME_PATTERN = "[\\p{L}0-9\\s-',]{1,100}";
+    private static String DESCRIPTION_PATTERN = "[\\p{L}0-9\\s-,._!?&'%:]{1,500}";
     private static BigDecimal MIN_PRICE = new BigDecimal(1);
     private static BigDecimal MAX_PRICE = new BigDecimal(999999.99);
 
@@ -36,7 +36,6 @@ public class GiftCertificateValidator {
         validateDescription(giftCertificateDto.getDescription());
         validatePrice(giftCertificateDto.getPrice());
         validateDuration(giftCertificateDto.getDuration());
-        validateTags(giftCertificateDto);
     }
 
     /**
@@ -92,17 +91,6 @@ public class GiftCertificateValidator {
     public static void validateDuration(int duration) {
         if (duration < MIN_NUMBER || duration > MAX_DURATION) {
             throw new IncorrectParameterException(GIFT_CERTIFICATE_DURATION_INCORRECT, String.valueOf(duration));
-        }
-    }
-
-    /**
-     * Validate tags.
-     *
-     * @param giftCertificateDto the gift certificate dto
-     */
-    public static void validateTags(GiftCertificateDto giftCertificateDto) {
-        if (giftCertificateDto.getTags() == null) {
-            giftCertificateDto.setTags(new ArrayList<>());
         }
     }
 }

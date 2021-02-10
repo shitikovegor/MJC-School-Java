@@ -12,6 +12,7 @@ import com.epam.esm.util.Page;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 
@@ -25,22 +26,18 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserServiceImplTest {
-    private static UserService userService;
-    private static UserDao userDao;
-    private static ModelMapper modelMapper;
-    private static Page page;
-    private static PageDto pageDto;
-    private static User user1;
-    private static User user2;
-    private static User user3;
-    private static UserDto userDto1;
-    private static UserDto userDto2;
-    private static UserDto userDto3;
-    private static UserDto userDtoInvalid;
+    private UserService userService;
+    private UserDao userDao;
+    private ModelMapper modelMapper;
+    private Page page;
+    private PageDto pageDto;
+    private User user;
+    private UserDto userDto;
 
     @BeforeAll
-    static void setUp() {
+    void setUp() {
         userDao = mock(UserDaoImpl.class);
         modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
@@ -49,35 +46,28 @@ class UserServiceImplTest {
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
         userService = new UserServiceImpl(modelMapper, userDao);
-        page = new Page(5, 1);
-        pageDto = new PageDto(5, 1);
-        user1 = new User(24L, "user@gmail.com");
-        userDto1 = new UserDto(24L, "user@gmail.com");
-        user2 = new User(1L, "user2@gmail.com");
-        userDto2 = new UserDto(1L, "user2@gmail.com");
-        user3 = new User(2L, "user3@epam.com");
-        userDto3 = new UserDto(2L, "user3@epam.com");
-        userDtoInvalid = new UserDto(1L, "user.gmail.com");
+        page = new Page(5, 1, 10);
+        pageDto = new PageDto(5, 1, 10);
+        user = new User(2L, "user3@epam.com");
+        userDto = new UserDto(2L, "user3@epam.com");
+
     }
 
     @AfterAll
-    static void tearDown() {
+    void tearDown() {
         userService = null;
         userDao = null;
         modelMapper = null;
         page = null;
         pageDto = null;
-        user1 = null;
-        user2 = null;
-        user3 = null;
-        userDto1 = null;
-        userDto2 = null;
-        userDto3 = null;
-        userDtoInvalid = null;
+        user = null;
+        userDto = null;
     }
 
     @Test
     void addCorrectDataShouldReturnUserDtoId() {
+        User user1 = new User(24L, "user@gmail.com");
+        UserDto userDto1 = new UserDto(24L, "user@gmail.com");
         when(userDao.findByEmail("user@gmail.com")).thenReturn(Optional.empty());
         when(userDao.add(user1)).thenReturn(user1);
         long expected = 24L;
@@ -86,6 +76,7 @@ class UserServiceImplTest {
 
     @Test
     void addIncorrectDataShouldThrowException() {
+        UserDto userDtoInvalid = new UserDto(1L, "user.gmail.com");
         when(userDao.findByEmail(anyString())).thenReturn(Optional.empty());
         when(userDao.add(any(User.class))).thenReturn(null);
         assertThrows(IncorrectParameterException.class, () -> userService.add(userDtoInvalid));
@@ -93,18 +84,21 @@ class UserServiceImplTest {
 
     @Test
     void findAllCorrectDataShouldReturnUserDtoList() {
-        List<User> users = List.of(user2, user3);
-        List<UserDto> usersDto = List.of(userDto2, userDto3);
-
+        User user2 = new User(1L, "user2@gmail.com");
+        UserDto userDto2 = new UserDto(1L, "user2@gmail.com");
+        List<User> users = List.of(user2, user);
+        List<UserDto> usersDto = List.of(userDto2, userDto);
+        when(userDao.findTotalRecords()).thenReturn(10);
         when(userDao.findAll(page)).thenReturn(users);
+
         assertEquals(usersDto, userService.findAll(pageDto));
     }
 
     @Test
     void findByIdCorrectDataShouldReturnUserDto() {
-        when(userDao.findById(2L)).thenReturn(Optional.of(user3));
+        when(userDao.findById(2L)).thenReturn(Optional.of(user));
         long id = 2L;
-        assertEquals(userDto3, userService.findById(id));
+        assertEquals(userDto, userService.findById(id));
     }
 
     @Test
@@ -116,9 +110,9 @@ class UserServiceImplTest {
 
     @Test
     void findByEmailCorrectDataShouldReturnUserDto() {
-        when(userDao.findByEmail("user3@epam.com")).thenReturn(Optional.of(user3));
+        when(userDao.findByEmail("user3@epam.com")).thenReturn(Optional.of(user));
         long id = 2L;
-        assertEquals(userDto3, userService.findByEmail("user3@epam.com"));
+        assertEquals(userDto, userService.findByEmail("user3@epam.com"));
     }
 
     @Test

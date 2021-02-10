@@ -63,8 +63,8 @@ class OrderServiceImplTest {
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
         orderService = new OrderServiceImpl(modelMapper, orderDao, userService, giftCertificateService);
-        page = new Page(5, 1);
-        pageDto = new PageDto(5, 1);
+        page = new Page(5, 1, 10);
+        pageDto = new PageDto(5, 1, 10);
 
         giftCertificateDto = new GiftCertificateDto(
                 3, "dinner", "New Year",
@@ -142,6 +142,7 @@ class OrderServiceImplTest {
     @Test
     void findByUserIdCorrectDataShouldReturnOrderDtoList() {
         List<OrderDto> expected = List.of(orderDto);
+        when(orderDao.findTotalRecordsByUserId(15L)).thenReturn(10);
         when(orderDao.findOrdersByUserId(15L, page)).thenReturn(List.of(order));
         long id = 15L;
 

@@ -3,12 +3,11 @@ package com.epam.esm.configuration;
 import com.epam.esm.converter.SortOrderConverter;
 import com.epam.esm.converter.SortTypeConverter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -17,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @author Egor Shitikov
  * @version 1.0
  */
-@SpringBootApplication(scanBasePackages = "com.epam.esm")
+@Configuration
 public class WebConfiguration implements WebMvcConfigurer {
     @Value("i18n/messages")
     private String pathName;

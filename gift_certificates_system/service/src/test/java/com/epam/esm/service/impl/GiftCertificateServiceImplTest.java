@@ -102,14 +102,16 @@ class GiftCertificateServiceImplTest {
                 LocalDateTime.of(2020, 12, 25, 10, 0, 0),
                 LocalDateTime.of(2021, 1, 12, 12, 59, 59), new ArrayList<>());
         List<GiftCertificateDto> giftCertificatesDto = List.of(giftCertificateDto1, giftCertificateDto2);
-
-        when(giftCertificateDao.findByQueryParameters(any(GiftCertificateQueryParameters.class), any(Page.class)))
-                .thenReturn(giftCertificates);
         GiftCertificateQueryParametersDto parametersDto =
                 new GiftCertificateQueryParametersDto(new String[1], "in", "i",
                         GiftCertificateQueryParametersDto.SortType.NAME,
                         GiftCertificateQueryParametersDto.SortOrder.ASC);
-        assertEquals(giftCertificatesDto, giftCertificateService.findCertificates(parametersDto, new PageDto(5, 1)));
+        when(giftCertificateDao.findTotalRecordsByQueryParameters(any(GiftCertificateQueryParameters.class))).thenReturn(10);
+        when(giftCertificateDao.findByQueryParameters(any(GiftCertificateQueryParameters.class), any(Page.class)))
+                .thenReturn(giftCertificates);
+
+        assertEquals(giftCertificatesDto, giftCertificateService.findCertificates(parametersDto,
+                new PageDto(5, 1, 10)));
     }
 
     @Test

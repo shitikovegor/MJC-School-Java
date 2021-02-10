@@ -5,6 +5,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -113,7 +114,7 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
     }
 
     public List<TagDto> getTags() {
-        return tags;
+        return (tags != null) ? tags : new ArrayList<>();
     }
 
     public void setTags(List<TagDto> tagsDto) {

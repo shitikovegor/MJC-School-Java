@@ -7,6 +7,7 @@ import com.epam.esm.util.Page;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,12 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(classes = PersistenceTestConfiguration.class)
 @Transactional
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserDaoImplTest {
-    private static Page page;
-    private static User user1;
-    private static User user2;
-    private static User user3;
-    private UserDao userDao;
+    private final UserDao userDao;
+    private Page page;
 
     @Autowired
     public UserDaoImplTest(UserDao userDao) {
@@ -32,25 +31,20 @@ class UserDaoImplTest {
     }
 
     @BeforeAll
-    static void setUp() {
-        user1 = new User();
-        user1.setEmail("newUser@mail.ru");
-        user2 = new User(3L, "name_surname@tut.by");
-        user3 = new User(1L, "shitikov.egor@gmail.com");
+    void setUp() {
         page = new Page(3, 1);
     }
 
     @AfterAll
-    static void tearDown() {
+    void tearDown() {
         page = null;
-        user1 = null;
-        user2 = null;
-        user3 = null;
     }
 
     @Test
     void addCorrectDataShouldReturnUser() {
-        User actual = userDao.add(user1);
+        User user = new User();
+        user.setEmail("newUser@mail.ru");
+        User actual = userDao.add(user);
 
         assertNotNull(actual);
     }
@@ -66,10 +60,11 @@ class UserDaoImplTest {
 
     @Test
     void findByIdCorrectDataShouldReturnUser() {
+        User user = new User(3L, "name_surname@tut.by");
         Optional<User> actualOptional = userDao.findById(3);
         User actual = actualOptional.orElse(null);
 
-        assertEquals(user2, actual);
+        assertEquals(user, actual);
     }
 
     @Test
@@ -80,9 +75,10 @@ class UserDaoImplTest {
 
     @Test
     void findByEmailCorrectDataShouldReturnUser() {
+        User user = new User(1L, "shitikov.egor@gmail.com");
         Optional<User> actualOptional = userDao.findByEmail("shitikov.egor@gmail.com");
         User actual = actualOptional.orElse(null);
 
-        assertEquals(user3, actual);
+        assertEquals(user, actual);
     }
 }

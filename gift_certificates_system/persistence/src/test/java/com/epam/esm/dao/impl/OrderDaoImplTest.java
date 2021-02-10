@@ -10,6 +10,7 @@ import com.epam.esm.util.Page;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +25,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(classes = PersistenceTestConfiguration.class)
 @Transactional
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OrderDaoImplTest {
-    private static Page page;
-    private static Order order1;
-    private static Order order2;
-    private static Order order3;
-    private OrderDao orderDao;
+    private Page page;
+    private User user;
+    private GiftCertificate giftCertificate;
+    private final OrderDao orderDao;
 
     @Autowired
     public OrderDaoImplTest(OrderDao orderDao) {
@@ -37,39 +38,30 @@ class OrderDaoImplTest {
     }
 
     @BeforeAll
-    static void setUp() {
-        User user = new User(1L, "shitikov.egor@gmail.com");
-        GiftCertificate giftCertificate = new GiftCertificate(1L, "rest in hotel",
+    void setUp() {
+        user = new User(1L, "shitikov.egor@gmail.com");
+        giftCertificate = new GiftCertificate(1L, "rest in hotel",
                 "rest in good place", new BigDecimal("150.45"), 4,
                 LocalDateTime.of(2021, 1, 1, 10, 0, 0),
                 LocalDateTime.of(2021, 1, 2, 10, 0, 0),
                 List.of(new Tag(1L, "rest"), new Tag(3L, "food")));
-
-        order1 = new Order();
-        order1.setUser(user);
-        order1.setGiftCertificate(giftCertificate);
-        order1.setCost(new BigDecimal("150.45"));
-        order2 = new Order();
-        order2.setId(1L);
-        order2.setUser(user);
-        order2.setGiftCertificate(giftCertificate);
-        order2.setCost(new BigDecimal("150.45"));
-        order2.setPurchaseDate(LocalDateTime.of(2021, 2, 1, 10, 0, 0));
-        order3 = new Order();
         page = new Page(5, 1);
     }
 
     @AfterAll
-    static void tearDown() {
+    void tearDown() {
         page = null;
-        order1 = null;
-        order2 = null;
-        order3 = null;
+        user = null;
+        giftCertificate = null;
     }
 
     @Test
     void addCorrectDataShouldReturnOrder() {
-        Order actual = orderDao.add(order1);
+        Order order = new Order();
+        order.setUser(user);
+        order.setGiftCertificate(giftCertificate);
+        order.setCost(new BigDecimal("150.45"));
+        Order actual = orderDao.add(order);
 
         assertNotNull(actual);
     }
@@ -85,10 +77,16 @@ class OrderDaoImplTest {
 
     @Test
     void findByIdCorrectDataShouldReturnOrder() {
+        Order order = new Order();
+        order.setId(1L);
+        order.setUser(user);
+        order.setGiftCertificate(giftCertificate);
+        order.setCost(new BigDecimal("150.45"));
+        order.setPurchaseDate(LocalDateTime.of(2021, 2, 1, 10, 0, 0));
         Optional<Order> actualOptional = orderDao.findById(1L);
         Order actual = actualOptional.orElse(null);
 
-        assertEquals(order2, actual);
+        assertEquals(order, actual);
     }
 
     @Test

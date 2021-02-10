@@ -25,7 +25,7 @@ public class PageValidator {
             throw new IncorrectParameterException(ExceptionKey.INCORRECT_PAGE_FORMAT, String.valueOf(pageDto.getSize()));
         }
         if (pageDto.getPageNumber() > calculateLastPage(pageDto)) {
-            throw new IncorrectParameterException(ExceptionKey.PAGE_DOES_NOT_EXIST, String.valueOf(pageDto.getSize()));
+            throw new IncorrectParameterException(ExceptionKey.PAGE_DOES_NOT_EXIST, String.valueOf(pageDto.getPageNumber()));
         }
     }
 

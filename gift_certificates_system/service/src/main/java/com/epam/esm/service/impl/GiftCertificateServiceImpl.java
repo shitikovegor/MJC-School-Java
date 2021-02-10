@@ -104,11 +104,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     }
 
     private void findAndSetTags(GiftCertificateDto giftCertificateDto) {
-        List<TagDto> tags = Optional.of(giftCertificateDto.getTags().stream()
+        List<TagDto> tags = giftCertificateDto.getTags().stream()
                 .distinct()
                 .map(tagDto -> tagService.findByName(tagDto.getName())
                         .orElseGet(() -> new TagDto(tagService.add(tagDto), tagDto.getName())))
-                .collect(Collectors.toList())).orElse(new ArrayList<>());
+                .collect(Collectors.toList());
 
         giftCertificateDto.setTags(tags);
     }
@@ -127,7 +127,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (updatedGiftCertificateDto.getDuration() != 0) {
             foundGiftCertificateDto.setDuration(updatedGiftCertificateDto.getDuration());
         }
-        if (updatedGiftCertificateDto.getTags() != null) {
+        if (!updatedGiftCertificateDto.getTags().isEmpty()) {
             foundGiftCertificateDto.setTags(updatedGiftCertificateDto.getTags());
         }
     }

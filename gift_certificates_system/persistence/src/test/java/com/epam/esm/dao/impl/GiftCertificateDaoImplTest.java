@@ -9,10 +9,10 @@ import com.epam.esm.util.Page;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -24,16 +24,13 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = PersistenceTestConfiguration.class)
 @Transactional
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GiftCertificateDaoImplTest {
-    private static GiftCertificate giftCertificate1;
-    private static GiftCertificate giftCertificate2;
-    private static GiftCertificate giftCertificate3;
-    private static Page page;
-    private static GiftCertificateQueryParameters parameters;
-    private GiftCertificateDao giftCertificateDao;
+    private final GiftCertificateDao giftCertificateDao;
+    private Page page;
+    private GiftCertificateQueryParameters parameters;
 
 
     @Autowired
@@ -43,29 +40,7 @@ class GiftCertificateDaoImplTest {
 
 
     @BeforeAll
-    static void setUp() {
-        giftCertificate1 = new GiftCertificate();
-        giftCertificate1.setName("rest in hotel one");
-        giftCertificate1.setDescription("rest in good place");
-        giftCertificate1.setPrice(new BigDecimal(150.45).setScale(2, RoundingMode.CEILING));
-        giftCertificate1.setDuration(4);
-        giftCertificate1.setTags(List.of(new Tag(4L, "sport")));
-        giftCertificate2 = new GiftCertificate();
-        giftCertificate2.setId(1L);
-        giftCertificate2.setName("rest in SPA");
-        giftCertificate2.setDescription("rest in good place");
-        giftCertificate2.setPrice(new BigDecimal(250));
-        giftCertificate2.setDuration(40);
-        giftCertificate2.setCreateDate(LocalDateTime.of(2021, 1, 1, 10, 0, 0));
-        giftCertificate3 = new GiftCertificate();
-        giftCertificate3.setId(3);
-        giftCertificate3.setName("dinner in cafe");
-        giftCertificate3.setDescription("New Year dinner or breakfast");
-        giftCertificate3.setPrice(new BigDecimal(50.99).setScale(2, RoundingMode.DOWN));
-        giftCertificate3.setDuration(10);
-        giftCertificate3.setCreateDate(LocalDateTime.of(2020, 12, 31, 23, 59, 0));
-        giftCertificate3.setLastUpdateDate(LocalDateTime.of(2021, 12, 31, 23, 59, 59));
-        giftCertificate3.setTags(List.of(new Tag(4L, "sport")));
+    void setUp() {
         page = new Page(5, 1);
         parameters = new GiftCertificateQueryParameters();
         parameters.setName("i");
@@ -74,17 +49,20 @@ class GiftCertificateDaoImplTest {
     }
 
     @AfterAll
-    static void tearDown() {
-        giftCertificate1 = null;
-        giftCertificate2 = null;
-        giftCertificate3 = null;
+    void tearDown() {
         page = null;
         parameters = null;
     }
 
     @Test
     void addCorrectDataShouldReturnGiftCertificate() {
-        GiftCertificate actual = giftCertificateDao.add(giftCertificate1);
+        GiftCertificate giftCertificate = new GiftCertificate();
+        giftCertificate.setName("rest in hotel one");
+        giftCertificate.setDescription("rest in good place");
+        giftCertificate.setPrice(new BigDecimal(150.45).setScale(2, RoundingMode.CEILING));
+        giftCertificate.setDuration(4);
+        giftCertificate.setTags(List.of(new Tag(4L, "sport")));
+        GiftCertificate actual = giftCertificateDao.add(giftCertificate);
 
         assertNotNull(actual);
     }
@@ -100,10 +78,19 @@ class GiftCertificateDaoImplTest {
 
     @Test
     void findByIdCorrectDataShouldReturnGiftCertificate() {
+        GiftCertificate giftCertificate = new GiftCertificate();
+        giftCertificate.setId(3);
+        giftCertificate.setName("dinner in cafe");
+        giftCertificate.setDescription("New Year dinner or breakfast");
+        giftCertificate.setPrice(new BigDecimal(50.99).setScale(2, RoundingMode.DOWN));
+        giftCertificate.setDuration(10);
+        giftCertificate.setCreateDate(LocalDateTime.of(2020, 12, 31, 23, 59, 0));
+        giftCertificate.setLastUpdateDate(LocalDateTime.of(2021, 12, 31, 23, 59, 59));
+        giftCertificate.setTags(List.of(new Tag(4L, "sport")));
         Optional<GiftCertificate> actualOptional = giftCertificateDao.findById(3);
         GiftCertificate actual = actualOptional.orElse(null);
 
-        assertEquals(giftCertificate3, actual);
+        assertEquals(giftCertificate, actual);
     }
 
     @Test
@@ -115,8 +102,15 @@ class GiftCertificateDaoImplTest {
 
     @Test
     void updateCorrectDataShouldReturnTrue() {
-        GiftCertificate actual = giftCertificateDao.update(giftCertificate2);
-        assertEquals(giftCertificate2.getName(), actual.getName());
+        GiftCertificate giftCertificate = new GiftCertificate();
+        giftCertificate.setId(1L);
+        giftCertificate.setName("rest in SPA");
+        giftCertificate.setDescription("rest in good place");
+        giftCertificate.setPrice(new BigDecimal(250));
+        giftCertificate.setDuration(40);
+        giftCertificate.setCreateDate(LocalDateTime.of(2021, 1, 1, 10, 0, 0));
+        GiftCertificate actual = giftCertificateDao.update(giftCertificate);
+        assertEquals(giftCertificate.getName(), actual.getName());
     }
 
     @Test

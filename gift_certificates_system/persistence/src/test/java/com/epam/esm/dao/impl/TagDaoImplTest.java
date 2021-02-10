@@ -7,6 +7,7 @@ import com.epam.esm.util.Page;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,16 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(classes = PersistenceTestConfiguration.class)
 @Transactional
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TagDaoImplTest {
-    private static Page page;
-    private static Tag tag1;
-    private static Tag tag2;
-    private static Tag tag3;
-    private TagDao tagDao;
+    private final TagDao tagDao;
+    private Page page;
+    private Tag tag;
 
     @Autowired
     public TagDaoImplTest(TagDao tagDao) {
@@ -31,24 +32,21 @@ class TagDaoImplTest {
     }
 
     @BeforeAll
-    static void setUp() {
-        tag1 = new Tag();
-        tag1.setName("New tag");
-        tag2 = new Tag(3L, "food");
-        tag3 = new Tag(1L, "rest");
+    void setUp() {
+        tag = new Tag(1L, "rest");
         page = new Page(5, 1);
     }
 
     @AfterAll
-    static void tearDown() {
+    void tearDown() {
         page = null;
-        tag1 = null;
-        tag2 = null;
-        tag3 = null;
+        tag = null;
     }
 
     @Test
     void addCorrectDataShouldReturnTag() {
+        Tag tag1 = new Tag();
+        tag1.setName("New tag");
         Tag actual = tagDao.add(tag1);
 
         assertNotNull(actual);
@@ -65,6 +63,7 @@ class TagDaoImplTest {
 
     @Test
     void findByIdCorrectDataShouldReturnTag() {
+        Tag tag2 = new Tag(3L, "food");
         Optional<Tag> actualOptional = tagDao.findById(3);
         Tag actual = actualOptional.orElse(null);
 
@@ -82,7 +81,7 @@ class TagDaoImplTest {
         Optional<Tag> actualOptional = tagDao.findByName("rest");
         Tag actual = actualOptional.orElse(null);
 
-        assertEquals(tag3, actual);
+        assertEquals(tag, actual);
     }
 
     @Test
@@ -90,6 +89,6 @@ class TagDaoImplTest {
         Optional<Tag> actualOptional = tagDao.findMostPopularTagFromUserWithMaxPurchases();
         Tag actual = actualOptional.orElse(null);
 
-        assertEquals(tag3, actual);
+        assertEquals(tag, actual);
     }
 }

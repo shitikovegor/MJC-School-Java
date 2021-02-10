@@ -2,7 +2,6 @@ package com.epam.esm.service;
 
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagDto;
-import com.epam.esm.util.Page;
 
 import java.util.List;
 import java.util.Optional;

@@ -123,7 +123,7 @@ class GiftCertificateValidatorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "rest!", "23$D", "rest, sea"})
+    @ValueSource(strings = {"", "rest!", "23$D", "rest; sea"})
     void validateIncorrectNameShouldThrowException(String name) {
         assertThrows(IncorrectParameterException.class, () -> GiftCertificateValidator.validateName(name));
     }
@@ -135,7 +135,7 @@ class GiftCertificateValidatorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "rest^", "<//s", ">Sea cruise", "90%"})
+    @ValueSource(strings = {"", "rest^", "<//s", ">Sea cruise", "90[]"})
     void validateIncorrectDescriptionShouldThrowException(String description) {
         assertThrows(IncorrectParameterException.class, () -> GiftCertificateValidator.validateDescription(description));
     }

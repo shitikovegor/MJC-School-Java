@@ -5,7 +5,7 @@ import com.epam.esm.exception.IncorrectParameterException;
 
 public class UserValidator {
     private static final String EMAIL_PATTERN
-            = "[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,100})";
+            = "[A-Za-z0-9-]+([\\.|_][A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,100})";
     private static int MIN_NUMBER = 1;
 
     /**

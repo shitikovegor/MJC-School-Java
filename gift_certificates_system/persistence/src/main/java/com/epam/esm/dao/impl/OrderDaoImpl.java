@@ -14,10 +14,11 @@ public class OrderDaoImpl extends BaseDaoImpl<Order> implements OrderDao {
     private static final String ORDER_FIND_BY_USER_ID = "SELECT o FROM Order o WHERE user_id_fk = ?1";
     private static final String ORDER_TOTAL_RECORDS = "SELECT COUNT(*) FROM Order";
     private static final String ORDER_TOTAL_RECORDS_BY_USER_ID = "SELECT COUNT(*) FROM Order WHERE user_id_fk = ?1";
+    private static final String ORDER_FIND_ALL = "select o from Order o";
 
     @Override
     public List<Order> findAll(Page page) {
-        return entityManager.createQuery("select o from Order o")
+        return entityManager.createQuery(ORDER_FIND_ALL)
                 .setFirstResult((page.getPageNumber() - 1) * page.getSize())
                 .setMaxResults(page.getSize())
                 .getResultList();
