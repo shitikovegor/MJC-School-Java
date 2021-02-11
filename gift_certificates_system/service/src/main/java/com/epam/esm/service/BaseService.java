@@ -1,7 +1,7 @@
 package com.epam.esm.service;
 
 /**
- * Interface {@code BaseService} Base service describes base business logic operations.
+ * Interface {@code BaseService} describes base business logic operations.
  *
  * @param <T> the type parameter
  * @author Egor Shitikov
@@ -23,11 +23,4 @@ public interface BaseService<T> {
      * @return the found object
      */
     T findById(long id);
-
-    /**
-     * Remove object by id.
-     *
-     * @param id the id of object to remove
-     */
-    void remove(long id);
 }

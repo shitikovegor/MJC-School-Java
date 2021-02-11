@@ -1,75 +1,73 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.TagDao;
-import com.epam.esm.dao.mapper.TagMapper;
+import com.epam.esm.dao.configuration.PersistenceTestConfiguration;
 import com.epam.esm.entity.Tag;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.epam.esm.util.Page;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.junit.jupiter.api.TestInstance;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SpringBootTest(classes = PersistenceTestConfiguration.class)
+@Transactional
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TagDaoImplTest {
-    private TagDao tagDao;
-    private EmbeddedDatabase database;
+    private final TagDao tagDao;
+    private Page page;
+    private Tag tag;
 
-
-    @BeforeEach
-    void setUp() {
-        database = new EmbeddedDatabaseBuilder()
-                .setType(EmbeddedDatabaseType.H2)
-                .addScript("db_script/tag_create_table.sql")
-                .addScript("db_script/tag_insert_data.sql")
-                .build();
-        JdbcTemplate template = new JdbcTemplate(database);
-        tagDao = new TagDaoImpl(template, new TagMapper());
-
+    @Autowired
+    public TagDaoImplTest(TagDao tagDao) {
+        this.tagDao = tagDao;
     }
 
-    @AfterEach
+    @BeforeAll
+    void setUp() {
+        tag = new Tag(1L, "rest");
+        page = new Page(5, 1);
+    }
+
+    @AfterAll
     void tearDown() {
-        database.shutdown();
-        tagDao = null;
+        page = null;
+        tag = null;
     }
 
     @Test
     void addCorrectDataShouldReturnTag() {
-        Tag tag = new Tag();
-        tag.setName("New tag");
-        Tag actual = tagDao.add(tag);
+        Tag tag1 = new Tag();
+        tag1.setName("New tag");
+        Tag actual = tagDao.add(tag1);
+
         assertNotNull(actual);
     }
 
     @Test
-    void addCorrectDataShouldReturnValidId() {
-        Tag tag = new Tag();
-        tag.setName("Title");
-        Tag actual = tagDao.add(tag);
-        assertTrue(actual.getId() != 0);
-    }
-
-    @Test
     void findAllCorrectDataShouldReturnListOfTags() {
-        List<Tag> tags = tagDao.findAll();
+        List<Tag> tags = tagDao.findAll(page);
         int actual = tags.size();
         int expected = 5;
+
         assertEquals(expected, actual);
     }
 
     @Test
     void findByIdCorrectDataShouldReturnTag() {
-        Tag expected = new Tag(3, "food");
-
+        Tag tag2 = new Tag(3L, "food");
         Optional<Tag> actualOptional = tagDao.findById(3);
         Tag actual = actualOptional.orElse(null);
-        assertEquals(expected, actual);
+
+        assertEquals(tag2, actual);
     }
 
     @Test
@@ -79,14 +77,18 @@ class TagDaoImplTest {
     }
 
     @Test
-    void removeCorrectDataShouldReturnTrue() {
-        boolean actual = tagDao.remove(3);
-        assertTrue(actual);
+    void findByNameCorrectDataShouldReturnTag() {
+        Optional<Tag> actualOptional = tagDao.findByName("rest");
+        Tag actual = actualOptional.orElse(null);
+
+        assertEquals(tag, actual);
     }
 
     @Test
-    void removeNotExistingDataShouldReturnFalse() {
-        boolean actual = tagDao.remove(15);
-        assertFalse(actual);
+    void findMostPopularTagFromUserWithMaxPurchasesShouldReturnMostPopularTag() {
+        Optional<Tag> actualOptional = tagDao.findMostPopularTagFromUserWithMaxPurchases();
+        Tag actual = actualOptional.orElse(null);
+
+        assertEquals(tag, actual);
     }
 }

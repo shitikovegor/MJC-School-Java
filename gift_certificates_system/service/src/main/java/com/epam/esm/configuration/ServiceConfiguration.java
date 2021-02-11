@@ -3,13 +3,8 @@ package com.epam.esm.configuration;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import javax.sql.DataSource;
 
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
@@ -20,7 +15,6 @@ import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
  * @version 1.0
  */
 @Configuration
-@ComponentScan("com.epam.esm")
 @EnableTransactionManagement
 public class ServiceConfiguration {
 
@@ -38,16 +32,5 @@ public class ServiceConfiguration {
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
         return mapper;
-    }
-
-    /**
-     * Bean {@code PlatformTransactionManager} will be use for transactions
-     *
-     * @param dataSource the data source
-     * @return the platform transaction manager
-     */
-    @Bean
-    public PlatformTransactionManager transactionManager(DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
     }
 }

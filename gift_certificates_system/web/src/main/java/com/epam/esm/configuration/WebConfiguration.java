@@ -1,15 +1,13 @@
 package com.epam.esm.configuration;
 
-import com.epam.esm.converter.OrderSortConverter;
-import com.epam.esm.converter.TypeSortConverter;
+import com.epam.esm.converter.SortOrderConverter;
+import com.epam.esm.converter.SortTypeConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -19,8 +17,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @version 1.0
  */
 @Configuration
-@EnableWebMvc
-@ComponentScan("com.epam.esm")
 public class WebConfiguration implements WebMvcConfigurer {
     @Value("i18n/messages")
     private String pathName;
@@ -44,7 +40,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(new OrderSortConverter());
-        registry.addConverter(new TypeSortConverter());
+        registry.addConverter(new SortOrderConverter());
+        registry.addConverter(new SortTypeConverter());
     }
 }

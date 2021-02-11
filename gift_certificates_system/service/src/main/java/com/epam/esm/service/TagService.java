@@ -1,12 +1,13 @@
 package com.epam.esm.service;
 
+import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagDto;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Interface {@code TagService} Base service describes business logic operations
+ * Interface {@code TagService} describes business logic operations
  * for working with tags.
  *
  * @author Egor Shitikov
@@ -14,19 +15,19 @@ import java.util.Optional;
  */
 public interface TagService extends BaseService<TagDto> {
     /**
-     * Find all tags.
+     * Remove tag by id.
      *
-     * @return the list of tags DTO
+     * @param id the id of tag to remove
      */
-    List<TagDto> findAll();
+    void remove(long id);
 
     /**
-     * Find all tags by gift-certificate id.
+     * Find all tags.
      *
-     * @param id the gift-certificate id
+     * @param pageDto the page DTO
      * @return the list of tags DTO
      */
-    List<TagDto> findByCertificateId(long id);
+    List<TagDto> findAll(PageDto pageDto);
 
     /**
      * Find tag by name.
@@ -35,4 +36,11 @@ public interface TagService extends BaseService<TagDto> {
      * @return the optional of found tag DTO
      */
     Optional<TagDto> findByName(String name);
+
+    /**
+     * Find most popular tag from user with max purchases tag dto.
+     *
+     * @return the tag dto
+     */
+    TagDto findMostPopularTagFromUserWithMaxPurchases();
 }

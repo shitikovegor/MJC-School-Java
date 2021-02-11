@@ -78,27 +78,11 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     public ErrorInfo handleUnsupportedTypeException(HttpMediaTypeNotSupportedException exception, Locale locale) {
         String errorMessage = createErrorMessage(
-                messageSource.getMessage(ExceptionKey.UNSUPPORTED_MEDIA_TYPE.getKey(), new Object[]{}, locale),
+                messageSource.getMessage(ExceptionKey.UNSUPPORTED_MEDIA_TYPE, new Object[]{}, locale),
                 exception.getMessage());
         return new ErrorInfo(errorMessage, UNSUPPORTED_MEDIA_TYPE.getCode());
     }
 
-
-    /**
-     * Handle {@link RuntimeException}.
-     *
-     * @param exception the exception
-     * @param locale    the locale
-     * @return the error information
-     */
-    @ExceptionHandler(RuntimeException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorInfo handleRuntimeException(RuntimeException exception, Locale locale) {
-        String errorMessage = createErrorMessage(
-                messageSource.getMessage(ExceptionKey.INTERNAL_ERROR.getKey(), new Object[]{}, locale),
-                exception.getMessage());
-        return new ErrorInfo(errorMessage, INTERNAL_ERROR.getCode());
-    }
 
     /**
      * Handle {@link HttpMessageNotReadableException}.
@@ -111,7 +95,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorInfo handleMessageNotReadableException(HttpMessageNotReadableException exception, Locale locale) {
         String errorMessage = createErrorMessage(
-                messageSource.getMessage(ExceptionKey.INCORRECT_PARAMETER.getKey(), new Object[]{}, locale),
+                messageSource.getMessage(ExceptionKey.INCORRECT_PARAMETER, new Object[]{}, locale),
                 exception.getMessage());
         return new ErrorInfo(errorMessage, BAD_REQUEST.getCode());
     }
@@ -127,9 +111,25 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorInfo handleNoHandlerFoundException(NoHandlerFoundException exception, Locale locale) {
         String errorMessage = createErrorMessage(
-                messageSource.getMessage(ExceptionKey.HANDLER_NOT_FOUND.getKey(), new Object[]{}, locale),
+                messageSource.getMessage(ExceptionKey.HANDLER_NOT_FOUND, new Object[]{}, locale),
                 exception.getMessage());
         return new ErrorInfo(errorMessage, NOT_FOUND.getCode());
+    }
+
+    /**
+     * Handle {@link RuntimeException}.
+     *
+     * @param exception the exception
+     * @param locale    the locale
+     * @return the error information
+     */
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorInfo handleRuntimeException(RuntimeException exception, Locale locale) {
+        String errorMessage = createErrorMessage(
+                messageSource.getMessage(ExceptionKey.INTERNAL_ERROR, new Object[]{}, locale),
+                exception.getMessage());
+        return new ErrorInfo(errorMessage, INTERNAL_ERROR.getCode());
     }
 
     private String createErrorMessage(String message, String parameter) {

@@ -1,5 +1,9 @@
 package com.epam.esm.entity;
 
+import com.epam.esm.dao.audit.GiftCertificateAuditListener;
+
+import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,14 +15,25 @@ import java.util.Objects;
  * @author Egor Shitikov
  * @version 1.0
  */
-public class GiftCertificate {
+@EntityListeners(GiftCertificateAuditListener.class)
+@Entity
+@Table(name = "gift_certificate")
+public class GiftCertificate implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     private String description;
     private BigDecimal price;
     private int duration;
+    @Column(name = "create_date")
     private LocalDateTime createDate;
+    @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
+    @ManyToMany
+    @JoinTable(name = "gift_certificate_has_tag",
+            joinColumns = @JoinColumn(name = "gift_certificate_id_fk", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id_fk", referencedColumnName = "id"))
     private List<Tag> tags;
 
     /**
@@ -51,146 +66,66 @@ public class GiftCertificate {
         this.tags = tags;
     }
 
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
     public long getId() {
         return id;
     }
 
-    /**
-     * Sets id.
-     *
-     * @param id the id
-     */
     public void setId(long id) {
         this.id = id;
     }
 
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * Sets name.
-     *
-     * @param name the name
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * Gets description.
-     *
-     * @return the description
-     */
     public String getDescription() {
         return description;
     }
 
-    /**
-     * Sets description.
-     *
-     * @param description the description
-     */
     public void setDescription(String description) {
         this.description = description;
     }
 
-    /**
-     * Gets price.
-     *
-     * @return the price
-     */
     public BigDecimal getPrice() {
         return price;
     }
 
-    /**
-     * Sets price.
-     *
-     * @param price the price
-     */
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    /**
-     * Gets duration.
-     *
-     * @return the duration
-     */
     public int getDuration() {
         return duration;
     }
 
-    /**
-     * Sets duration.
-     *
-     * @param duration the duration
-     */
     public void setDuration(int duration) {
         this.duration = duration;
     }
 
-    /**
-     * Gets create date.
-     *
-     * @return the create date
-     */
     public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    /**
-     * Sets create date.
-     *
-     * @param createDate the create date
-     */
     public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
-    /**
-     * Gets last update date.
-     *
-     * @return the last update date
-     */
     public LocalDateTime getLastUpdateDate() {
         return lastUpdateDate;
     }
 
-    /**
-     * Sets last update date.
-     *
-     * @param lastUpdateDate the last update date
-     */
     public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    /**
-     * Gets tags.
-     *
-     * @return the tags
-     */
     public List<Tag> getTags() {
         return tags;
     }
 
-    /**
-     * Sets tags.
-     *
-     * @param tags the tags
-     */
     public void setTags(List<Tag> tags) {
         this.tags = tags;
     }

@@ -1,12 +1,15 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.TagDao;
+import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.ExceptionKey;
 import com.epam.esm.exception.IncorrectParameterException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.TagService;
+import com.epam.esm.util.Page;
+import com.epam.esm.validator.PageValidator;
 import com.epam.esm.validator.TagValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,7 @@ public class TagServiceImpl implements TagService {
         this.tagDao = tagDao;
     }
 
+    @Transactional
     @Override
     public long add(TagDto tagDto) {
         TagValidator.validateName(tagDto.getName());
@@ -38,47 +42,47 @@ public class TagServiceImpl implements TagService {
             Tag addedTag = tagDao.add(tag);
             return addedTag.getId();
         } else {
-            throw new IncorrectParameterException(ExceptionKey.TAG_EXISTS.getKey(), tag.getName());
+            throw new IncorrectParameterException(ExceptionKey.TAG_EXISTS, tag.getName());
         }
     }
 
     @Override
-    public List<TagDto> findAll() {
-        return tagDao.findAll().stream()
+    public List<TagDto> findAll(PageDto pageDto) {
+        pageDto.setTotalRecords(tagDao.findTotalRecords());
+        PageValidator.validatePage(pageDto);
+        Page page = modelMapper.map(pageDto, Page.class);
+        return tagDao.findAll(page).stream()
                 .map(tag -> modelMapper.map(tag, TagDto.class))
                 .collect(Collectors.toList());
     }
 
     @Override
     public TagDto findById(long id) {
-        TagValidator.validateId(id);
         Optional<Tag> foundTag = tagDao.findById(id);
         return foundTag.map(tag -> modelMapper.map(tag, TagDto.class))
-                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND.getKey(), String.valueOf(id)));
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND, String.valueOf(id)));
     }
 
     @Transactional
     @Override
     public void remove(long id) {
-        TagValidator.validateId(id);
-        if (tagDao.findById(id).isEmpty()) {
-            throw new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND.getKey(), String.valueOf(id));
-        }
-        tagDao.removeFromTableGiftCertificateHasTag(id);
-        tagDao.remove(id);
-    }
+        Optional<Tag> tagOptional = tagDao.findById(id);
+        Tag tag = tagOptional.orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.TAG_NOT_FOUND, String.valueOf(id)));
 
-    @Override
-    public List<TagDto> findByCertificateId(long id) {
-        return tagDao.findByCertificateId(id).stream()
-                .map(tag -> modelMapper.map(tag, TagDto.class))
-                .collect(Collectors.toList());
+        tagDao.removeFromTableGiftCertificateHasTag(tag.getId());
+        tagDao.remove(tag);
     }
 
     @Override
     public Optional<TagDto> findByName(String name) {
-        TagValidator.validateName(name);
         Optional<Tag> foundTag = tagDao.findByName(name);
         return foundTag.map(tag -> modelMapper.map(tag, TagDto.class));
+    }
+
+    @Override
+    public TagDto findMostPopularTagFromUserWithMaxPurchases() {
+        Optional<Tag> foundTag = tagDao.findMostPopularTagFromUserWithMaxPurchases();
+        return foundTag.map(tag -> modelMapper.map(tag, TagDto.class))
+                .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.TAG_DOES_NOT_EXIST));
     }
 }

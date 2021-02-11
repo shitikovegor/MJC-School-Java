@@ -1,5 +1,7 @@
 package com.epam.esm.dto;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import java.util.Objects;
 
 /**
@@ -8,7 +10,7 @@ import java.util.Objects;
  * @author Egor Shitikov
  * @version 1.0
  */
-public class TagDto {
+public class TagDto extends RepresentationModel<TagDto> {
     private long id;
     private String name;
 
@@ -29,38 +31,18 @@ public class TagDto {
         this.name = name;
     }
 
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
     public long getId() {
         return id;
     }
 
-    /**
-     * Sets id.
-     *
-     * @param id the id
-     */
     public void setId(long id) {
         this.id = id;
     }
 
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * Sets name.
-     *
-     * @param name the name
-     */
     public void setName(String name) {
         this.name = name;
     }

@@ -1,5 +1,6 @@
 package com.epam.esm.entity;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 /**
@@ -8,7 +9,11 @@ import java.util.Objects;
  * @author Egor Shitikov
  * @version 1.0
  */
+@Entity
+@Table(name = "tag")
 public class Tag {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
 
@@ -29,38 +34,18 @@ public class Tag {
         this.name = name;
     }
 
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
     public long getId() {
         return id;
     }
 
-    /**
-     * Sets id.
-     *
-     * @param id the id
-     */
     public void setId(long id) {
         this.id = id;
     }
 
-    /**
-     * Gets name.
-     *
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * Sets name.
-     *
-     * @param name the name
-     */
     public void setName(String name) {
         this.name = name;
     }

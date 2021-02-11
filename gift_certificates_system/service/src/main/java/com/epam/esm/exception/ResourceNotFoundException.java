@@ -23,6 +23,15 @@ public class ResourceNotFoundException extends RuntimeException {
     }
 
     /**
+     * Instantiates a new Resource not found exception with specified message key.
+     *
+     * @param messageKey the message key
+     */
+    public ResourceNotFoundException(String messageKey) {
+        this.messageKey = messageKey;
+    }
+
+    /**
      * Gets message parameter of exception.
      *
      * @return the message parameter

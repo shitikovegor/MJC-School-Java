@@ -1,17 +1,14 @@
 package com.epam.esm.validator;
 
-import com.epam.esm.dto.TagDto;
 import com.epam.esm.exception.IncorrectParameterException;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TagValidatorTest {
+
 
     @ParameterizedTest
     @ValueSource(longs = {1, 40, 454, 343223223})

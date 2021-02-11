@@ -1,7 +1,8 @@
 package com.epam.esm.dao;
 
 import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.GiftCertificateQueryParameters;
+import com.epam.esm.util.GiftCertificateQueryParameters;
+import com.epam.esm.util.Page;
 
 import java.util.List;
 
@@ -22,24 +23,19 @@ public interface GiftCertificateDao extends BaseDao<GiftCertificate> {
     GiftCertificate update (GiftCertificate entity);
 
     /**
-     * Add gift certificate id to cross table.
-     *
-     * @param giftCertificate the gift certificate
-     */
-    void addToTableGiftCertificateHasTag(GiftCertificate giftCertificate);
-
-    /**
-     * Remove gift certificates from cross table by gift certificate id.
-     *
-     * @param id the id
-     */
-    void removeFromTableGiftCertificateHasTag(long id);
-
-    /**
      * Find gift certificates by query parameters.
      *
      * @param giftCertificateQueryParameters the gift certificate query parameters
      * @return the list of gift certificates
      */
-    List<GiftCertificate> findByQueryParameters(GiftCertificateQueryParameters giftCertificateQueryParameters);
+    List<GiftCertificate> findByQueryParameters(GiftCertificateQueryParameters giftCertificateQueryParameters,
+                                                Page page);
+
+    /**
+     * Find total records in database by query parameters int.
+     *
+     * @param giftCertificateQueryParameters the gift certificate query parameters
+     * @return the int
+     */
+    int findTotalRecordsByQueryParameters(GiftCertificateQueryParameters giftCertificateQueryParameters);
 }

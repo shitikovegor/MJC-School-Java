@@ -2,7 +2,10 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.GiftCertificateQueryParametersDto;
+import com.epam.esm.dto.PageDto;
+import com.epam.esm.util.PageCollection;
 import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.util.PageFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,7 +16,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-import static com.epam.esm.dto.GiftCertificateQueryParametersDto.*;
+import static com.epam.esm.dto.GiftCertificateQueryParametersDto.SortOrder;
+import static com.epam.esm.dto.GiftCertificateQueryParametersDto.SortType;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * Class {@code GiftCertificateController} uses to work with gift-certificate information.
@@ -37,30 +43,41 @@ public class GiftCertificateController {
     }
 
     /**
-     * Gets list of gift-certificates by parameters.
+     * Gets gift certificates.
      *
-     * @param tagName     the tag name
+     * @param tagName     the tag names
      * @param name        the name
      * @param description the description
      * @param sortType    the sort type
      * @param sortOrder   the sort order
-     * @return the list of gift-certificates
+     * @param page  the page number
+     * @param size        the size
+     * @return the gift certificates
      */
     @GetMapping
-    public List<GiftCertificateDto> getGiftCertificates
-            (@RequestParam(required = false) String tagName,
-             @RequestParam(required = false) String name,
-             @RequestParam(required = false) String description,
-             @RequestParam(required = false) SortType sortType,
-             @RequestParam(required = false) SortOrder sortOrder) {
+    public ResponseEntity<PageCollection<GiftCertificateDto>> getGiftCertificates
+    (@RequestParam(required = false) String[] tagName,
+     @RequestParam(required = false) String name,
+     @RequestParam(required = false) String description,
+     @RequestParam(required = false) SortType sortType,
+     @RequestParam(required = false) SortOrder sortOrder,
+     @RequestParam(required = false, defaultValue = "1") int page,
+     @RequestParam(required = false, defaultValue = "5") int size) {
         GiftCertificateQueryParametersDto giftCertificateQueryParametersDto = new GiftCertificateQueryParametersDto();
-        giftCertificateQueryParametersDto.setTagName(tagName);
+        giftCertificateQueryParametersDto.setTagNames(tagName);
         giftCertificateQueryParametersDto.setName(name);
         giftCertificateQueryParametersDto.setDescription(description);
         giftCertificateQueryParametersDto.setSortType(sortType);
         giftCertificateQueryParametersDto.setSortOrder(sortOrder);
+        PageDto pageDto = new PageDto(size, page);
 
-        return giftCertificateService.findCertificates(giftCertificateQueryParametersDto);
+        List<GiftCertificateDto> giftCertificates =
+                giftCertificateService.findCertificates(giftCertificateQueryParametersDto, pageDto);
+        giftCertificates.forEach(this::addRelationship);
+        PageCollection<GiftCertificateDto> collection = new PageCollection<>(giftCertificates,
+                pageDto.getTotalRecords());
+        addPageRelationship(collection, pageDto, giftCertificateQueryParametersDto);
+        return ResponseEntity.ok(collection);
     }
 
     /**
@@ -70,8 +87,10 @@ public class GiftCertificateController {
      * @return the gift-certificate DTO
      */
     @GetMapping("/{id}")
-    public GiftCertificateDto getGiftCertificateById(@PathVariable long id){
-        return giftCertificateService.findById(id);
+    public GiftCertificateDto getGiftCertificateById(@PathVariable long id) {
+        GiftCertificateDto foundGiftCertificate = giftCertificateService.findById(id);
+        addRelationship(foundGiftCertificate);
+        return foundGiftCertificate;
     }
 
     /**
@@ -90,8 +109,8 @@ public class GiftCertificateController {
                 .toUri();
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(location);
-
-        return new ResponseEntity(headers, HttpStatus.CREATED);
+        addRelationship(giftCertificateDto);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     /**
@@ -101,8 +120,23 @@ public class GiftCertificateController {
      * @return the gift-certificate DTO
      */
     @PutMapping
-    public GiftCertificateDto updateGiftCertificate(@RequestBody GiftCertificateDto giftCertificateDto){
-        return giftCertificateService.update(giftCertificateDto);
+    public GiftCertificateDto updateGiftCertificate(@RequestBody GiftCertificateDto giftCertificateDto) {
+        GiftCertificateDto updatedGiftCertificate = giftCertificateService.update(giftCertificateDto);
+        addRelationship(updatedGiftCertificate);
+        return updatedGiftCertificate;
+    }
+
+    /**
+     * Update part of gift-certificate.
+     *
+     * @param giftCertificateDto the gift-certificate DTO
+     * @return the gift-certificate DTO
+     */
+    @PatchMapping
+    public GiftCertificateDto updatePartOfGiftCertificate(@RequestBody GiftCertificateDto giftCertificateDto) {
+        GiftCertificateDto updatedGiftCertificate = giftCertificateService.updatePart(giftCertificateDto);
+        addRelationship(updatedGiftCertificate);
+        return updatedGiftCertificate;
     }
 
     /**
@@ -111,8 +145,48 @@ public class GiftCertificateController {
      * @param id the gift-certificate id
      */
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteGiftCertificate(@PathVariable long id){
+    public ResponseEntity<Void> deleteGiftCertificate(@PathVariable long id) {
         giftCertificateService.remove(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    private void addRelationship(GiftCertificateDto giftCertificateDto) {
+        giftCertificateDto.add(linkTo(methodOn(GiftCertificateController.class)
+                .getGiftCertificateById(giftCertificateDto.getId())).withSelfRel());
+        giftCertificateDto.add(linkTo(methodOn(GiftCertificateController.class)
+                .updateGiftCertificate(giftCertificateDto)).withRel("update"));
+        giftCertificateDto.add(linkTo(methodOn(GiftCertificateController.class)
+                .deleteGiftCertificate(giftCertificateDto.getId())).withRel("delete"));
+        giftCertificateDto.getTags().forEach(tagDto ->
+                tagDto.add(linkTo(methodOn(TagController.class).getTagById(tagDto.getId())).withSelfRel()));
+    }
+
+    private void addPageRelationship(PageCollection<GiftCertificateDto> giftCertificateCollection, PageDto pageDto,
+                                     GiftCertificateQueryParametersDto parameters) {
+        int lastPage = PageFormatter.calculateLastPage(pageDto);
+        if (pageDto.getPageNumber() < lastPage) {
+            giftCertificateCollection.add(linkTo(methodOn(GiftCertificateController.class)
+                    .getGiftCertificates(parameters.getTagNames(), parameters.getName(), parameters.getDescription(),
+                            parameters.getSortType(), parameters.getSortOrder(),
+                            PageFormatter.calculateNextPage(pageDto), pageDto.getSize()))
+                    .withRel("next_page").expand());
+        }
+        if (pageDto.getPageNumber() > 1) {
+            giftCertificateCollection.add(linkTo(methodOn(GiftCertificateController.class)
+                    .getGiftCertificates(parameters.getTagNames(), parameters.getName(), parameters.getDescription(),
+                            parameters.getSortType(), parameters.getSortOrder(),
+                            PageFormatter.calculatePrevPage(pageDto), pageDto.getSize()))
+                    .withRel("previous_page").expand());
+        }
+        giftCertificateCollection.add(linkTo(methodOn(GiftCertificateController.class)
+                .getGiftCertificates(parameters.getTagNames(), parameters.getName(), parameters.getDescription(),
+                        parameters.getSortType(), parameters.getSortOrder(),
+                        PageDto.FIRST_PAGE, pageDto.getSize()))
+                .withRel("first_page").expand());
+        giftCertificateCollection.add(linkTo(methodOn(GiftCertificateController.class)
+                .getGiftCertificates(parameters.getTagNames(), parameters.getName(), parameters.getDescription(),
+                        parameters.getSortType(), parameters.getSortOrder(),
+                        lastPage, pageDto.getSize()))
+                .withRel("last_page").expand());
     }
 }
