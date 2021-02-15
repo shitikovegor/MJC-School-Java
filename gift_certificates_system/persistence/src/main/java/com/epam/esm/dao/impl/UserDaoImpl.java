@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
-    private static final String USER_FIND_BY_EMAIL = "SELECT u FROM User u WHERE email = ?1";
+    private static final String USER_FIND_BY_USERNAME = "SELECT u FROM User u WHERE username = ?1";
     private static final String USER_FIND_ALL = "SELECT u FROM User u";
     private static final String USER_TOTAL_RECORDS = "SELECT COUNT(*) FROM User";
 
@@ -34,10 +34,10 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        Query query = entityManager.createQuery(USER_FIND_BY_EMAIL);
-        query.setParameter(1, email);
-        return query.getResultStream().findFirst();
+    public Optional<User> findByUsername(String username) {
+        Query query = entityManager.createQuery(USER_FIND_BY_USERNAME, User.class);
+        query.setParameter(1, username);
+        return query.getResultList().stream().findFirst();
     }
 
     @Override

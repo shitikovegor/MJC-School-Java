@@ -46,7 +46,7 @@ public class TagDaoImpl extends BaseDaoImpl<Tag> implements TagDao {
     public Optional<Tag> findByName(String name) {
         Query query = entityManager.createQuery(TAG_FIND_BY_NAME);
         query.setParameter(1, name);
-        return query.getResultStream().findFirst();
+        return query.getResultList().stream().findFirst();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class TagDaoImpl extends BaseDaoImpl<Tag> implements TagDao {
     @Override
     public Optional<Tag> findMostPopularTagFromUserWithMaxPurchases() {
         Query query = entityManager.createNativeQuery(TAG_FIND_POPULAR_TAG_BY_MAX_USER_PRICE, Tag.class);
-        return query.getResultStream().findFirst();
+        return query.getResultList().stream().findFirst();
     }
 
     @Override

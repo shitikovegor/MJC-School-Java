@@ -36,6 +36,8 @@ public final class   ExceptionKey {
     public static final String UNSUPPORTED_MEDIA_TYPE = "unsupportedMediaType";
     public static final String INCORRECT_PARAMETER = "incorrectParameter";
     public static final String HANDLER_NOT_FOUND = "handlerNotFound";
+    public static final String ROLE_NOT_FOUND = "role.notFound";
+    public static final String USER_NOT_FOUND_BY_LOGIN_OR_PASSWORD = "user.notFoundByLoginOrPassword";
 
     private ExceptionKey() {
     }

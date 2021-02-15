@@ -79,7 +79,7 @@ public class UserController {
      */
     @PostMapping
     public ResponseEntity<String> addUser(@RequestBody @Valid UserDto userDto) {
-        long userId = userService.add(userDto);
+        long userId = userService.register(userDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

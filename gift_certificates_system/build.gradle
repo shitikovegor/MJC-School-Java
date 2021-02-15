@@ -32,6 +32,7 @@ subprojects {
 
     dependencies {
         implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+        implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
         implementation 'org.springframework.boot:spring-boot-starter-actuator:2.4.2'
     }
 }

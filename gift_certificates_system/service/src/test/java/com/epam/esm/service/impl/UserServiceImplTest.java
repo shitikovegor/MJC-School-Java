@@ -16,6 +16,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,11 +46,11 @@ class UserServiceImplTest {
                 .setFieldMatchingEnabled(true)
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
-        userService = new UserServiceImpl(modelMapper, userDao);
+        userService = new UserServiceImpl(modelMapper, userDao, null, null);
         page = new Page(5, 1, 10);
         pageDto = new PageDto(5, 1, 10);
-        user = new User(2L, "user3@epam.com");
-        userDto = new UserDto(2L, "user3@epam.com");
+        user = new User(2L, "user3@epam.com", "", "", "", new ArrayList<>());
+        userDto = new UserDto(2L, "user3@epam.com", "", "", "", new ArrayList<>());
 
     }
 
@@ -66,26 +67,26 @@ class UserServiceImplTest {
 
     @Test
     void addCorrectDataShouldReturnUserDtoId() {
-        User user1 = new User(24L, "user@gmail.com");
-        UserDto userDto1 = new UserDto(24L, "user@gmail.com");
-        when(userDao.findByEmail("user@gmail.com")).thenReturn(Optional.empty());
+        User user1 = new User(24L, "user@gmail.com", "", "", "", new ArrayList<>());
+        UserDto userDto1 = new UserDto(24L, "user@gmail.com", "", "", "", new ArrayList<>());
+        when(userDao.findByUsername("user@gmail.com")).thenReturn(Optional.empty());
         when(userDao.add(user1)).thenReturn(user1);
         long expected = 24L;
-        assertEquals(expected, userService.add(userDto1));
+        assertEquals(expected, userService.register(userDto1));
     }
 
     @Test
     void addIncorrectDataShouldThrowException() {
-        UserDto userDtoInvalid = new UserDto(1L, "user.gmail.com");
-        when(userDao.findByEmail(anyString())).thenReturn(Optional.empty());
+        UserDto userDtoInvalid = new UserDto(1L, "user.gmail.com", "", "", "", new ArrayList<>());
+        when(userDao.findByUsername(anyString())).thenReturn(Optional.empty());
         when(userDao.add(any(User.class))).thenReturn(null);
-        assertThrows(IncorrectParameterException.class, () -> userService.add(userDtoInvalid));
+        assertThrows(IncorrectParameterException.class, () -> userService.register(userDtoInvalid));
     }
 
     @Test
     void findAllCorrectDataShouldReturnUserDtoList() {
-        User user2 = new User(1L, "user2@gmail.com");
-        UserDto userDto2 = new UserDto(1L, "user2@gmail.com");
+        User user2 = new User(1L, "user2@gmail.com", "", "", "", new ArrayList<>());
+        UserDto userDto2 = new UserDto(1L, "user2@gmail.com", "", "", "", new ArrayList<>());
         List<User> users = List.of(user2, user);
         List<UserDto> usersDto = List.of(userDto2, userDto);
         when(userDao.findTotalRecords()).thenReturn(10);
@@ -110,15 +111,15 @@ class UserServiceImplTest {
 
     @Test
     void findByEmailCorrectDataShouldReturnUserDto() {
-        when(userDao.findByEmail("user3@epam.com")).thenReturn(Optional.of(user));
+        when(userDao.findByUsername("user3@epam.com")).thenReturn(Optional.of(user));
         long id = 2L;
-        assertEquals(userDto, userService.findByEmail("user3@epam.com"));
+        assertEquals(userDto, userService.findByUsername("user3@epam.com"));
     }
 
     @Test
     void findByEmailCorrectDataShouldThrowException() {
-        when(userDao.findByEmail(anyString())).thenReturn(Optional.empty());
+        when(userDao.findByUsername(anyString())).thenReturn(Optional.empty());
         long id = 2L;
-        assertThrows(ResourceNotFoundException.class, () -> userService.findByEmail("email@gmail.com"));
+        assertThrows(ResourceNotFoundException.class, () -> userService.findByUsername("email@gmail.com"));
     }
 }

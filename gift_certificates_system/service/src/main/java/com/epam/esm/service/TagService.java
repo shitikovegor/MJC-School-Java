@@ -13,7 +13,23 @@ import java.util.Optional;
  * @author Egor Shitikov
  * @version 1.0
  */
-public interface TagService extends BaseService<TagDto> {
+public interface TagService {
+    /**
+     * Add tag.
+     *
+     * @param tagDto the t
+     * @return the id of added tag
+     */
+    long add(TagDto tagDto);
+
+    /**
+     * Find tag DTO by id.
+     *
+     * @param id the id
+     * @return the found tag DTO
+     */
+    TagDto findById(long id);
+
     /**
      * Remove tag by id.
      *

@@ -13,7 +13,15 @@ import java.util.List;
  * @author Egor Shitikov
  * @version 1.0
  */
-public interface GiftCertificateService extends BaseService<GiftCertificateDto> {
+public interface GiftCertificateService {
+    /**
+     * Add gift certificate.
+     *
+     * @param giftCertificateDto the gift certificate DTO
+     * @return the id of added gift certificate
+     */
+    long add(GiftCertificateDto giftCertificateDto);
+
     /**
      * Remove gift certificate by id.
      *
@@ -38,11 +46,19 @@ public interface GiftCertificateService extends BaseService<GiftCertificateDto> 
     GiftCertificateDto updatePart(GiftCertificateDto giftCertificateDto);
 
     /**
-     * Find gift-certificates list by parameters.
+     * Find gift certificates list by parameters.
      *
      * @param giftCertificateQueryParametersDto the gift certificate query parameters DTO
      * @return the list of gift-certificates DTO
      */
     List<GiftCertificateDto> findCertificates(GiftCertificateQueryParametersDto giftCertificateQueryParametersDto,
                                               PageDto pageDto);
+
+    /**
+     * Find gift certificate DTO by id.
+     *
+     * @param id the id
+     * @return the found gift certificate
+     */
+    GiftCertificateDto findById(long id);
 }
