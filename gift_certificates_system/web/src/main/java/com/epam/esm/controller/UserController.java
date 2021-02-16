@@ -71,26 +71,6 @@ public class UserController {
         return userDto;
     }
 
-    /**
-     * Add user.
-     *
-     * @param userDto the user DTO
-     * @return the response entity
-     */
-    @PostMapping
-    public ResponseEntity<String> addUser(@RequestBody @Valid UserDto userDto) {
-        long userId = userService.register(userDto);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(userId)
-                .toUri();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(location);
-        addRelationship(userDto);
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
-    }
-
     private void addRelationship(UserDto userDto) {
         userDto.add(linkTo(methodOn(UserController.class).getUserById(userDto.getId())).withSelfRel());
     }

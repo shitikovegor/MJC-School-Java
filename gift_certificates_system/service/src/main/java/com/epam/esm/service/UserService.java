@@ -1,8 +1,6 @@
 package com.epam.esm.service;
 
-import com.epam.esm.dto.AuthenticationDto;
-import com.epam.esm.dto.PageDto;
-import com.epam.esm.dto.UserDto;
+import com.epam.esm.dto.*;
 
 import java.util.List;
 
@@ -17,10 +15,10 @@ public interface UserService {
     /**
      * Register user.
      *
-     * @param userDto the user DTO
+     * @param registrationDto the registration DTO
      * @return the id of added user
      */
-    long register(UserDto userDto);
+    long register(RegistrationDto registrationDto);
 
     /**
      * Find user DTO by id.
@@ -42,7 +40,7 @@ public interface UserService {
      *
      * @return the user DTO
      */
-    UserDto findByUsername(String username);
+    FullUserDto findByUsername(String username);
 
     /**
      * Authenticate user user dto.

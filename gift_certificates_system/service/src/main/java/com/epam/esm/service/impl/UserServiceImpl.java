@@ -2,10 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.RoleDao;
 import com.epam.esm.dao.UserDao;
-import com.epam.esm.dto.AuthenticationDto;
-import com.epam.esm.dto.PageDto;
-import com.epam.esm.dto.RoleDto;
-import com.epam.esm.dto.UserDto;
+import com.epam.esm.dto.*;
 import com.epam.esm.entity.Role;
 import com.epam.esm.entity.User;
 import com.epam.esm.exception.ExceptionKey;
@@ -43,16 +40,16 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public long register(UserDto userDto) {
-        UserValidator.validateEmail(userDto.getUsername()); // TODO: 14.02.2021 validate all user's fields, renameadd method
+    public long register(RegistrationDto registrationDto) {
+        UserValidator.validateEmail(registrationDto.getUsername()); // TODO: 14.02.2021 validate all user's fields
 
         Optional<Role> roleOptional = roleDao.findByName(ROLE_USER);
         RoleDto roleUser = roleOptional.map(role -> modelMapper.map(role, RoleDto.class))
                 .orElseThrow(() -> new IncorrectParameterException(ExceptionKey.ROLE_NOT_FOUND, ROLE_USER));
 
-        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        userDto.setRoles(List.of(roleUser));
-        User user = modelMapper.map(userDto, User.class);
+        registrationDto.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
+        registrationDto.setRoles(List.of(roleUser));
+        User user = modelMapper.map(registrationDto, User.class);
         Optional<User> existingUser = userDao.findByUsername(user.getUsername());
 
         if (existingUser.isEmpty()) {
@@ -80,15 +77,15 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.USER_NOT_FOUND, String.valueOf(id)));
     }
 
-    @Transactional
     @Override
-    public UserDto findByUsername(String username) {
+    public FullUserDto findByUsername(String username) {
         Optional<User> foundUser = userDao.findByUsername(username);
-        return foundUser.map(user -> modelMapper.map(user, UserDto.class))
+        return foundUser.map(user -> modelMapper.map(user, FullUserDto.class))
                 .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.USER_NOT_FOUND,
                         String.valueOf(username)));
     }
 
+    @Transactional
     @Override
     public UserDto authenticateUser(AuthenticationDto authenticationDto) {
         Optional<User> foundUser = userDao.findByUsername(authenticationDto.getUsername());
