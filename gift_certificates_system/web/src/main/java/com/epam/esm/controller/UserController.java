@@ -6,14 +6,10 @@ import com.epam.esm.service.UserService;
 import com.epam.esm.util.PageCollection;
 import com.epam.esm.util.PageFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -64,6 +60,7 @@ public class UserController {
      * @param id the user id
      * @return the user DTO
      */
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #id == principal.id")
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable long id) {
         UserDto userDto = userService.findById(id);

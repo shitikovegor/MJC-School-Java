@@ -25,8 +25,8 @@ public class AuthenticationController {
 
     @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> registerUser(@RequestBody RegistrationDto registrationDto) {
-        long userId = userService.register(registrationDto);
+    public ResponseEntity<String> registerUser(@RequestBody UserRegistrationDto userRegistrationDto) {
+        long userId = userService.register(userRegistrationDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .path("users/{id}")

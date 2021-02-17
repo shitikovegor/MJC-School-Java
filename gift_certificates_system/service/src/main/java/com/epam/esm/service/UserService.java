@@ -15,10 +15,10 @@ public interface UserService {
     /**
      * Register user.
      *
-     * @param registrationDto the registration DTO
+     * @param userRegistrationDto the registration DTO
      * @return the id of added user
      */
-    long register(RegistrationDto registrationDto);
+    long register(UserRegistrationDto userRegistrationDto);
 
     /**
      * Find user DTO by id.

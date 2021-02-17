@@ -8,13 +8,13 @@ import java.util.Collection;
 public class JwtUser implements UserDetails {
     private long id;
     private String username;
-    private String password;
+//    private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public JwtUser(long id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public JwtUser(long id, String username, /*String password,*/ Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
-        this.password = password;
+//        this.password = password;
         this.authorities = authorities;
     }
 
@@ -29,7 +29,7 @@ public class JwtUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return password;
+        return null;
     }
 
     @Override

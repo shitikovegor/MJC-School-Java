@@ -11,7 +11,7 @@ import java.util.Objects;
  * @author Egor Shitikov
  * @version 1.0
  */
-public class RegistrationDto extends RepresentationModel<RegistrationDto> {
+public class UserRegistrationDto extends RepresentationModel<UserRegistrationDto> {
     private long id;
     private String username;
     private String password;
@@ -23,7 +23,7 @@ public class RegistrationDto extends RepresentationModel<RegistrationDto> {
     /**
      * Instantiates a new User DTO.
      */
-    public RegistrationDto() {
+    public UserRegistrationDto() {
     }
 
     /**
@@ -37,8 +37,8 @@ public class RegistrationDto extends RepresentationModel<RegistrationDto> {
      * @param lastName        the last name
      * @param roles           the roles
      */
-    public RegistrationDto(long id, String username, String password, String confirmPassword, String firstName,
-                           String lastName, List<RoleDto> roles) {
+    public UserRegistrationDto(long id, String username, String password, String confirmPassword, String firstName,
+                               String lastName, List<RoleDto> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -115,7 +115,7 @@ public class RegistrationDto extends RepresentationModel<RegistrationDto> {
         if (!super.equals(o)) {
             return false;
         }
-        RegistrationDto userDto = (RegistrationDto) o;
+        UserRegistrationDto userDto = (UserRegistrationDto) o;
         return id == userDto.id &&
                 Objects.equals(username, userDto.username) &&
                 Objects.equals(password, userDto.password) &&

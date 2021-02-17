@@ -40,16 +40,16 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public long register(RegistrationDto registrationDto) {
-        UserValidator.validateEmail(registrationDto.getUsername()); // TODO: 14.02.2021 validate all user's fields
+    public long register(UserRegistrationDto userRegistrationDto) {
+        UserValidator.validateEmail(userRegistrationDto.getUsername()); // TODO: 14.02.2021 validate all user's fields
 
         Optional<Role> roleOptional = roleDao.findByName(ROLE_USER);
         RoleDto roleUser = roleOptional.map(role -> modelMapper.map(role, RoleDto.class))
                 .orElseThrow(() -> new IncorrectParameterException(ExceptionKey.ROLE_NOT_FOUND, ROLE_USER));
 
-        registrationDto.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
-        registrationDto.setRoles(List.of(roleUser));
-        User user = modelMapper.map(registrationDto, User.class);
+        userRegistrationDto.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
+        userRegistrationDto.setRoles(List.of(roleUser));
+        User user = modelMapper.map(userRegistrationDto, User.class);
         Optional<User> existingUser = userDao.findByUsername(user.getUsername());
 
         if (existingUser.isEmpty()) {

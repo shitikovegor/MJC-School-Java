@@ -3,7 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.UserDao;
 import com.epam.esm.dao.impl.UserDaoImpl;
 import com.epam.esm.dto.PageDto;
-import com.epam.esm.dto.RegistrationDto;
+import com.epam.esm.dto.UserRegistrationDto;
 import com.epam.esm.dto.UserDto;
 import com.epam.esm.entity.User;
 import com.epam.esm.exception.IncorrectParameterException;
@@ -69,7 +69,7 @@ class UserServiceImplTest {
     @Test
     void addCorrectDataShouldReturnUserDtoId() {
         User user1 = new User(24L, "user@gmail.com", "", "", "", new ArrayList<>());
-        RegistrationDto userDto1 = new RegistrationDto(24L, "user@gmail.com", "", "", "", "", new ArrayList<>());
+        UserRegistrationDto userDto1 = new UserRegistrationDto(24L, "user@gmail.com", "", "", "", "", new ArrayList<>());
         when(userDao.findByUsername("user@gmail.com")).thenReturn(Optional.empty());
         when(userDao.add(user1)).thenReturn(user1);
         long expected = 24L;
@@ -78,7 +78,7 @@ class UserServiceImplTest {
 
     @Test
     void addIncorrectDataShouldThrowException() {
-        RegistrationDto userDtoInvalid = new RegistrationDto(1L, "user.gmail.com", "", "", "", "", new ArrayList<>());
+        UserRegistrationDto userDtoInvalid = new UserRegistrationDto(1L, "user.gmail.com", "", "", "", "", new ArrayList<>());
         when(userDao.findByUsername(anyString())).thenReturn(Optional.empty());
         when(userDao.add(any(User.class))).thenReturn(null);
         assertThrows(IncorrectParameterException.class, () -> userService.register(userDtoInvalid));

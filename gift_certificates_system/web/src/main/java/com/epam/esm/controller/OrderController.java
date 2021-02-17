@@ -2,6 +2,8 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.OrderDto;
 import com.epam.esm.dto.PageDto;
+import com.epam.esm.dto.UserDto;
+import com.epam.esm.security.entity.JwtUser;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.util.PageCollection;
 import com.epam.esm.util.PageFormatter;
@@ -9,10 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -45,6 +52,7 @@ public class OrderController {
      * @param id the id
      * @return the order dto
      */
+    @PostAuthorize("hasRole('ROLE_ADMIN') or returnObject.user.id == principal.id")
     @GetMapping("/{id}")
     public OrderDto getOrderById(@PathVariable long id) {
         OrderDto orderDto = orderService.findById(id);
@@ -58,12 +66,16 @@ public class OrderController {
      * @param orderDto the order dto
      * @return the response entity
      */
-    @PostMapping
-    public ResponseEntity<String> addOrder(@RequestBody OrderDto orderDto) {
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #userId == principal.id")
+    @PostMapping("/users/{userId}")
+    public ResponseEntity<String> addOrder(@PathVariable long userId, @RequestBody OrderDto orderDto) {
+        UserDto userDto = new UserDto();
+        userDto.setId(userId);
+        orderDto.setUser(userDto);
         long orderId = orderService.add(orderDto);
         URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
+                .fromCurrentContextPath()
+                .path("orders/{id}")
                 .buildAndExpand(orderId)
                 .toUri();
         HttpHeaders headers = new HttpHeaders();
@@ -91,6 +103,7 @@ public class OrderController {
      * @param size   the size
      * @return the orders by user id
      */
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #userId == principal.id")
     @GetMapping("/users/{userId}")
     public ResponseEntity<PageCollection<OrderDto>> getOrdersByUserId(@PathVariable long userId,
                                                                       @RequestParam(required = false, defaultValue = "1") int page,
