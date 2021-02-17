@@ -60,7 +60,7 @@ public class UserController {
      * @param id the user id
      * @return the user DTO
      */
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #id == principal.id")
+    @PreAuthorize("hasRole('ADMIN') or #id == principal.id")
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable long id) {
         UserDto userDto = userService.findById(id);
