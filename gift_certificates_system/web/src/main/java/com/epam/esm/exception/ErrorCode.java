@@ -11,7 +11,8 @@ public enum ErrorCode {
     NOT_FOUND(4044),
     INTERNAL_ERROR(5004),
     UNSUPPORTED_MEDIA_TYPE(4154),
-    BAD_REQUEST(4005);
+    BAD_REQUEST(4005),
+    JWT_ERROR(4014);
 
     private int code;
 

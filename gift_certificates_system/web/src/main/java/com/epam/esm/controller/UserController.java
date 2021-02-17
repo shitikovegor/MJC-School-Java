@@ -73,15 +73,16 @@ public class UserController {
     }
 
     private void addPageRelationship(PageCollection<UserDto> userCollection, PageDto pageDto) {
-        int lastPage = PageFormatter.calculateLastPage(pageDto);
+        PageFormatter formatter = new PageFormatter();
+        int lastPage = formatter.calculateLastPage(pageDto);
         if (pageDto.getPageNumber() < lastPage) {
             userCollection.add(linkTo(methodOn(UserController.class)
-                    .getUsers(PageFormatter.calculateNextPage(pageDto), pageDto.getSize()))
+                    .getUsers(formatter.calculateNextPage(pageDto), pageDto.getSize()))
                     .withRel("next_page"));
         }
         if (pageDto.getPageNumber() > 1) {
             userCollection.add(linkTo(methodOn(UserController.class)
-                    .getUsers(PageFormatter.calculatePrevPage(pageDto), pageDto.getSize()))
+                    .getUsers(formatter.calculatePrevPage(pageDto), pageDto.getSize()))
                     .withRel("previous_page"));
         }
         userCollection.add(linkTo(methodOn(UserController.class)

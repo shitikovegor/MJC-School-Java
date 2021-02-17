@@ -51,7 +51,7 @@ class UserServiceImplTest {
         page = new Page(5, 1, 10);
         pageDto = new PageDto(5, 1, 10);
         user = new User(2L, "user3@epam.com", "", "", "", new ArrayList<>());
-        userDto = new UserDto(2L, "user3@epam.com", "", "", "", new ArrayList<>());
+        userDto = new UserDto(2L, "user3@epam.com", "", "");
 
     }
 
@@ -87,7 +87,7 @@ class UserServiceImplTest {
     @Test
     void findAllCorrectDataShouldReturnUserDtoList() {
         User user2 = new User(1L, "user2@gmail.com", "", "", "", new ArrayList<>());
-        UserDto userDto2 = new UserDto(1L, "user2@gmail.com", "", "", "", new ArrayList<>());
+        UserDto userDto2 = new UserDto(1L, "user2@gmail.com", "", "");
         List<User> users = List.of(user2, user);
         List<UserDto> usersDto = List.of(userDto2, userDto);
         when(userDao.findTotalRecords()).thenReturn(10);

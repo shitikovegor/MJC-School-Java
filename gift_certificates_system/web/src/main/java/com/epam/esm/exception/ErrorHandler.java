@@ -1,5 +1,7 @@
 package com.epam.esm.exception;
 
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -117,6 +119,38 @@ public class ErrorHandler {
     }
 
     /**
+     * Handle {@link JwtException}.
+     *
+     * @param exception the exception
+     * @param locale    the locale
+     * @return the error information
+     */
+    @ExceptionHandler(JwtException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorInfo handleExpiredJwtException(ExpiredJwtException exception, Locale locale) {
+        String errorMessage = createErrorMessage(
+                messageSource.getMessage(ExceptionKey.JWT_ERROR, new Object[]{}, locale),
+                exception.getMessage());
+        return new ErrorInfo(errorMessage, JWT_ERROR.getCode());
+    }
+
+    /**
+     * Handle {@link IllegalArgumentException}.
+     *
+     * @param exception the exception
+     * @param locale    the locale
+     * @return the error information
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorInfo handleIllegalArgumentException(IllegalArgumentException exception, Locale locale) {
+        String errorMessage = createErrorMessage(
+                messageSource.getMessage(ExceptionKey.JWT_ERROR, new Object[]{}, locale),
+                exception.getMessage());
+        return new ErrorInfo(errorMessage, JWT_ERROR.getCode());
+    }
+
+    /**
      * Handle {@link RuntimeException}.
      *
      * @param exception the exception
@@ -131,6 +165,7 @@ public class ErrorHandler {
                 exception.getMessage());
         return new ErrorInfo(errorMessage, INTERNAL_ERROR.getCode());
     }
+
 
     private String createErrorMessage(String message, String parameter) {
         return String.format(message, parameter);

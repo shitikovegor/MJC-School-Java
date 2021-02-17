@@ -117,15 +117,16 @@ public class TagController {
     }
 
     private void addPageRelationship(PageCollection<TagDto> tagCollection, PageDto pageDto) {
-        int lastPage = PageFormatter.calculateLastPage(pageDto);
+        PageFormatter formatter = new PageFormatter();
+        int lastPage = formatter.calculateLastPage(pageDto);
         if (pageDto.getPageNumber() < lastPage) {
             tagCollection.add(linkTo(methodOn(TagController.class)
-                    .getTags(PageFormatter.calculateNextPage(pageDto), pageDto.getSize()))
+                    .getTags(formatter.calculateNextPage(pageDto), pageDto.getSize()))
                     .withRel("next_page"));
         }
         if (pageDto.getPageNumber() > 1) {
             tagCollection.add(linkTo(methodOn(TagController.class)
-                    .getTags(PageFormatter.calculatePrevPage(pageDto), pageDto.getSize()))
+                    .getTags(formatter.calculatePrevPage(pageDto), pageDto.getSize()))
                     .withRel("previous_page"));
         }
         tagCollection.add(linkTo(methodOn(TagController.class)

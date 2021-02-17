@@ -163,19 +163,20 @@ public class GiftCertificateController {
 
     private void addPageRelationship(PageCollection<GiftCertificateDto> giftCertificateCollection, PageDto pageDto,
                                      GiftCertificateQueryParametersDto parameters) {
-        int lastPage = PageFormatter.calculateLastPage(pageDto);
+        PageFormatter formatter = new PageFormatter();
+        int lastPage = formatter.calculateLastPage(pageDto);
         if (pageDto.getPageNumber() < lastPage) {
             giftCertificateCollection.add(linkTo(methodOn(GiftCertificateController.class)
                     .getGiftCertificates(parameters.getTagNames(), parameters.getName(), parameters.getDescription(),
                             parameters.getSortType(), parameters.getSortOrder(),
-                            PageFormatter.calculateNextPage(pageDto), pageDto.getSize()))
+                            formatter.calculateNextPage(pageDto), pageDto.getSize()))
                     .withRel("next_page").expand());
         }
         if (pageDto.getPageNumber() > 1) {
             giftCertificateCollection.add(linkTo(methodOn(GiftCertificateController.class)
                     .getGiftCertificates(parameters.getTagNames(), parameters.getName(), parameters.getDescription(),
                             parameters.getSortType(), parameters.getSortOrder(),
-                            PageFormatter.calculatePrevPage(pageDto), pageDto.getSize()))
+                            formatter.calculatePrevPage(pageDto), pageDto.getSize()))
                     .withRel("previous_page").expand());
         }
         giftCertificateCollection.add(linkTo(methodOn(GiftCertificateController.class)

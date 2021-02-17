@@ -117,15 +117,16 @@ public class OrderController {
     }
 
     private void addPageRelationship(PageCollection<OrderDto> orderCollection, PageDto pageDto, long userId) {
-        int lastPage = PageFormatter.calculateLastPage(pageDto);
+        PageFormatter formatter = new PageFormatter();
+        int lastPage = formatter.calculateLastPage(pageDto);
         if (pageDto.getPageNumber() < lastPage) {
             orderCollection.add(linkTo(methodOn(OrderController.class)
-                    .getOrdersByUserId(userId, PageFormatter.calculateNextPage(pageDto), pageDto.getSize()))
+                    .getOrdersByUserId(userId, formatter.calculateNextPage(pageDto), pageDto.getSize()))
                     .withRel("next_page"));
         }
         if (pageDto.getPageNumber() > 1) {
             orderCollection.add(linkTo(methodOn(OrderController.class)
-                    .getOrdersByUserId(userId, PageFormatter.calculatePrevPage(pageDto), pageDto.getSize()))
+                    .getOrdersByUserId(userId, formatter.calculatePrevPage(pageDto), pageDto.getSize()))
                     .withRel("previous_page"));
         }
         orderCollection.add(linkTo(methodOn(OrderController.class)
