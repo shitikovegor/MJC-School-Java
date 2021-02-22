@@ -48,7 +48,7 @@ public class OrderController {
      * @param id the id
      * @return the order dto
      */
-    @PostAuthorize("hasRole('ADMIN') or returnObject.user.id == principal.id")
+    @PostAuthorize("hasRole('admin') or returnObject.user.id == principal.userId")
     @GetMapping("/{id}")
     public OrderDto getOrderById(@PathVariable long id) {
         OrderDto orderDto = orderService.findById(id);
@@ -62,7 +62,7 @@ public class OrderController {
      * @param orderDto the order dto
      * @return the response entity
      */
-    @PreAuthorize("hasRole('ADMIN') or #userId == principal.id")
+    @PreAuthorize("hasRole('admin') or #userId == principal.userId")
     @PostMapping("/users/{userId}")
     public ResponseEntity<String> addOrder(@PathVariable long userId, @RequestBody OrderDto orderDto) {
         UserDto userDto = new UserDto();
@@ -99,7 +99,7 @@ public class OrderController {
      * @param size   the size
      * @return the orders by user id
      */
-    @PreAuthorize("hasRole('ADMIN') or #userId == principal.id")
+    @PreAuthorize("hasRole('admin') or #userId == principal.userId")
     @GetMapping("/users/{userId}")
     public ResponseEntity<PageCollection<OrderDto>> getOrdersByUserId(@PathVariable long userId,
                                                                       @RequestParam(required = false, defaultValue = "1") int page,

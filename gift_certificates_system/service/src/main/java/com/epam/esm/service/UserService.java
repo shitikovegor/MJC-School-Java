@@ -40,7 +40,7 @@ public interface UserService {
      *
      * @return the user DTO
      */
-    FullUserDto findByUsername(String username);
+    UserDto findByUsername(String username);
 
     /**
      * Authenticate user user dto.

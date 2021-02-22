@@ -7,6 +7,7 @@ import com.epam.esm.util.PageCollection;
 import com.epam.esm.util.PageFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,7 +61,7 @@ public class UserController {
      * @param id the user id
      * @return the user DTO
      */
-    @PreAuthorize("hasRole('ADMIN') or #id == principal.id")
+    @PreAuthorize("hasRole('admin') or #id == principal.userId")
     @GetMapping("/{id}")
     public UserDto getUserById(@PathVariable long id) {
         UserDto userDto = userService.findById(id);

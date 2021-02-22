@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -148,6 +149,22 @@ public class ErrorHandler {
                 messageSource.getMessage(ExceptionKey.JWT_ERROR, new Object[]{}, locale),
                 exception.getMessage());
         return new ErrorInfo(errorMessage, JWT_ERROR.getCode());
+    }
+
+    /**
+     * Handle {@link AccessDeniedException}.
+     *
+     * @param exception the exception
+     * @param locale    the locale
+     * @return the error information
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorInfo handleAccessDeniedException(AccessDeniedException exception, Locale locale) {
+        String errorMessage = createErrorMessage(
+                messageSource.getMessage(ExceptionKey.JWT_ERROR, new Object[]{}, locale),
+                exception.getMessage());
+        return new ErrorInfo(errorMessage, FORBIDDEN.getCode());
     }
 
     /**

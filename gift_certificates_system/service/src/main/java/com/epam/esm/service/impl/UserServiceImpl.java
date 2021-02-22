@@ -77,9 +77,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public FullUserDto findByUsername(String username) {
+    public UserDto findByUsername(String username) {
         Optional<User> foundUser = userDao.findByUsername(username);
-        return foundUser.map(user -> modelMapper.map(user, FullUserDto.class))
+        return foundUser.map(user -> modelMapper.map(user, UserDto.class))
                 .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.USER_NOT_FOUND,
                         String.valueOf(username)));
     }
