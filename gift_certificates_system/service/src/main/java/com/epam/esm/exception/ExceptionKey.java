@@ -30,9 +30,10 @@ public final class   ExceptionKey {
     public static final String USER_NOT_FOUND = "user.notFound";
     public static final String USER_EXISTS = "user.exists";
     public static final String USER_NOT_COMPLETED = "user.notCompleted";
-    public static final String USER_NOT_FOUND_BY_LOGIN_OR_PASSWORD = "user.notFoundByLoginOrPassword";
+    public static final String PASSWORDS_DO_NOT_MATCH = "user.passwordsNotMatch";
 
     public static final String ORDER_NOT_FOUND = "order.notFound";
+    public static final String OBJECT_NOT_FOUND = "object.notFound";
 
     public static final String INCORRECT_PAGE_FORMAT = "pagination.incorrectPage";
     public static final String PAGE_DOES_NOT_EXIST = "pagination.notExists";
@@ -41,9 +42,9 @@ public final class   ExceptionKey {
     public static final String UNSUPPORTED_MEDIA_TYPE = "unsupportedMediaType";
     public static final String INCORRECT_PARAMETER = "incorrectParameter";
     public static final String HANDLER_NOT_FOUND = "handlerNotFound";
-    public static final String ROLE_NOT_FOUND = "role.notFound";
-    public static final String PASSWORDS_DO_NOT_MATCH = "user.passwordsNotMatch";
     public static final String JWT_ERROR = "jwtError";
+    public static final String AUTH_SERVER_ERROR = "authServerError";
+
 
     private ExceptionKey() {
     }

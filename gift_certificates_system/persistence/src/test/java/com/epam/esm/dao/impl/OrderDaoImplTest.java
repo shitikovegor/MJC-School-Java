@@ -40,7 +40,7 @@ class OrderDaoImplTest {
 
     @BeforeAll
     void setUp() {
-        user = new User(1L, "shitikov.egor@gmail.com", "", "", "", new ArrayList<>());
+        user = new User(1L, "shitikov.egor@gmail.com", "Egor", "Shitikov");
         giftCertificate = new GiftCertificate(1L, "rest in hotel",
                 "rest in good place", new BigDecimal("150.45"), 4,
                 LocalDateTime.of(2021, 1, 1, 10, 0, 0),
@@ -102,5 +102,21 @@ class OrderDaoImplTest {
         int expectedSize = 2;
 
         assertEquals(expectedSize, actual.size());
+    }
+
+    @Test
+    void findTotalRecordsShouldReturnNumberOfOrders() {
+        int actual = orderDao.findTotalRecords();
+        int expected = 5;
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void findTotalRecordsByUserIdShouldReturnNumberOfUserOrders() {
+        int actual = orderDao.findTotalRecordsByUserId(1);
+        int expected = 2;
+
+        assertEquals(expected, actual);
     }
 }

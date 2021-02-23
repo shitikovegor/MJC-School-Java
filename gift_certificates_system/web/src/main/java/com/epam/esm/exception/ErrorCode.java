@@ -13,7 +13,8 @@ public enum ErrorCode {
     UNSUPPORTED_MEDIA_TYPE(4154),
     BAD_REQUEST(4005),
     JWT_ERROR(4014),
-    FORBIDDEN(4034);
+    FORBIDDEN(4034),
+    AUTH_SERVER_ERROR(4094);
 
     private int code;
 

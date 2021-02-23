@@ -18,7 +18,6 @@ public class UserRegistrationDto extends RepresentationModel<UserRegistrationDto
     private String confirmPassword;
     private String firstName;
     private String lastName;
-    private List<RoleDto> roles;
 
     /**
      * Instantiates a new User DTO.
@@ -35,17 +34,15 @@ public class UserRegistrationDto extends RepresentationModel<UserRegistrationDto
      * @param confirmPassword the confirm password
      * @param firstName       the first name
      * @param lastName        the last name
-     * @param roles           the roles
      */
     public UserRegistrationDto(long id, String username, String password, String confirmPassword, String firstName,
-                               String lastName, List<RoleDto> roles) {
+                               String lastName) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.confirmPassword = confirmPassword;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.roles = roles;
     }
 
     public long getId() {
@@ -96,14 +93,6 @@ public class UserRegistrationDto extends RepresentationModel<UserRegistrationDto
         this.lastName = lastName;
     }
 
-    public List<RoleDto> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<RoleDto> roles) {
-        this.roles = roles;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -121,13 +110,12 @@ public class UserRegistrationDto extends RepresentationModel<UserRegistrationDto
                 Objects.equals(password, userDto.password) &&
                 Objects.equals(confirmPassword, userDto.confirmPassword) &&
                 Objects.equals(firstName, userDto.firstName) &&
-                Objects.equals(lastName, userDto.lastName) &&
-                Objects.equals(roles, userDto.roles);
+                Objects.equals(lastName, userDto.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), id, username, password, confirmPassword, firstName, lastName, roles);
+        return Objects.hash(super.hashCode(), id, username, password, confirmPassword, firstName, lastName);
     }
 
     @Override
@@ -138,8 +126,7 @@ public class UserRegistrationDto extends RepresentationModel<UserRegistrationDto
         sb.append(", password='").append(password).append('\'');
         sb.append(", confirmPassword='").append(confirmPassword).append('\'');
         sb.append(", firstName='").append(firstName).append('\'');
-        sb.append(", lastName='").append(lastName).append('\'');
-        sb.append(", roles=").append(roles);
+        sb.append(", lastName='").append(lastName);
         sb.append('}');
         return sb.toString();
     }

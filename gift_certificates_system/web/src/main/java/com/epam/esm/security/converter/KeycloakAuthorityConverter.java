@@ -10,6 +10,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Class {@code KeycloakAuthorityConverter} uses to add user roles to token.
+ *
+ * @author Egor Shitikov
+ * @version 1.0
+ */
 public class KeycloakAuthorityConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
     @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {

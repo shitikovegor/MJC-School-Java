@@ -1,11 +1,16 @@
 package com.epam.esm.security.entity;
 
-import com.epam.esm.dto.UserDto;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.time.Instant;
 import java.util.Map;
 
+/**
+ * Class {@code JwtUserInfo} represents user info for token
+ *
+ * @author Egor Shitikov
+ * @version 1.0
+ */
 public class JwtUserInfo extends Jwt {
     private long userId;
     private String username;
@@ -23,6 +28,13 @@ public class JwtUserInfo extends Jwt {
         super(tokenValue, issuedAt, expiresAt, headers, claims);
     }
 
+    /**
+     * Instantiates a new Jwt user info.
+     *
+     * @param jwt      the jwt
+     * @param userId   the user id
+     * @param username the username
+     */
     public JwtUserInfo(Jwt jwt, long userId, String username) {
         super(jwt.getTokenValue(), jwt.getIssuedAt(), jwt.getExpiresAt(), jwt.getHeaders(), jwt.getClaims());
         this.userId = userId;

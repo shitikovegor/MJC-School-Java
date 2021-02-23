@@ -10,6 +10,12 @@ import org.springframework.stereotype.Service;
 
 import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.USERNAME;
 
+/**
+ * Class {@code JwtUserInfoService} uses to get {@link JwtUserInfo} from database
+ *
+ * @author Egor Shitikov
+ * @version 1.0
+ */
 @Service
 public class JwtUserInfoService {
     private final UserService userService;

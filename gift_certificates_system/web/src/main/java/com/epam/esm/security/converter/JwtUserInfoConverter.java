@@ -8,10 +8,15 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
-import org.springframework.util.Assert;
 
 import java.util.Collection;
 
+/**
+ * Class {@code JwtUserInfoConverter} uses to add user info to token principal.
+ *
+ * @author Egor Shitikov
+ * @version 1.0
+ */
 public class JwtUserInfoConverter implements Converter<Jwt, AbstractAuthenticationToken> {
     private Converter<Jwt, Collection<GrantedAuthority>> grantedAuthoritiesConverter;
     @Autowired
@@ -24,9 +29,15 @@ public class JwtUserInfoConverter implements Converter<Jwt, AbstractAuthenticati
         return new JwtAuthenticationToken(jwtUserInfo, authorities);
     }
 
+    /**
+     * Sets granted authorities converter.
+     *
+     * @param grantedAuthoritiesConverter the granted authorities converter
+     */
     public void setGrantedAuthoritiesConverter(
             Converter<Jwt, Collection<GrantedAuthority>> grantedAuthoritiesConverter) {
-        Assert.notNull(grantedAuthoritiesConverter, "jwtGrantedAuthoritiesConverter cannot be null");
-        this.grantedAuthoritiesConverter = grantedAuthoritiesConverter;
+        if (grantedAuthoritiesConverter != null) {
+            this.grantedAuthoritiesConverter = grantedAuthoritiesConverter;
+        }
     }
 }

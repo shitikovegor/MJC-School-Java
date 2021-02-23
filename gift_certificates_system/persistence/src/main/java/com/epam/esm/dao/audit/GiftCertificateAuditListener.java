@@ -7,7 +7,7 @@ import javax.persistence.PreUpdate;
 import java.time.LocalDateTime;
 
 /**
- * Class {@code GiftCertificateAuditListener} uses for audit gift certificate creation
+ * Class {@code GiftCertificateAuditListener} uses to audit gift certificate creation
  * and updating operations.
  *
  * @author Egor Shitikov

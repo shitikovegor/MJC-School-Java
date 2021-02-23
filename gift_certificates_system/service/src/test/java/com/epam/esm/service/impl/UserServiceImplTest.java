@@ -47,10 +47,10 @@ class UserServiceImplTest {
                 .setFieldMatchingEnabled(true)
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
-        userService = new UserServiceImpl(modelMapper, userDao, null, null);
+        userService = new UserServiceImpl(modelMapper, userDao);
         page = new Page(5, 1, 10);
         pageDto = new PageDto(5, 1, 10);
-        user = new User(2L, "user3@epam.com", "", "", "", new ArrayList<>());
+        user = new User(2L, "user3@epam.com", "", "");
         userDto = new UserDto(2L, "user3@epam.com", "", "");
 
     }
@@ -68,8 +68,9 @@ class UserServiceImplTest {
 
     @Test
     void addCorrectDataShouldReturnUserDtoId() {
-        User user1 = new User(24L, "user@gmail.com", "", "", "", new ArrayList<>());
-        UserRegistrationDto userDto1 = new UserRegistrationDto(24L, "user@gmail.com", "", "", "", "", new ArrayList<>());
+        User user1 = new User(24L, "user@gmail.com", "Ivan", "Ivanov");
+        UserRegistrationDto userDto1 = new UserRegistrationDto(24L, "user@gmail.com", "User123",
+                "User123", "Ivan", "Ivanov");
         when(userDao.findByUsername("user@gmail.com")).thenReturn(Optional.empty());
         when(userDao.add(user1)).thenReturn(user1);
         long expected = 24L;
@@ -78,7 +79,7 @@ class UserServiceImplTest {
 
     @Test
     void addIncorrectDataShouldThrowException() {
-        UserRegistrationDto userDtoInvalid = new UserRegistrationDto(1L, "user.gmail.com", "", "", "", "", new ArrayList<>());
+        UserRegistrationDto userDtoInvalid = new UserRegistrationDto(1L, "user.gmail.com", "", "", "", "");
         when(userDao.findByUsername(anyString())).thenReturn(Optional.empty());
         when(userDao.add(any(User.class))).thenReturn(null);
         assertThrows(IncorrectParameterException.class, () -> userService.register(userDtoInvalid));
@@ -86,7 +87,7 @@ class UserServiceImplTest {
 
     @Test
     void findAllCorrectDataShouldReturnUserDtoList() {
-        User user2 = new User(1L, "user2@gmail.com", "", "", "", new ArrayList<>());
+        User user2 = new User(1L, "user2@gmail.com", "", "");
         UserDto userDto2 = new UserDto(1L, "user2@gmail.com", "", "");
         List<User> users = List.of(user2, user);
         List<UserDto> usersDto = List.of(userDto2, userDto);

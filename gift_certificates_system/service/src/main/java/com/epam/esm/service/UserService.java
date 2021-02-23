@@ -41,12 +41,4 @@ public interface UserService {
      * @return the user DTO
      */
     UserDto findByUsername(String username);
-
-    /**
-     * Authenticate user user dto.
-     *
-     * @param authenticationDto the authentication dto
-     * @return the user dto
-     */
-    UserDto authenticateUser(AuthenticationDto authenticationDto);
 }

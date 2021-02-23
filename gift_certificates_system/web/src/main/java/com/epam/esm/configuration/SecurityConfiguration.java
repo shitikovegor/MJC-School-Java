@@ -14,12 +14,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
 
-import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.USERNAME;
-
-@EnableWebSecurity(debug = true)
+/**
+ * Class {@code SecurityConfiguration} contains spring configuration for security.
+ *
+ * @author Egor Shitikov
+ * @version 1.0
+ */
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final FilterExceptionHandler filterExceptionHandler;
@@ -36,9 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests(oauth -> oauth
-                        .antMatchers(HttpMethod.POST, "/oauth2/**").permitAll()
-                        .antMatchers(HttpMethod.POST, "/login1").permitAll()
+                .authorizeRequests(oauth2 -> oauth2
                         .antMatchers(HttpMethod.POST, "/registration").permitAll()
                         .antMatchers(HttpMethod.GET, "/gift-certificates/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/tags/**").hasAnyRole("user", "admin")
@@ -54,6 +55,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(filterExceptionHandler, BearerTokenAuthenticationFilter.class);
     }
 
+    /**
+     * Bean {@code Converter} will be use as token converter
+     *
+     * @return the converter
+     */
     @Bean
     public Converter<Jwt, AbstractAuthenticationToken> authenticationConverter() {
         JwtUserInfoConverter converter = new JwtUserInfoConverter();
