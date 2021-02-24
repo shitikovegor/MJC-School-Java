@@ -15,6 +15,7 @@ buildscript {
 }
 
 subprojects {
+    apply plugin: 'war'
     apply plugin: 'java'
     apply plugin: "org.springframework.boot"
     apply plugin: "io.spring.dependency-management"
@@ -32,8 +33,7 @@ subprojects {
 
     dependencies {
         implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-        implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
-        implementation 'org.springframework.boot:spring-boot-starter-actuator:2.4.2'
+
     }
 }
 

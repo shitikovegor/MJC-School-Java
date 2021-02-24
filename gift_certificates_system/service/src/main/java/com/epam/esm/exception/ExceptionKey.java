@@ -33,6 +33,7 @@ public final class   ExceptionKey {
     public static final String PASSWORDS_DO_NOT_MATCH = "user.passwordsNotMatch";
 
     public static final String ORDER_NOT_FOUND = "order.notFound";
+    public static final String USER_ORDERS_NOT_FOUND = "order.byUserNotFound";
     public static final String OBJECT_NOT_FOUND = "object.notFound";
 
     public static final String INCORRECT_PAGE_FORMAT = "pagination.incorrectPage";
@@ -41,7 +42,7 @@ public final class   ExceptionKey {
     public static final String INTERNAL_ERROR = "internalError";
     public static final String UNSUPPORTED_MEDIA_TYPE = "unsupportedMediaType";
     public static final String INCORRECT_PARAMETER = "incorrectParameter";
-    public static final String HANDLER_NOT_FOUND = "handlerNotFound";
+    public static final String AUTHORIZATION_ERROR = "authorizationError";
     public static final String JWT_ERROR = "jwtError";
     public static final String AUTH_SERVER_ERROR = "authServerError";
 

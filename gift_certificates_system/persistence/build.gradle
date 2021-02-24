@@ -26,4 +26,3 @@ sourceSets {
         }
     }
 }
-jar.enabled=true

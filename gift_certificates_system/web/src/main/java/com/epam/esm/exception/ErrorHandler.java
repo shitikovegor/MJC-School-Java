@@ -116,7 +116,7 @@ public class ErrorHandler {
         String errorMessage = createErrorMessage(
                 messageSource.getMessage(ExceptionKey.JWT_ERROR, new Object[]{}, locale),
                 exception.getMessage());
-        return new ErrorInfo(errorMessage, JWT_ERROR.getCode());
+        return new ErrorInfo(errorMessage, AUTHORIZATION_ERROR.getCode());
     }
 
     /**
@@ -132,7 +132,7 @@ public class ErrorHandler {
         String errorMessage = createErrorMessage(
                 messageSource.getMessage(ExceptionKey.JWT_ERROR, new Object[]{}, locale),
                 exception.getMessage());
-        return new ErrorInfo(errorMessage, JWT_ERROR.getCode());
+        return new ErrorInfo(errorMessage, AUTHORIZATION_ERROR.getCode());
     }
 
     /**

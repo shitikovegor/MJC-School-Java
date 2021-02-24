@@ -1,8 +1,8 @@
 package com.epam.esm.configuration;
 
+import com.epam.esm.security.RestAuthenticationEntryPoint;
 import com.epam.esm.security.converter.JwtUserInfoConverter;
 import com.epam.esm.security.converter.KeycloakAuthorityConverter;
-import com.epam.esm.security.filter.FilterExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter;
 
 /**
  * Class {@code SecurityConfiguration} contains spring configuration for security.
@@ -25,11 +24,11 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private final FilterExceptionHandler filterExceptionHandler;
+    private final RestAuthenticationEntryPoint authenticationEntryPoint;
 
     @Autowired
-    public SecurityConfiguration(FilterExceptionHandler filterExceptionHandler) {
-        this.filterExceptionHandler = filterExceptionHandler;
+    public SecurityConfiguration(RestAuthenticationEntryPoint authenticationEntryPoint) {
+        this.authenticationEntryPoint = authenticationEntryPoint;
     }
 
     @Override
@@ -40,7 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests(oauth2 -> oauth2
-                        .antMatchers(HttpMethod.POST, "/registration").permitAll()
+                        .antMatchers(HttpMethod.POST, "/users").permitAll()
                         .antMatchers(HttpMethod.GET, "/gift-certificates/**").permitAll()
                         .antMatchers(HttpMethod.GET, "/tags/**").hasAnyRole("user", "admin")
                         .antMatchers(HttpMethod.GET, "/users/{\\d+}").hasAnyRole("user", "admin")
@@ -51,8 +50,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt()
-                        .jwtAuthenticationConverter(authenticationConverter()))
-                .addFilterBefore(filterExceptionHandler, BearerTokenAuthenticationFilter.class);
+                        .jwtAuthenticationConverter(authenticationConverter())
+                        .and().authenticationEntryPoint(authenticationEntryPoint));
     }
 
     /**

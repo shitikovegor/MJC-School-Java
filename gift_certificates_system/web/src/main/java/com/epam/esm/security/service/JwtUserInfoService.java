@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
-import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames.USERNAME;
-
 /**
  * Class {@code JwtUserInfoService} uses to get {@link JwtUserInfo} from database
  *
@@ -18,6 +16,7 @@ import static org.springframework.security.oauth2.core.endpoint.OAuth2ParameterN
  */
 @Service
 public class JwtUserInfoService {
+    private static final String USERNAME_CLAIM = "user_name";
     private final UserService userService;
 
     @Autowired
@@ -26,7 +25,7 @@ public class JwtUserInfoService {
     }
 
     public JwtUserInfo loadJwtUserInfoByJwt(Jwt jwt) {
-        UserDto user = userService.findByUsername(jwt.getClaimAsString(USERNAME));
+        UserDto user = userService.findByUsername(jwt.getClaimAsString(USERNAME_CLAIM));
         JwtUserInfo jwtUserInfo = JwtUserFactory.create(jwt, user);
         return jwtUserInfo;
     }

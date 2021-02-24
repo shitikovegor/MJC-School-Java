@@ -70,7 +70,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> findByUserId(long userId, PageDto pageDto) {
-        pageDto.setTotalRecords(orderDao.findTotalRecordsByUserId(userId));
+        int totalRecords = orderDao.findTotalRecordsByUserId(userId);
+        if (totalRecords == 0) {
+            throw new ResourceNotFoundException(ExceptionKey.USER_ORDERS_NOT_FOUND, String.valueOf(userId));
+        }
+        pageDto.setTotalRecords(totalRecords);
         PageValidator.validatePage(pageDto);
         Page page = modelMapper.map(pageDto, Page.class);
         return orderDao.findOrdersByUserId(userId, page).stream()

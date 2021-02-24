@@ -1,5 +1,6 @@
 package com.epam.esm.dto;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
@@ -38,11 +39,11 @@ public class UserRegistrationDto extends RepresentationModel<UserRegistrationDto
     public UserRegistrationDto(long id, String username, String password, String confirmPassword, String firstName,
                                String lastName) {
         this.id = id;
-        this.username = username;
+        this.username = StringUtils.trim(username);
         this.password = password;
         this.confirmPassword = confirmPassword;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = StringUtils.trim(firstName);
+        this.lastName = StringUtils.trim(lastName);
     }
 
     public long getId() {
@@ -57,8 +58,8 @@ public class UserRegistrationDto extends RepresentationModel<UserRegistrationDto
         return username;
     }
 
-    public void setUsername(String name) {
-        this.username = name;
+    public void setUsername(String username) {
+        this.username = StringUtils.trim(username);
     }
 
     public String getPassword() {
@@ -82,7 +83,7 @@ public class UserRegistrationDto extends RepresentationModel<UserRegistrationDto
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.firstName = StringUtils.trim(firstName);
     }
 
     public String getLastName() {
@@ -90,7 +91,7 @@ public class UserRegistrationDto extends RepresentationModel<UserRegistrationDto
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.lastName = StringUtils.trim(lastName);
     }
 
     @Override
