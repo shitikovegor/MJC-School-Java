@@ -2,7 +2,6 @@ package com.epam.esm.entity;
 
 import com.epam.esm.dao.audit.GiftCertificateAuditListener;
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -21,7 +20,6 @@ import java.util.Objects;
 @Entity
 @Table(name = "gift_certificate")
 @SQLDelete(sql = "UPDATE gift_certificate SET deleted=true WHERE id=?")
-@Where(clause = "deleted = false")
 public class GiftCertificate implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

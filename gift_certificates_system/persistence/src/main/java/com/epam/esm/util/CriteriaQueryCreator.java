@@ -28,6 +28,7 @@ public class CriteriaQueryCreator {
         CriteriaQuery<GiftCertificate> query = builder.createQuery(GiftCertificate.class);
         Root<GiftCertificate> root = query.from(GiftCertificate.class);
         List<Predicate> predicates = new ArrayList<>();
+        predicates.add(builder.isFalse(root.get(GiftCertificate_.IS_DELETED)));
 
         predicates.addAll(addTagNames(giftCertificateQueryParameters, builder, root));
         predicates.addAll(addName(giftCertificateQueryParameters, builder, root));
