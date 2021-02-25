@@ -1,6 +1,8 @@
 package com.epam.esm.entity;
 
 import com.epam.esm.dao.audit.GiftCertificateAuditListener;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -18,6 +20,8 @@ import java.util.Objects;
 @EntityListeners(GiftCertificateAuditListener.class)
 @Entity
 @Table(name = "gift_certificate")
+@SQLDelete(sql = "UPDATE gift_certificate SET deleted=true WHERE id=?")
+@Where(clause = "deleted = false")
 public class GiftCertificate implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +39,8 @@ public class GiftCertificate implements Serializable {
             joinColumns = @JoinColumn(name = "gift_certificate_id_fk", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id_fk", referencedColumnName = "id"))
     private List<Tag> tags;
+    @Column(name = "deleted")
+    private boolean isDeleted;
 
     /**
      * Instantiates a new Gift certificate.
@@ -53,9 +59,10 @@ public class GiftCertificate implements Serializable {
      * @param createDate     the create date
      * @param lastUpdateDate the last update date
      * @param tags           the tags
+     * @param isDeleted      the is deleted
      */
     public GiftCertificate(long id, String name, String description, BigDecimal price, int duration,
-                           LocalDateTime createDate, LocalDateTime lastUpdateDate, List<Tag> tags) {
+                           LocalDateTime createDate, LocalDateTime lastUpdateDate, List<Tag> tags, boolean isDeleted) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -64,6 +71,7 @@ public class GiftCertificate implements Serializable {
         this.createDate = createDate;
         this.lastUpdateDate = lastUpdateDate;
         this.tags = tags;
+        this.isDeleted = isDeleted;
     }
 
     public long getId() {
@@ -130,6 +138,14 @@ public class GiftCertificate implements Serializable {
         this.tags = tags;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -141,6 +157,7 @@ public class GiftCertificate implements Serializable {
         GiftCertificate that = (GiftCertificate) o;
         return id == that.id &&
                 duration == that.duration &&
+                isDeleted == that.isDeleted &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(price, that.price) &&
@@ -151,7 +168,7 @@ public class GiftCertificate implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, price, duration, createDate, lastUpdateDate, tags);
+        return Objects.hash(id, name, description, price, duration, createDate, lastUpdateDate, tags, isDeleted);
     }
 
     @Override
@@ -165,6 +182,7 @@ public class GiftCertificate implements Serializable {
         sb.append(", createDate=").append(createDate);
         sb.append(", lastUpdateDate=").append(lastUpdateDate);
         sb.append(", tags=").append(tags);
+        sb.append(", deleted=").append(isDeleted);
         sb.append('}');
         return sb.toString();
     }

@@ -6,7 +6,8 @@ CREATE TABLE gift_certificate
     price            DECIMAL(10, 2) NOT NULL,
     duration         INT            NOT NULL,
     create_date      DATETIME       NOT NULL,
-    last_update_date DATETIME       NOT NULL
+    last_update_date DATETIME       NOT NULL,
+    deleted          TINYINT(1)     NOT NULL
 ) ENGINE = InnoDB;
 
 CREATE TABLE tag
