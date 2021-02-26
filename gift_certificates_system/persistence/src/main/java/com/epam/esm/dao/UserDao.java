@@ -13,12 +13,12 @@ import java.util.Optional;
  */
 public interface UserDao extends BaseDao<User> {
     /**
-     * Find by email optional.
+     * Find by username optional.
      *
-     * @param email the email to search
+     * @param username the username to search
      * @return the optional
      */
-    Optional<User> findByEmail(String email);
+    Optional<User> findByUsername(String username);
 
     /**
      * Find total records in database.
@@ -26,4 +26,12 @@ public interface UserDao extends BaseDao<User> {
      * @return the int
      */
     int findTotalRecords();
+
+    /**
+     * Update user.
+     *
+     * @param user to update
+     * @return the updated user
+     */
+    User update(User user);
 }

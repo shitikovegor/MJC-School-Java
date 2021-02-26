@@ -7,6 +7,7 @@ import com.epam.esm.util.GiftCertificateQueryParameters;
 import com.epam.esm.util.Page;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
@@ -14,7 +15,11 @@ import java.util.Optional;
 
 @Repository
 public class GiftCertificateDaoImpl extends BaseDaoImpl<GiftCertificate> implements GiftCertificateDao {
-    private static final String GIFT_CERTIFICATE_FIND_ALL = "SELECT g FROM GiftCertificate g";
+    private static final String GIFT_CERTIFICATE_FIND_ALL = "SELECT g FROM GiftCertificate g WHERE g.isDeleted = false";
+    private static final String GIFT_CERTIFICATE_FIND_BY_ID = "SELECT g FROM GiftCertificate g WHERE g.id = ?1 " +
+            "AND g.isDeleted = false";
+    private static final String GIFT_CERTIFICATE_DELETE_BY_ID = "UPDATE GiftCertificate SET isDeleted = true WHERE " +
+            "id=?1";
 
     @Override
     public List<GiftCertificate> findAll(Page page) {
@@ -26,7 +31,9 @@ public class GiftCertificateDaoImpl extends BaseDaoImpl<GiftCertificate> impleme
 
     @Override
     public Optional<GiftCertificate> findById(long id) {
-        return Optional.ofNullable(entityManager.find(GiftCertificate.class, id));
+        Query query = entityManager.createQuery(GIFT_CERTIFICATE_FIND_BY_ID);
+        query.setParameter(1, id);
+        return query.getResultList().stream().findFirst();
     }
 
     @Override
@@ -54,5 +61,12 @@ public class GiftCertificateDaoImpl extends BaseDaoImpl<GiftCertificate> impleme
                 new CriteriaQueryCreator().generateCountCriteriaQueryBySearchParameters(giftCertificateQueryParameters,
                         builder);
         return entityManager.createQuery(query).getSingleResult().intValue();
+    }
+
+    @Override
+    public void remove(GiftCertificate entity) {
+        Query query = entityManager.createQuery(GIFT_CERTIFICATE_DELETE_BY_ID);
+        query.setParameter(1, entity.getId());
+        query.executeUpdate();
     }
 }

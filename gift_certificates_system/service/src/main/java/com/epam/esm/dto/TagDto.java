@@ -1,5 +1,6 @@
 package com.epam.esm.dto;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.Objects;
@@ -28,7 +29,7 @@ public class TagDto extends RepresentationModel<TagDto> {
      */
     public TagDto(long id, String name) {
         this.id = id;
-        this.name = name;
+        this.name = StringUtils.trim(name);
     }
 
     public long getId() {
@@ -44,7 +45,7 @@ public class TagDto extends RepresentationModel<TagDto> {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = StringUtils.trim(name);
     }
 
     @Override

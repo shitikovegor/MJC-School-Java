@@ -43,7 +43,9 @@ class UserDaoImplTest {
     @Test
     void addCorrectDataShouldReturnUser() {
         User user = new User();
-        user.setEmail("newUser@mail.ru");
+        user.setUsername("newUser@mail.ru");
+        user.setFirstName("Name");
+        user.setLastName("Lastname");
         User actual = userDao.add(user);
 
         assertNotNull(actual);
@@ -60,7 +62,7 @@ class UserDaoImplTest {
 
     @Test
     void findByIdCorrectDataShouldReturnUser() {
-        User user = new User(3L, "name_surname@tut.by");
+        User user = new User(3L, "name_surname@tut.by", "Oleg", "Petrov");
         Optional<User> actualOptional = userDao.findById(3);
         User actual = actualOptional.orElse(null);
 
@@ -75,8 +77,8 @@ class UserDaoImplTest {
 
     @Test
     void findByEmailCorrectDataShouldReturnUser() {
-        User user = new User(1L, "shitikov.egor@gmail.com");
-        Optional<User> actualOptional = userDao.findByEmail("shitikov.egor@gmail.com");
+        User user = new User(1L, "shitikov.egor@gmail.com", "Egor", "Shitikov");
+        Optional<User> actualOptional = userDao.findByUsername("shitikov.egor@gmail.com");
         User actual = actualOptional.orElse(null);
 
         assertEquals(user, actual);

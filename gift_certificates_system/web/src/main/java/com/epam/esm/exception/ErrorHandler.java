@@ -1,14 +1,18 @@
 package com.epam.esm.exception;
 
+import com.epam.esm.security.exception.AuthorizationServerException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Locale;
 
@@ -101,19 +105,83 @@ public class ErrorHandler {
     }
 
     /**
-     * Handle {@link NoHandlerFoundException}.
+     * Handle {@link JwtException}.
      *
      * @param exception the exception
      * @param locale    the locale
      * @return the error information
      */
-    @ExceptionHandler(NoHandlerFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorInfo handleNoHandlerFoundException(NoHandlerFoundException exception, Locale locale) {
+    @ExceptionHandler(JwtException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorInfo handleExpiredJwtException(ExpiredJwtException exception, Locale locale) {
         String errorMessage = createErrorMessage(
-                messageSource.getMessage(ExceptionKey.HANDLER_NOT_FOUND, new Object[]{}, locale),
+                messageSource.getMessage(ExceptionKey.JWT_ERROR, new Object[]{}, locale),
+                exception.getMessage());
+        return new ErrorInfo(errorMessage, AUTHORIZATION_ERROR.getCode());
+    }
+
+    /**
+     * Handle {@link IllegalArgumentException}.
+     *
+     * @param exception the exception
+     * @param locale    the locale
+     * @return the error information
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorInfo handleIllegalArgumentException(IllegalArgumentException exception, Locale locale) {
+        String errorMessage = createErrorMessage(
+                messageSource.getMessage(ExceptionKey.JWT_ERROR, new Object[]{}, locale),
+                exception.getMessage());
+        return new ErrorInfo(errorMessage, AUTHORIZATION_ERROR.getCode());
+    }
+
+    /**
+     * Handle {@link MethodArgumentTypeMismatchException}.
+     *
+     * @param exception the exception
+     * @param locale    the locale
+     * @return the error information
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorInfo handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception, Locale locale) {
+        String errorMessage = createErrorMessage(
+                messageSource.getMessage(ExceptionKey.INCORRECT_PARAMETER, new Object[]{}, locale),
+                exception.getMessage());
+        return new ErrorInfo(errorMessage, BAD_REQUEST.getCode());
+    }
+
+    /**
+     * Handle {@link AccessDeniedException}.
+     *
+     * @param exception the exception
+     * @param locale    the locale
+     * @return the error information
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorInfo handleAccessDeniedException(AccessDeniedException exception, Locale locale) {
+        String errorMessage = createErrorMessage(
+                messageSource.getMessage(ExceptionKey.OBJECT_NOT_FOUND, new Object[]{}, locale),
                 exception.getMessage());
         return new ErrorInfo(errorMessage, NOT_FOUND.getCode());
+    }
+
+    /**
+     * Handle {@link AuthorizationServerException}.
+     *
+     * @param exception the exception
+     * @param locale    the locale
+     * @return the error information
+     */
+    @ExceptionHandler(AuthorizationServerException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorInfo handleAuthorizationServerException(AuthorizationServerException exception, Locale locale) {
+        String errorMessage = createErrorMessage(
+                messageSource.getMessage(exception.getMessageKey(), new Object[]{}, locale),
+                exception.getMessageParameter());
+        return new ErrorInfo(errorMessage, AUTH_SERVER_ERROR.getCode());
     }
 
     /**
@@ -131,6 +199,7 @@ public class ErrorHandler {
                 exception.getMessage());
         return new ErrorInfo(errorMessage, INTERNAL_ERROR.getCode());
     }
+
 
     private String createErrorMessage(String message, String parameter) {
         return String.format(message, parameter);

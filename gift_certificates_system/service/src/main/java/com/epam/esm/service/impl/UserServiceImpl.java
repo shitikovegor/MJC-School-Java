@@ -3,6 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.UserDao;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.dto.UserDto;
+import com.epam.esm.dto.UserRegistrationDto;
 import com.epam.esm.entity.User;
 import com.epam.esm.exception.ExceptionKey;
 import com.epam.esm.exception.IncorrectParameterException;
@@ -33,16 +34,16 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public long add(UserDto userDto) {
-        UserValidator.validateEmail(userDto.getEmail());
-        User user = modelMapper.map(userDto, User.class);
-        Optional<User> existingUser = userDao.findByEmail(user.getEmail());
+    public long register(UserRegistrationDto userRegistrationDto) {
+        UserValidator.validateUserRegistration(userRegistrationDto);
+        User user = modelMapper.map(userRegistrationDto, User.class);
+        Optional<User> existingUser = userDao.findByUsername(user.getUsername());
 
         if (existingUser.isEmpty()) {
             User addedUser = userDao.add(user);
             return addedUser.getId();
         } else {
-            throw new IncorrectParameterException(ExceptionKey.USER_EXISTS, user.getEmail());
+            throw new IncorrectParameterException(ExceptionKey.USER_EXISTS, user.getUsername());
         }
     }
 
@@ -64,10 +65,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findByEmail(String email) {
-        Optional<User> foundUser = userDao.findByEmail(email);
+    public UserDto findByUsername(String username) {
+        Optional<User> foundUser = userDao.findByUsername(username);
         return foundUser.map(user -> modelMapper.map(user, UserDto.class))
                 .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.USER_NOT_FOUND,
-                        String.valueOf(email)));
+                        String.valueOf(username)));
+    }
+
+    @Transactional
+    @Override
+    public UserDto update(UserDto userDto) {
+        User user = modelMapper.map(userDto, User.class);
+        return modelMapper.map(userDao.update(user), UserDto.class);
     }
 }

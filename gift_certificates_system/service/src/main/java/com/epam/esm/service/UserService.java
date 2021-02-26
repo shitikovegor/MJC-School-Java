@@ -1,7 +1,6 @@
 package com.epam.esm.service;
 
-import com.epam.esm.dto.PageDto;
-import com.epam.esm.dto.UserDto;
+import com.epam.esm.dto.*;
 
 import java.util.List;
 
@@ -12,7 +11,23 @@ import java.util.List;
  * @author Egor Shitikov
  * @version 1.0
  */
-public interface UserService extends BaseService<UserDto> {
+public interface UserService {
+    /**
+     * Register user.
+     *
+     * @param userRegistrationDto the registration DTO
+     * @return the id of added user
+     */
+    long register(UserRegistrationDto userRegistrationDto);
+
+    /**
+     * Find user DTO by id.
+     *
+     * @param id the id
+     * @return the found user DTO
+     */
+    UserDto findById(long id);
+
     /**
      * Find all users.
      *
@@ -21,9 +36,17 @@ public interface UserService extends BaseService<UserDto> {
     List<UserDto> findAll(PageDto pageDto);
 
     /**
-     * Find user by email.
+     * Find user by username.
      *
      * @return the user DTO
      */
-    UserDto findByEmail(String email);
+    UserDto findByUsername(String username);
+
+    /**
+     * Update user.
+     *
+     * @param userDto the user DTO
+     * @return the user DTO
+     */
+    UserDto update(UserDto userDto);
 }

@@ -83,13 +83,13 @@ class OrderServiceImplTest {
                 new BigDecimal(55), 2,
                 LocalDateTime.of(2020, 12, 25, 23, 59, 0),
                 LocalDateTime.of(2021, 12, 28, 23, 59, 59), new ArrayList<>());
-        userDto = new UserDto(24L, "user@gmail.com");
+        userDto = new UserDto(24L, "user@gmail.com", "", "");
         giftCertificate = new GiftCertificate(
                 3, "dinner", "New Year",
                 new BigDecimal(55), 2,
                 LocalDateTime.of(2020, 12, 25, 23, 59, 0),
                 LocalDateTime.of(2021, 12, 28, 23, 59, 59), new ArrayList<>());
-        user = new User(24L, "user@gmail.com");
+        user = new User(24L, "user@gmail.com", "", "");
 
         order = new Order(15L, user, giftCertificate, new BigDecimal(55),
                 LocalDateTime.of(2021, 1, 5, 23, 59, 0));

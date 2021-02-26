@@ -26,12 +26,12 @@ INSERT INTO gift_certificate_has_tag VALUES (3, 4);
 INSERT INTO gift_certificate_has_tag VALUES (4, 4);
 INSERT INTO gift_certificate_has_tag VALUES (5, 1);
 
-INSERT INTO user(email)
-VALUES ('shitikov.egor@gmail.com');
-INSERT INTO user(email)
-VALUES ('user_1@epam.com');
-INSERT INTO user(email)
-VALUES ('name_surname@tut.by');
+INSERT INTO user(username, first_name, last_name)
+VALUES ('shitikov.egor@gmail.com', 'Egor', 'Shitikov');
+INSERT INTO user(username, first_name, last_name)
+VALUES ('user_1@epam.com', 'Ivan', 'Ivanov');
+INSERT INTO user(username, first_name, last_name)
+VALUES ('name_surname@tut.by', 'Oleg', 'Petrov');
 
 INSERT INTO gift_certificate_order(user_id_fk, gift_certificate_id_fk, cost, purchase_date)
 VALUES(1, 1, 150.45, '2021-02-01 10:00:00');

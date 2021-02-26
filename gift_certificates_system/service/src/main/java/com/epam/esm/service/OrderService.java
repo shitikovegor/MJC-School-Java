@@ -12,7 +12,23 @@ import java.util.List;
  * @author Egor Shitikov
  * @version 1.0
  */
-public interface OrderService extends BaseService<OrderDto> {
+public interface OrderService {
+    /**
+     * Add order.
+     *
+     * @param orderDto the order DTO
+     * @return the id of added order
+     */
+    long add(OrderDto orderDto);
+
+    /**
+     * Find order DTO by id.
+     *
+     * @param id the id
+     * @return the found order
+     */
+    OrderDto findById(long id);
+
     /**
      * Remove order by id.
      *

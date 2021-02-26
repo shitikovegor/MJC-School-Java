@@ -1,6 +1,7 @@
 package com.epam.esm.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.math.BigDecimal;
@@ -48,8 +49,8 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
     public GiftCertificateDto(long id, String name, String description, BigDecimal price, int duration,
                               LocalDateTime createDate, LocalDateTime lastUpdateDate, List<TagDto> tags) {
         this.id = id;
-        this.name = name;
-        this.description = description;
+        this.name = StringUtils.trim(name);
+        this.description = StringUtils.trim(description);
         this.price = price;
         this.duration = duration;
         this.createDate = createDate;
@@ -70,7 +71,7 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = StringUtils.trim(name);
     }
 
     public String getDescription() {
@@ -78,7 +79,7 @@ public class GiftCertificateDto extends RepresentationModel<GiftCertificateDto> 
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = StringUtils.trim(description);
     }
 
     public BigDecimal getPrice() {

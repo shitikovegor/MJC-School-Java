@@ -10,14 +10,14 @@ import com.epam.esm.dto.PageDto;
  */
 public class PageFormatter {
 
-    private PageFormatter(){}
+    public PageFormatter(){}
     /**
      * Calculate previous page int.
      *
      * @param pageDto the page dto
      * @return the int
      */
-    public static int calculatePrevPage(PageDto pageDto) {
+    public int calculatePrevPage(PageDto pageDto) {
         return pageDto.getPageNumber() - 1;
     }
 
@@ -27,7 +27,7 @@ public class PageFormatter {
      * @param pageDto the page dto
      * @return the int
      */
-    public static int calculateNextPage(PageDto pageDto) {
+    public int calculateNextPage(PageDto pageDto) {
         return pageDto.getPageNumber() + 1;
     }
 
@@ -37,7 +37,7 @@ public class PageFormatter {
      * @param pageDto the page dto
      * @return the int
      */
-    public static int calculateLastPage(PageDto pageDto) {
+    public int calculateLastPage(PageDto pageDto) {
         int endPage;
         if (pageDto.getTotalRecords() % pageDto.getSize() == 0) {
             endPage = pageDto.getTotalRecords() / pageDto.getSize();

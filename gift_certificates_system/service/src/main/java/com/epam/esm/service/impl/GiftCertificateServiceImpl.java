@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -94,7 +93,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
                                                      PageDto pageDto) {
         GiftCertificateQueryParameters parameters = modelMapper.map(giftCertificateQueryParametersDto,
                 GiftCertificateQueryParameters.class);
-        pageDto.setTotalRecords(giftCertificateDao.findTotalRecordsByQueryParameters(parameters));
+        int totalRecords = giftCertificateDao.findTotalRecordsByQueryParameters(parameters);
+        if (totalRecords == 0) {
+            throw new ResourceNotFoundException(ExceptionKey.GIFT_CERTIFICATES_NOT_FOUND);
+        }
+        pageDto.setTotalRecords(totalRecords);
         PageValidator.validatePage(pageDto);
         Page page = modelMapper.map(pageDto, Page.class);
         List<GiftCertificate> giftCertificates = giftCertificateDao.findByQueryParameters(parameters, page);

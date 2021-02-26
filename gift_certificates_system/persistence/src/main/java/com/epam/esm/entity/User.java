@@ -15,7 +15,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String email;
+    private String username;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
 
     /**
      * Instantiates a new User.
@@ -26,12 +30,16 @@ public class User {
     /**
      * Instantiates a new User.
      *
-     * @param id    the id
-     * @param email the email
+     * @param id        the id
+     * @param username  the username
+     * @param firstName the first name
+     * @param lastName  the last name
      */
-    public User(long id, String email) {
+    public User(long id, String username, String firstName, String lastName) {
         this.id = id;
-        this.email = email;
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public long getId() {
@@ -42,12 +50,28 @@ public class User {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String name) {
-        this.email = name;
+    public void setUsername(String name) {
+        this.username = name;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override
@@ -60,19 +84,23 @@ public class User {
         }
         User user = (User) o;
         return id == user.id &&
-                Objects.equals(email, user.email);
+                Objects.equals(username, user.username) &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email);
+        return Objects.hash(id, username, firstName, lastName);
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("User{");
         sb.append("id=").append(id);
-        sb.append(", email='").append(email).append('\'');
+        sb.append(", username='").append(username).append('\'');
+        sb.append(", firstName='").append(firstName).append('\'');
+        sb.append(", lastName='").append(lastName);
         sb.append('}');
         return sb.toString();
     }

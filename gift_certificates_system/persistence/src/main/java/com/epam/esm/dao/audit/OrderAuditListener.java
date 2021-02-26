@@ -6,7 +6,7 @@ import javax.persistence.PrePersist;
 import java.time.LocalDateTime;
 
 /**
- * Class {@code OrderAuditListener} uses for audit order creation operation.
+ * Class {@code OrderAuditListener} uses to audit order creation operation.
  *
  * @author Egor Shitikov
  * @version 1.0
