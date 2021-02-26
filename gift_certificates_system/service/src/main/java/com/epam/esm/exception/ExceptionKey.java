@@ -21,6 +21,7 @@ public final class   ExceptionKey {
     public static final String GIFT_CERTIFICATE_PRICE_INCORRECT = "giftCertificate.incorrectPrice";
     public static final String GIFT_CERTIFICATE_DURATION_INCORRECT = "giftCertificate.incorrectDuration";
     public static final String GIFT_CERTIFICATE_NOT_COMPLETED = "giftCertificate.notCompleted";
+    public static final String GIFT_CERTIFICATES_NOT_FOUND = "giftCertificates.notFound";
 
     public static final String USER_ID_INCORRECT = "user.incorrectId";
     public static final String USER_FIRSTNAME_INCORRECT = "user.incorrectFirstname";

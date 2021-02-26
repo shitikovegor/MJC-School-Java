@@ -41,4 +41,12 @@ public interface UserService {
      * @return the user DTO
      */
     UserDto findByUsername(String username);
+
+    /**
+     * Update user.
+     *
+     * @param userDto the user DTO
+     * @return the user DTO
+     */
+    UserDto update(UserDto userDto);
 }

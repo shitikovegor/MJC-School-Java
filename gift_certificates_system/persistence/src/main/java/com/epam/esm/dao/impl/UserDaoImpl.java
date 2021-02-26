@@ -1,6 +1,7 @@
 package com.epam.esm.dao.impl;
 
 import com.epam.esm.dao.UserDao;
+import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.User;
 import com.epam.esm.util.Page;
 import org.springframework.stereotype.Repository;
@@ -26,6 +27,11 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
     @Override
     public Optional<User> findById(long id) {
         return Optional.ofNullable(entityManager.find(User.class, id));
+    }
+
+    @Override
+    public User update(User user) {
+        return entityManager.merge(user);
     }
 
     @Override

@@ -71,4 +71,11 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.USER_NOT_FOUND,
                         String.valueOf(username)));
     }
+
+    @Transactional
+    @Override
+    public UserDto update(UserDto userDto) {
+        User user = modelMapper.map(userDto, User.class);
+        return modelMapper.map(userDao.update(user), UserDto.class);
+    }
 }

@@ -18,6 +18,8 @@ public class GiftCertificateDaoImpl extends BaseDaoImpl<GiftCertificate> impleme
     private static final String GIFT_CERTIFICATE_FIND_ALL = "SELECT g FROM GiftCertificate g WHERE g.isDeleted = false";
     private static final String GIFT_CERTIFICATE_FIND_BY_ID = "SELECT g FROM GiftCertificate g WHERE g.id = ?1 " +
             "AND g.isDeleted = false";
+    private static final String GIFT_CERTIFICATE_DELETE_BY_ID = "UPDATE GiftCertificate SET isDeleted = true WHERE " +
+            "id=?1";
 
     @Override
     public List<GiftCertificate> findAll(Page page) {
@@ -59,5 +61,12 @@ public class GiftCertificateDaoImpl extends BaseDaoImpl<GiftCertificate> impleme
                 new CriteriaQueryCreator().generateCountCriteriaQueryBySearchParameters(giftCertificateQueryParameters,
                         builder);
         return entityManager.createQuery(query).getSingleResult().intValue();
+    }
+
+    @Override
+    public void remove(GiftCertificate entity) {
+        Query query = entityManager.createQuery(GIFT_CERTIFICATE_DELETE_BY_ID);
+        query.setParameter(1, entity.getId());
+        query.executeUpdate();
     }
 }

@@ -26,4 +26,12 @@ public interface UserDao extends BaseDao<User> {
      * @return the int
      */
     int findTotalRecords();
+
+    /**
+     * Update user.
+     *
+     * @param user to update
+     * @return the updated user
+     */
+    User update(User user);
 }

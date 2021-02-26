@@ -12,6 +12,7 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Locale;
 
@@ -133,6 +134,22 @@ public class ErrorHandler {
                 messageSource.getMessage(ExceptionKey.JWT_ERROR, new Object[]{}, locale),
                 exception.getMessage());
         return new ErrorInfo(errorMessage, AUTHORIZATION_ERROR.getCode());
+    }
+
+    /**
+     * Handle {@link MethodArgumentTypeMismatchException}.
+     *
+     * @param exception the exception
+     * @param locale    the locale
+     * @return the error information
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorInfo handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception, Locale locale) {
+        String errorMessage = createErrorMessage(
+                messageSource.getMessage(ExceptionKey.INCORRECT_PARAMETER, new Object[]{}, locale),
+                exception.getMessage());
+        return new ErrorInfo(errorMessage, BAD_REQUEST.getCode());
     }
 
     /**

@@ -19,7 +19,6 @@ import java.util.Objects;
 @EntityListeners(GiftCertificateAuditListener.class)
 @Entity
 @Table(name = "gift_certificate")
-@SQLDelete(sql = "UPDATE gift_certificate SET deleted=true WHERE id=?")
 public class GiftCertificate implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
