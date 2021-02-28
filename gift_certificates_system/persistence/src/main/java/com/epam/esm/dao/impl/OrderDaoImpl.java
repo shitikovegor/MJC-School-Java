@@ -40,13 +40,13 @@ public class OrderDaoImpl extends BaseDaoImpl<Order> implements OrderDao {
     }
 
     @Override
-    public int findTotalRecords() {
+    public long findTotalRecords() {
         Long totalRecords = (Long) entityManager.createQuery(ORDER_TOTAL_RECORDS).getSingleResult();
         return totalRecords.intValue();
     }
 
     @Override
-    public int findTotalRecordsByUserId(long userId) {
+    public long findTotalRecordsByUserId(long userId) {
         Query query = entityManager.createQuery(ORDER_TOTAL_RECORDS_BY_USER_ID);
         query.setParameter(1, userId);
         return ((Long) query.getSingleResult()).intValue();

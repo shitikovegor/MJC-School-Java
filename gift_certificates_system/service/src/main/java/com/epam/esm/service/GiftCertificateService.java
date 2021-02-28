@@ -61,4 +61,12 @@ public interface GiftCertificateService {
      * @return the found gift certificate
      */
     GiftCertificateDto findById(long id);
+
+    /**
+     * Find total records of gift certificates by parameters.
+     *
+     * @param giftCertificateQueryParametersDto the gift certificate query parameters DTO
+     * @return the long
+     */
+    long findTotalRecordsByQueryParameters(GiftCertificateQueryParametersDto giftCertificateQueryParametersDto);
 }

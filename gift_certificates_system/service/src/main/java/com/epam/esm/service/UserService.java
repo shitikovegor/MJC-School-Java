@@ -49,4 +49,11 @@ public interface UserService {
      * @return the user DTO
      */
     UserDto update(UserDto userDto);
+
+    /**
+     * Find all user records.
+     *
+     * @return the long
+     */
+    long findTotalRecords();
 }

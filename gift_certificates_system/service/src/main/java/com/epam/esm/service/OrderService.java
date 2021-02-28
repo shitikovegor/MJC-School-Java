@@ -37,10 +37,18 @@ public interface OrderService {
     void remove(long id);
 
     /**
-     * Findlist of orders by user id.
+     * Find list of orders by user id.
      *
      * @param userId the user id
      * @return the list of orders
      */
     List<OrderDto> findByUserId(long userId, PageDto pageDto);
+
+    /**
+     * Find total orders by user id.
+     *
+     * @param userId the user id
+     * @return the long
+     */
+    long findTotalRecordsByUserId(long userId);
 }

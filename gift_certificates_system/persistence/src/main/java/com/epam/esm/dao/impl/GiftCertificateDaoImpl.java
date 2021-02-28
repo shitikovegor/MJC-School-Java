@@ -55,12 +55,12 @@ public class GiftCertificateDaoImpl extends BaseDaoImpl<GiftCertificate> impleme
     }
 
     @Override
-    public int findTotalRecordsByQueryParameters(GiftCertificateQueryParameters giftCertificateQueryParameters) {
+    public long findTotalRecordsByQueryParameters(GiftCertificateQueryParameters giftCertificateQueryParameters) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query =
                 new CriteriaQueryCreator().generateCountCriteriaQueryBySearchParameters(giftCertificateQueryParameters,
                         builder);
-        return entityManager.createQuery(query).getSingleResult().intValue();
+        return entityManager.createQuery(query).getSingleResult().longValue();
     }
 
     @Override

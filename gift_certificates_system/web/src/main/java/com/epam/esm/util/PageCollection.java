@@ -15,9 +15,9 @@ import java.util.Objects;
  */
 public class PageCollection<T extends Object> extends RepresentationModel<PageCollection<T>> {
     private List<T> items;
-    private int total;
+    private long total;
 
-    public PageCollection(List<T> items, int total) {
+    public PageCollection(List<T> items, long total) {
         this.items = items;
         this.total = total;
     }
@@ -30,11 +30,11 @@ public class PageCollection<T extends Object> extends RepresentationModel<PageCo
         this.items = items;
     }
 
-    public int getTotal() {
+    public long getTotal() {
         return total;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(long total) {
         this.total = total;
     }
 

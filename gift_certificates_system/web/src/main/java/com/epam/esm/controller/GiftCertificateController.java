@@ -3,8 +3,8 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.dto.GiftCertificateQueryParametersDto;
 import com.epam.esm.dto.PageDto;
-import com.epam.esm.util.PageCollection;
 import com.epam.esm.service.GiftCertificateService;
+import com.epam.esm.util.PageCollection;
 import com.epam.esm.util.PageFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -50,7 +50,7 @@ public class GiftCertificateController {
      * @param description the description
      * @param sortType    the sort type
      * @param sortOrder   the sort order
-     * @param page  the page number
+     * @param page        the page number
      * @param size        the size
      * @return the gift certificates
      */
@@ -70,6 +70,7 @@ public class GiftCertificateController {
         giftCertificateQueryParametersDto.setSortType(sortType);
         giftCertificateQueryParametersDto.setSortOrder(sortOrder);
         PageDto pageDto = new PageDto(size, page);
+        pageDto.setTotalRecords(giftCertificateService.findTotalRecordsByQueryParameters(giftCertificateQueryParametersDto));
 
         List<GiftCertificateDto> giftCertificates =
                 giftCertificateService.findCertificates(giftCertificateQueryParametersDto, pageDto);

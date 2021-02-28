@@ -13,7 +13,7 @@ public class PageDto {
 
     private int size;
     private int pageNumber;
-    private int totalRecords;
+    private long totalRecords;
 
     /**
      * Instantiates a new Page DTO.
@@ -28,7 +28,7 @@ public class PageDto {
      * @param pageNumber   the page number
      * @param totalRecords the total records
      */
-    public PageDto(int size, int pageNumber, int totalRecords) {
+    public PageDto(int size, int pageNumber, long totalRecords) {
         this.size = size;
         this.pageNumber = pageNumber;
         this.totalRecords = totalRecords;
@@ -61,11 +61,11 @@ public class PageDto {
         this.pageNumber = pageNumber;
     }
 
-    public int getTotalRecords() {
+    public long getTotalRecords() {
         return totalRecords;
     }
 
-    public void setTotalRecords(int totalRecords) {
+    public void setTotalRecords(long totalRecords) {
         this.totalRecords = totalRecords;
     }
 

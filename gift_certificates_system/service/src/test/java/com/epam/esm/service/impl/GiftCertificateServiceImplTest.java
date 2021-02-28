@@ -65,7 +65,7 @@ class GiftCertificateServiceImplTest {
                 3, "dinner", "New Year",
                 new BigDecimal(55), 2,
                 LocalDateTime.of(2020, 12, 25, 23, 59, 0),
-                LocalDateTime.of(2021, 12, 28, 23, 59, 59), new ArrayList<>());
+                LocalDateTime.of(2021, 12, 28, 23, 59, 59), new ArrayList<>(), false);
         when(tagService.findByName(anyString())).thenReturn(Optional.empty());
         when(giftCertificateDao.add(any(GiftCertificate.class))).thenReturn(giftCertificate);
         assertEquals(giftCertificateDto.getId(), giftCertificateService.add(giftCertificateDto));
@@ -86,11 +86,11 @@ class GiftCertificateServiceImplTest {
         GiftCertificate giftCertificate1 = new GiftCertificate(3, "dinner in cafe",
                 "New Year dinner", new BigDecimal(50.99), 10,
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
-                LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>());
+                LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>(),false);
         GiftCertificate giftCertificate2 = new GiftCertificate(56, "rest in hotel",
                 "rest. In good place", new BigDecimal(150), 25,
                 LocalDateTime.of(2020, 12, 25, 10, 0, 0),
-                LocalDateTime.of(2021, 1, 12, 12, 59, 59), new ArrayList<>());
+                LocalDateTime.of(2021, 1, 12, 12, 59, 59), new ArrayList<>(), false);
         List<GiftCertificate> giftCertificates = List.of(giftCertificate1, giftCertificate2);
 
         GiftCertificateDto giftCertificateDto1 = new GiftCertificateDto(3, "dinner in cafe",
@@ -106,7 +106,7 @@ class GiftCertificateServiceImplTest {
                 new GiftCertificateQueryParametersDto(new String[1], "in", "i",
                         GiftCertificateQueryParametersDto.SortType.NAME,
                         GiftCertificateQueryParametersDto.SortOrder.ASC);
-        when(giftCertificateDao.findTotalRecordsByQueryParameters(any(GiftCertificateQueryParameters.class))).thenReturn(10);
+        when(giftCertificateDao.findTotalRecordsByQueryParameters(any(GiftCertificateQueryParameters.class))).thenReturn(10L);
         when(giftCertificateDao.findByQueryParameters(any(GiftCertificateQueryParameters.class), any(Page.class)))
                 .thenReturn(giftCertificates);
 
@@ -119,7 +119,7 @@ class GiftCertificateServiceImplTest {
         GiftCertificate giftCertificate = new GiftCertificate(3, "dinner in cafe",
                 "New Year dinner", new BigDecimal(50.99), 10,
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
-                LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>());
+                LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>(), false);
         when(giftCertificateDao.findById(3)).thenReturn(Optional.of(giftCertificate));
         GiftCertificateDto expected = new GiftCertificateDto(3, "dinner in cafe",
                 "New Year dinner", new BigDecimal(50.99), 10,
@@ -141,7 +141,7 @@ class GiftCertificateServiceImplTest {
         GiftCertificate giftCertificate = new GiftCertificate(2, "dinner in cafe",
                 "New Year dinner", new BigDecimal(50.99), 10,
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
-                LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>());
+                LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>(), false);
         when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.of(giftCertificate));
         doNothing().when(giftCertificateDao).remove(any(GiftCertificate.class));
         long id = 2L;
@@ -153,7 +153,7 @@ class GiftCertificateServiceImplTest {
         GiftCertificate giftCertificate = new GiftCertificate(2, "dinner in cafe",
                 "New Year dinner", new BigDecimal(50.99), 10,
                 LocalDateTime.of(2020, 12, 31, 23, 59, 0),
-                LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>());
+                LocalDateTime.of(2021, 12, 31, 23, 59, 59), new ArrayList<>(), false);
         when(giftCertificateDao.findById(anyLong())).thenReturn(Optional.of(giftCertificate));
         doThrow(IncorrectParameterException.class).when(giftCertificateDao).remove(any(GiftCertificate.class));
         long id = -2L;
@@ -165,11 +165,11 @@ class GiftCertificateServiceImplTest {
         GiftCertificate foundGiftCertificate = new GiftCertificate(56, "rest in hotel",
                 "rest. In good place", new BigDecimal(150), 25,
                 LocalDateTime.of(2020, 12, 25, 10, 0, 0),
-                LocalDateTime.of(2021, 1, 12, 12, 59, 59), new ArrayList<>());
+                LocalDateTime.of(2021, 1, 12, 12, 59, 59), new ArrayList<>(), false);
         GiftCertificate updatedGiftCertificate = new GiftCertificate(56, "new rest",
                 "rest. In good place", new BigDecimal(180), 24,
                 LocalDateTime.of(2020, 12, 25, 10, 0, 0),
-                LocalDateTime.of(2021, 1, 12, 12, 59, 59), new ArrayList<>());
+                LocalDateTime.of(2021, 1, 12, 12, 59, 59), new ArrayList<>(), false);
         GiftCertificateDto giftCertificateForUpdate = new GiftCertificateDto(56, "new rest",
                 "rest. In good place", new BigDecimal(180), 24,
                 LocalDateTime.of(2020, 12, 25, 10, 0, 0),
@@ -198,7 +198,7 @@ class GiftCertificateServiceImplTest {
         GiftCertificate giftCertificate = new GiftCertificate(56, "rest in hotel",
                 "rest. In good place", new BigDecimal(150), 25,
                 LocalDateTime.of(2020, 12, 25, 10, 0, 0),
-                LocalDateTime.of(2021, 1, 12, 12, 59, 59), new ArrayList<>());
+                LocalDateTime.of(2021, 1, 12, 12, 59, 59), new ArrayList<>(), false);
         GiftCertificateDto incorrectGiftCertificate = new GiftCertificateDto(56, "new rest",
                 "rest. In good place", new BigDecimal(180), -24,
                 LocalDateTime.of(2020, 12, 25, 10, 0, 0),

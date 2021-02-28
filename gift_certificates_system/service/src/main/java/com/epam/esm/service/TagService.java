@@ -59,4 +59,11 @@ public interface TagService {
      * @return the tag dto
      */
     TagDto findMostPopularTagFromUserWithMaxPurchases();
+
+    /**
+     * Find total tags records.
+     *
+     * @return the long
+     */
+    long findTotalRecords();
 }

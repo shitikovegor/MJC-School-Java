@@ -105,6 +105,7 @@ public class OrderController {
                                                                       @RequestParam(required = false, defaultValue = "1") int page,
                                                                       @RequestParam(required = false, defaultValue = "5") int size) {
         PageDto pageDto = new PageDto(size, page);
+        pageDto.setTotalRecords(orderService.findTotalRecordsByUserId(userId));
         List<OrderDto> orders = orderService.findByUserId(userId, pageDto);
         PageCollection<OrderDto> collection = new PageCollection<>(orders, pageDto.getTotalRecords());
         orders.forEach(this::addRelationship);

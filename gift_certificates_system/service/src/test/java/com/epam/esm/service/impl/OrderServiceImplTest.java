@@ -88,7 +88,7 @@ class OrderServiceImplTest {
                 3, "dinner", "New Year",
                 new BigDecimal(55), 2,
                 LocalDateTime.of(2020, 12, 25, 23, 59, 0),
-                LocalDateTime.of(2021, 12, 28, 23, 59, 59), new ArrayList<>());
+                LocalDateTime.of(2021, 12, 28, 23, 59, 59), new ArrayList<>(), false);
         user = new User(24L, "user@gmail.com", "", "");
 
         order = new Order(15L, user, giftCertificate, new BigDecimal(55),
@@ -146,7 +146,7 @@ class OrderServiceImplTest {
     @Test
     void findByUserIdCorrectDataShouldReturnOrderDtoList() {
         List<OrderDto> expected = List.of(orderDto);
-        when(orderDao.findTotalRecordsByUserId(15L)).thenReturn(10);
+        when(orderDao.findTotalRecordsByUserId(15L)).thenReturn(10L);
         when(orderDao.findOrdersByUserId(15L, page)).thenReturn(List.of(order));
         long id = 15L;
 

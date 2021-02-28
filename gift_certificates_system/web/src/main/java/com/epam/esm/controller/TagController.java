@@ -50,7 +50,7 @@ public class TagController {
     @GetMapping
     public ResponseEntity<PageCollection<TagDto>> getTags(@RequestParam(required = false, defaultValue = "1") int page,
                                                           @RequestParam(required = false, defaultValue = "5") int size) {
-        PageDto pageDto = new PageDto(size, page);
+        PageDto pageDto = new PageDto(size, page, tagService.findTotalRecords());
         List<TagDto> tags = tagService.findAll(pageDto);
         PageCollection<TagDto> collection = new PageCollection<>(tags, pageDto.getTotalRecords());
         tags.forEach(this::addRelationship);

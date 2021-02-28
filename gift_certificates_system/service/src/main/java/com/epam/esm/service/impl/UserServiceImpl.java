@@ -49,7 +49,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> findAll(PageDto pageDto) {
-        pageDto.setTotalRecords(userDao.findTotalRecords());
         PageValidator.validatePage(pageDto);
         Page page = modelMapper.map(pageDto, Page.class);
         return userDao.findAll(page).stream()
@@ -77,5 +76,10 @@ public class UserServiceImpl implements UserService {
     public UserDto update(UserDto userDto) {
         User user = modelMapper.map(userDto, User.class);
         return modelMapper.map(userDao.update(user), UserDto.class);
+    }
+
+    @Override
+    public long findTotalRecords() {
+        return userDao.findTotalRecords();
     }
 }

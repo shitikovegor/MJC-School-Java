@@ -75,7 +75,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<PageCollection<UserDto>> getUsers(@RequestParam(required = false, defaultValue = "1") int page,
                                                             @RequestParam(required = false, defaultValue = "5") int size) {
-        PageDto pageDto = new PageDto(size, page);
+        PageDto pageDto = new PageDto(size, page, userService.findTotalRecords());
         List<UserDto> users = userService.findAll(pageDto);
         PageCollection<UserDto> collection = new PageCollection<>(users, pageDto.getTotalRecords());
         users.forEach(this::addRelationship);

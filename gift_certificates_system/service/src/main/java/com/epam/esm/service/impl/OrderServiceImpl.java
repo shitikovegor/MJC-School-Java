@@ -62,23 +62,21 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public void remove(long id) {
-        Optional<Order> orderOptional = orderDao.findById(id);
-        Order order = orderOptional.orElseThrow(() ->
-                new ResourceNotFoundException(ExceptionKey.ORDER_NOT_FOUND, String.valueOf(id)));
-        orderDao.remove(order);
+        OrderDto order = findById(id);
+        orderDao.remove(modelMapper.map(order, Order.class));
     }
 
     @Override
     public List<OrderDto> findByUserId(long userId, PageDto pageDto) {
-        int totalRecords = orderDao.findTotalRecordsByUserId(userId);
-        if (totalRecords == 0) {
-            throw new ResourceNotFoundException(ExceptionKey.USER_ORDERS_NOT_FOUND, String.valueOf(userId));
-        }
-        pageDto.setTotalRecords(totalRecords);
         PageValidator.validatePage(pageDto);
         Page page = modelMapper.map(pageDto, Page.class);
         return orderDao.findOrdersByUserId(userId, page).stream()
                 .map(order -> modelMapper.map(order, OrderDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public long findTotalRecordsByUserId(long userId) {
+        return orderDao.findTotalRecordsByUserId(userId);
     }
 }

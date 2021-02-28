@@ -91,19 +91,20 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public List<GiftCertificateDto> findCertificates(GiftCertificateQueryParametersDto giftCertificateQueryParametersDto,
                                                      PageDto pageDto) {
-        GiftCertificateQueryParameters parameters = modelMapper.map(giftCertificateQueryParametersDto,
-                GiftCertificateQueryParameters.class);
-        int totalRecords = giftCertificateDao.findTotalRecordsByQueryParameters(parameters);
-        if (totalRecords == 0) {
-            throw new ResourceNotFoundException(ExceptionKey.GIFT_CERTIFICATES_NOT_FOUND);
-        }
-        pageDto.setTotalRecords(totalRecords);
         PageValidator.validatePage(pageDto);
         Page page = modelMapper.map(pageDto, Page.class);
+        GiftCertificateQueryParameters parameters = modelMapper.map(giftCertificateQueryParametersDto,
+                GiftCertificateQueryParameters.class);
         List<GiftCertificate> giftCertificates = giftCertificateDao.findByQueryParameters(parameters, page);
         return giftCertificates.stream()
                 .map(giftCertificate -> modelMapper.map(giftCertificate, GiftCertificateDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public long findTotalRecordsByQueryParameters(GiftCertificateQueryParametersDto parameters) {
+        return giftCertificateDao.findTotalRecordsByQueryParameters(modelMapper.map(parameters,
+                GiftCertificateQueryParameters.class));
     }
 
     private void findAndSetTags(GiftCertificateDto giftCertificateDto) {

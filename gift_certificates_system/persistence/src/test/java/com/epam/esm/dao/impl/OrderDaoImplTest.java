@@ -45,7 +45,7 @@ class OrderDaoImplTest {
                 "rest in good place", new BigDecimal("150.45"), 4,
                 LocalDateTime.of(2021, 1, 1, 10, 0, 0),
                 LocalDateTime.of(2021, 1, 2, 10, 0, 0),
-                List.of(new Tag(1L, "rest"), new Tag(3L, "food")));
+                List.of(new Tag(1L, "rest"), new Tag(3L, "food")), false);
         page = new Page(5, 1);
     }
 
@@ -106,16 +106,16 @@ class OrderDaoImplTest {
 
     @Test
     void findTotalRecordsShouldReturnNumberOfOrders() {
-        int actual = orderDao.findTotalRecords();
-        int expected = 5;
+        long actual = orderDao.findTotalRecords();
+        long expected = 5;
 
         assertEquals(expected, actual);
     }
 
     @Test
     void findTotalRecordsByUserIdShouldReturnNumberOfUserOrders() {
-        int actual = orderDao.findTotalRecordsByUserId(1);
-        int expected = 2;
+        long actual = orderDao.findTotalRecordsByUserId(1);
+        long expected = 2;
 
         assertEquals(expected, actual);
     }

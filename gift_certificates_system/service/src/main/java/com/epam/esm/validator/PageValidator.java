@@ -3,6 +3,7 @@ package com.epam.esm.validator;
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.exception.ExceptionKey;
 import com.epam.esm.exception.IncorrectParameterException;
+import com.epam.esm.exception.ResourceNotFoundException;
 
 public class PageValidator {
     private static int MIN_NUMBER = 1;
@@ -18,6 +19,9 @@ public class PageValidator {
      */
     public static void validatePage(PageDto pageDto) {
         fillEmptyFields(pageDto);
+        if (pageDto.getTotalRecords() == 0) {
+            throw new ResourceNotFoundException(ExceptionKey.USER_ORDERS_NOT_FOUND);
+        }
         if (pageDto.getPageNumber() < MIN_NUMBER) {
             throw new IncorrectParameterException(ExceptionKey.INCORRECT_PAGE_FORMAT, String.valueOf(pageDto.getPageNumber()));
         }
@@ -39,12 +43,12 @@ public class PageValidator {
     }
 
     private static int calculateLastPage(PageDto pageDto) {
-        int endPage;
+        long endPage;
         if (pageDto.getTotalRecords() % pageDto.getSize() == 0) {
             endPage = pageDto.getTotalRecords() / pageDto.getSize();
         } else {
             endPage = pageDto.getTotalRecords() / pageDto.getSize() + 1;
         }
-        return endPage;
+        return (int) endPage;
     }
 }

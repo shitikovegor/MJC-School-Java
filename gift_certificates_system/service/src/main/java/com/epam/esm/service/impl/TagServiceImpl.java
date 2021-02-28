@@ -48,7 +48,6 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<TagDto> findAll(PageDto pageDto) {
-        pageDto.setTotalRecords(tagDao.findTotalRecords());
         PageValidator.validatePage(pageDto);
         Page page = modelMapper.map(pageDto, Page.class);
         return tagDao.findAll(page).stream()
@@ -84,5 +83,10 @@ public class TagServiceImpl implements TagService {
         Optional<Tag> foundTag = tagDao.findMostPopularTagFromUserWithMaxPurchases();
         return foundTag.map(tag -> modelMapper.map(tag, TagDto.class))
                 .orElseThrow(() -> new ResourceNotFoundException(ExceptionKey.TAG_DOES_NOT_EXIST));
+    }
+
+    @Override
+    public long findTotalRecords() {
+        return tagDao.findTotalRecords();
     }
 }
