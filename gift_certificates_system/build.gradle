@@ -1,5 +1,5 @@
 group 'com.epam.esm'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 buildscript {
     ext {
@@ -15,12 +15,14 @@ buildscript {
 }
 
 subprojects {
-    apply plugin: 'war'
     apply plugin: 'java'
-    apply plugin: "org.springframework.boot"
-    apply plugin: "io.spring.dependency-management"
+    apply plugin: 'java-library'
 
-    compileJava.options.encoding = "UTF-8"
+    compileJava {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+        options.encoding = 'UTF-8'
+    }
     compileTestJava.options.encoding = "UTF-8"
 
     ext {
@@ -35,6 +37,6 @@ subprojects {
         implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 
     }
-    jar.enabled=true
+//    jar.enabled=true
 }
 

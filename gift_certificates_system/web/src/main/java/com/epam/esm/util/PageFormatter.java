@@ -38,12 +38,12 @@ public class PageFormatter {
      * @return the int
      */
     public int calculateLastPage(PageDto pageDto) {
-        int endPage;
+        long endPage;
         if (pageDto.getTotalRecords() % pageDto.getSize() == 0) {
             endPage = pageDto.getTotalRecords() / pageDto.getSize();
         } else {
             endPage = pageDto.getTotalRecords() / pageDto.getSize() + 1;
         }
-        return endPage;
+        return (int) endPage;
     }
 }
