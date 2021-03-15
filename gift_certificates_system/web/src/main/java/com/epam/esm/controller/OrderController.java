@@ -30,6 +30,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping("/orders")
 public class OrderController {
+
     private final OrderService orderService;
 
     /**
@@ -102,8 +103,8 @@ public class OrderController {
     @PreAuthorize("hasRole('admin') or #userId == principal.userId")
     @GetMapping("/users/{userId}")
     public ResponseEntity<PageCollection<OrderDto>> getOrdersByUserId(@PathVariable long userId,
-                                                                      @RequestParam(required = false, defaultValue = "1") int page,
-                                                                      @RequestParam(required = false, defaultValue = "5") int size) {
+                                                                      @RequestParam(required = false) Integer page,
+                                                                      @RequestParam(required = false) Integer size) {
         PageDto pageDto = new PageDto(size, page);
         pageDto.setTotalRecords(orderService.findTotalRecordsByUserId(userId));
         List<OrderDto> orders = orderService.findByUserId(userId, pageDto);

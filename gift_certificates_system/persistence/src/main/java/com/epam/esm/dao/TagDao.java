@@ -12,6 +12,7 @@ import java.util.Optional;
  * @version 1.0
  */
 public interface TagDao extends BaseDao<Tag> {
+
     /**
      * Find by name optional.
      *
@@ -37,7 +38,7 @@ public interface TagDao extends BaseDao<Tag> {
     /**
      * Find total records in database.
      *
-     * @return the int
+     * @return the long
      */
-    int findTotalRecords();
+    long findTotalRecords();
 }

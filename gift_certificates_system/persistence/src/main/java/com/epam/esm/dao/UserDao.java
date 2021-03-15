@@ -12,6 +12,7 @@ import java.util.Optional;
  * @version 1.0
  */
 public interface UserDao extends BaseDao<User> {
+
     /**
      * Find by username optional.
      *

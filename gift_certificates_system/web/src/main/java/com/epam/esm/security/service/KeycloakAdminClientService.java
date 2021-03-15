@@ -24,6 +24,7 @@ import java.util.Collections;
  */
 @Service
 public class KeycloakAdminClientService {
+
     @Value("${keycloak.realm}")
     private String realm;
     private static final int CREATED_STATUS = 201;

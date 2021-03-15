@@ -13,6 +13,7 @@ import java.util.Objects;
  * @version 1.0
  */
 public class OrderDto extends RepresentationModel<OrderDto> {
+
     private long id;
     private UserDto user;
     private GiftCertificateDto giftCertificate;

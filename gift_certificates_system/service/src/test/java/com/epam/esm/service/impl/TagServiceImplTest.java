@@ -9,6 +9,9 @@ import com.epam.esm.exception.IncorrectParameterException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.util.Page;
+import com.epam.esm.validator.DtoValidator;
+import com.epam.esm.validator.impl.PageValidator;
+import com.epam.esm.validator.impl.TagValidator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,22 +28,27 @@ import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TagServiceImplTest {
+
     private TagService tagService;
     private TagDao tagDao;
     private ModelMapper modelMapper;
     private Page page;
     private PageDto pageDto;
+    private DtoValidator<TagDto> tagValidator;
+    private DtoValidator<PageDto> pageValidator;
 
     @BeforeAll
     void setUp() {
         tagDao = mock(TagDaoImpl.class);
+        tagValidator = new TagValidator();
+        pageValidator = new PageValidator();
         modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.STRICT)
                 .setFieldMatchingEnabled(true)
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
-        tagService = new TagServiceImpl(modelMapper, tagDao);
+        tagService = new TagServiceImpl(modelMapper, tagDao, tagValidator, pageValidator);
         page = new Page(5, 1, 10);
         pageDto = new PageDto(5, 1, 10);
     }
@@ -83,7 +91,7 @@ class TagServiceImplTest {
         List<TagDto> tagsDto = List.of(tagDto1, tagDto2);
 
         when(tagDao.findAll(page)).thenReturn(tags);
-        when(tagDao.findTotalRecords()).thenReturn(10);
+        when(tagDao.findTotalRecords()).thenReturn(10L);
         assertEquals(tagsDto, tagService.findAll(pageDto));
     }
 

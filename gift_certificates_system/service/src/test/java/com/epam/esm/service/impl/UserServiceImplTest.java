@@ -3,6 +3,7 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.UserDao;
 import com.epam.esm.dao.impl.UserDaoImpl;
 import com.epam.esm.dto.PageDto;
+import com.epam.esm.dto.TagDto;
 import com.epam.esm.dto.UserRegistrationDto;
 import com.epam.esm.dto.UserDto;
 import com.epam.esm.entity.User;
@@ -10,6 +11,10 @@ import com.epam.esm.exception.IncorrectParameterException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.UserService;
 import com.epam.esm.util.Page;
+import com.epam.esm.validator.DtoValidator;
+import com.epam.esm.validator.impl.PageValidator;
+import com.epam.esm.validator.impl.TagValidator;
+import com.epam.esm.validator.impl.UserValidator;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -17,7 +22,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +34,7 @@ import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserServiceImplTest {
+
     private UserService userService;
     private UserDao userDao;
     private ModelMapper modelMapper;
@@ -37,17 +42,21 @@ class UserServiceImplTest {
     private PageDto pageDto;
     private User user;
     private UserDto userDto;
+    private DtoValidator<UserRegistrationDto> userValidator;
+    private DtoValidator<PageDto> pageValidator;
 
     @BeforeAll
     void setUp() {
         userDao = mock(UserDaoImpl.class);
+        userValidator = new UserValidator();
+        pageValidator = new PageValidator();
         modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.STRICT)
                 .setFieldMatchingEnabled(true)
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
-        userService = new UserServiceImpl(modelMapper, userDao);
+        userService = new UserServiceImpl(modelMapper, userDao, userValidator, pageValidator);
         page = new Page(5, 1, 10);
         pageDto = new PageDto(5, 1, 10);
         user = new User(2L, "user3@epam.com", "", "");

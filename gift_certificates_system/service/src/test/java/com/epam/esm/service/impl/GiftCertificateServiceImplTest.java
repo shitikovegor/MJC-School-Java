@@ -11,6 +11,9 @@ import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.TagService;
 import com.epam.esm.util.GiftCertificateQueryParameters;
 import com.epam.esm.util.Page;
+import com.epam.esm.validator.DtoValidator;
+import com.epam.esm.validator.impl.GiftCertificateValidator;
+import com.epam.esm.validator.impl.PageValidator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,22 +31,27 @@ import static org.mockito.Mockito.*;
 import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 class GiftCertificateServiceImplTest {
+
     private GiftCertificateService giftCertificateService;
     private GiftCertificateDao giftCertificateDao;
     private ModelMapper modelMapper;
     private TagService tagService;
+    private DtoValidator<GiftCertificateDto> giftCertificateValidator;
+    private DtoValidator<PageDto> pageValidator;
 
     @BeforeEach
     void setUp() {
         giftCertificateDao = mock(GiftCertificateDao.class);
         tagService = mock(TagServiceImpl.class);
+        giftCertificateValidator = new GiftCertificateValidator();
+        pageValidator = new PageValidator();
         modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.STRICT)
                 .setFieldMatchingEnabled(true)
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
-        giftCertificateService = new GiftCertificateServiceImpl(modelMapper, giftCertificateDao, tagService);
+        giftCertificateService = new GiftCertificateServiceImpl(modelMapper, giftCertificateDao, tagService, giftCertificateValidator, pageValidator);
     }
 
     @AfterEach
@@ -199,7 +207,7 @@ class GiftCertificateServiceImplTest {
                 "rest. In good place", new BigDecimal(150), 25,
                 LocalDateTime.of(2020, 12, 25, 10, 0, 0),
                 LocalDateTime.of(2021, 1, 12, 12, 59, 59), new ArrayList<>(), false);
-        GiftCertificateDto incorrectGiftCertificate = new GiftCertificateDto(56, "new rest",
+        GiftCertificateDto incorrectGiftCertificate = new GiftCertificateDto(56, "new rest$",
                 "rest. In good place", new BigDecimal(180), -24,
                 LocalDateTime.of(2020, 12, 25, 10, 0, 0),
                 LocalDateTime.of(2021, 1, 12, 12, 59, 59), new ArrayList<>());

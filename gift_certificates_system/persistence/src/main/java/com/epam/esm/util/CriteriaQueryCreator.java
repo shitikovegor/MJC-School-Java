@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
  * @version 1.0
  */
 public class CriteriaQueryCreator {
+
     private static final String PERCENT = "%";
+
     /**
      * Generate criteria query by search parameters criteria query.
      *
@@ -34,7 +36,7 @@ public class CriteriaQueryCreator {
         predicates.addAll(addName(giftCertificateQueryParameters, builder, root));
         predicates.addAll(addDescription(giftCertificateQueryParameters, builder, root));
 
-        query.select(root).where(predicates.toArray(Predicate[]::new));
+        query.select(root).where(predicates.toArray(new Predicate[]{}));
         setSortType(giftCertificateQueryParameters, builder, root, query);
         return query;
     }
@@ -49,7 +51,7 @@ public class CriteriaQueryCreator {
         predicates.addAll(addName(giftCertificateQueryParameters, builder, root));
         predicates.addAll(addDescription(giftCertificateQueryParameters, builder, root));
 
-        query.select(builder.count(root)).where(predicates.toArray(Predicate[]::new));
+        query.select(builder.count(root)).where(predicates.toArray(new Predicate[]{}));
         return query;
     }
 

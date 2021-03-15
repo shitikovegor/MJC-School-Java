@@ -28,6 +28,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping("/tags")
 public class TagController {
+
     private final TagService tagService;
 
     /**
@@ -48,8 +49,8 @@ public class TagController {
      * @return the tags
      */
     @GetMapping
-    public ResponseEntity<PageCollection<TagDto>> getTags(@RequestParam(required = false, defaultValue = "1") int page,
-                                                          @RequestParam(required = false, defaultValue = "5") int size) {
+    public ResponseEntity<PageCollection<TagDto>> getTags(@RequestParam(required = false) Integer page,
+                                                          @RequestParam(required = false) Integer size) {
         PageDto pageDto = new PageDto(size, page, tagService.findTotalRecords());
         List<TagDto> tags = tagService.findAll(pageDto);
         PageCollection<TagDto> collection = new PageCollection<>(tags, pageDto.getTotalRecords());

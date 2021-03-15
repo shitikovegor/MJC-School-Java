@@ -1,36 +1,45 @@
 package com.epam.esm.validator;
 
+import com.epam.esm.dto.TagDto;
 import com.epam.esm.exception.IncorrectParameterException;
+import com.epam.esm.validator.impl.TagValidator;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TagValidatorTest {
 
+    private DtoValidator<TagDto> validator;
 
-    @ParameterizedTest
-    @ValueSource(longs = {1, 40, 454, 343223223})
-    void validateCorrectIdShouldNotThrowException(long id) {
-        assertDoesNotThrow(() -> TagValidator.validateId(id));
+    @BeforeAll
+    void setUp() {
+        validator = new TagValidator();
     }
 
-    @ParameterizedTest
-    @ValueSource(longs = {-1, 0})
-    void validateIncorrectIdShouldThrowException(long id) {
-        assertThrows(IncorrectParameterException.class, () -> TagValidator.validateId(id));
+    @AfterAll
+    void tearDown() {
+        validator = null;
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"Rest", "Отдых", "2 people", "some-word"})
     void validateCorrectNameShouldNotThrowException(String name) {
-        assertDoesNotThrow(() -> TagValidator.validateName(name));
+        TagDto actual = new TagDto();
+        actual.setName(name);
+        assertDoesNotThrow(() -> validator.validate(actual));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", "rest!", "23$D", "rest, sea"})
     void validateIncorrectNameShouldThrowException(String name) {
-        assertThrows(IncorrectParameterException.class, () -> TagValidator.validateName(name));
+        TagDto actual = new TagDto();
+        actual.setName(name);
+        assertThrows(IncorrectParameterException.class, () -> validator.validate(actual));
     }
 }

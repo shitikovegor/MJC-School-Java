@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class JwtUserInfoService {
+
     private static final String USERNAME_CLAIM = "user_name";
     private final UserService userService;
 

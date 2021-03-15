@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class TagDaoImplTest {
+
     private final TagDao tagDao;
     private Page page;
     private Tag tag;

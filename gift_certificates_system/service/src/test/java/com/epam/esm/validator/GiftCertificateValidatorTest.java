@@ -2,9 +2,12 @@ package com.epam.esm.validator;
 
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.exception.IncorrectParameterException;
+import com.epam.esm.validator.impl.GiftCertificateValidator;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,7 +16,10 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GiftCertificateValidatorTest {
+
+    private DtoValidator<GiftCertificateDto> validator;
 
     private static Stream<GiftCertificateDto> createCorrectData() {
         GiftCertificateDto giftCertificateDto1 = new GiftCertificateDto(3, "dinner in cafe",
@@ -92,75 +98,25 @@ class GiftCertificateValidatorTest {
                 new BigDecimal(1200000));
     }
 
+    @BeforeAll
+    void setUp() {
+        validator = new GiftCertificateValidator();
+    }
+
+    @AfterAll
+    void tearDown() {
+        validator = null;
+    }
+
     @ParameterizedTest
     @MethodSource("createCorrectData")
     void validateCorrectDataShouldNotThrowException(GiftCertificateDto giftCertificateDto) {
-        assertDoesNotThrow(() -> GiftCertificateValidator.validate(giftCertificateDto));
+        assertDoesNotThrow(() -> validator.validate(giftCertificateDto));
     }
 
     @ParameterizedTest
     @MethodSource("createIncorrectData")
     void validateIncorrectDataShouldThrowException(GiftCertificateDto giftCertificateDto) {
-        assertThrows(IncorrectParameterException.class, () -> GiftCertificateValidator.validate(giftCertificateDto));
-    }
-
-    @ParameterizedTest
-    @ValueSource(longs = {1L, 40L, 454L, 343223223L})
-    void validateCorrectIdShouldNotThrowException(long id) {
-        assertDoesNotThrow(() -> GiftCertificateValidator.validateId(id));
-    }
-
-    @ParameterizedTest
-    @ValueSource(longs = {-1L, 0L})
-    void validateIncorrectIdShouldThrowException(long id) {
-        assertThrows(IncorrectParameterException.class, () -> GiftCertificateValidator.validateId(id));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"Rest in Turkey", "Отдых в санатории", "2 people", "some-word"})
-    void validateCorrectNameShouldNotThrowException(String name) {
-        assertDoesNotThrow(() -> GiftCertificateValidator.validateName(name));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"", "rest!", "23$D", "rest; sea"})
-    void validateIncorrectNameShouldThrowException(String name) {
-        assertThrows(IncorrectParameterException.class, () -> GiftCertificateValidator.validateName(name));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"Rest in Turkey!", "Отдых в санатории, 4 дня", "2 people & dog", "some-word _or one?!"})
-    void validateCorrectDescriptionShouldNotThrowException(String description) {
-        assertDoesNotThrow(() -> GiftCertificateValidator.validateDescription(description));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"", "rest^", "<//s", ">Sea cruise", "90[]"})
-    void validateIncorrectDescriptionShouldThrowException(String description) {
-        assertThrows(IncorrectParameterException.class, () -> GiftCertificateValidator.validateDescription(description));
-    }
-
-    @ParameterizedTest
-    @MethodSource("createCorrectPriceData")
-    void validateCorrectPriceShouldNotThrowException(BigDecimal price) {
-        assertDoesNotThrow(() -> GiftCertificateValidator.validatePrice(price));
-    }
-
-    @ParameterizedTest
-    @MethodSource("createIncorrectPriceData")
-    void validateIncorrectPriceShouldThrowException(BigDecimal price) {
-        assertThrows(IncorrectParameterException.class, () -> GiftCertificateValidator.validatePrice(price));
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {1, 23, 350})
-    void validateCorrectDurationShouldNotThrowException(int duration) {
-        assertDoesNotThrow(() -> GiftCertificateValidator.validateDuration(duration));
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = {-45, 0, 400})
-    void validateIncorrectDurationShouldThrowException(int duration) {
-        assertThrows(IncorrectParameterException.class, () -> GiftCertificateValidator.validateDuration(duration));
+        assertThrows(IncorrectParameterException.class, () -> validator.validate(giftCertificateDto));
     }
 }

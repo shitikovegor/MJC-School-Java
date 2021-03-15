@@ -24,6 +24,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
     private final RestAuthenticationEntryPoint authenticationEntryPoint;
 
     @Autowired

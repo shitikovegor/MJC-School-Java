@@ -1,23 +1,21 @@
-package com.epam.esm.validator;
+package com.epam.esm.validator.impl;
 
 import com.epam.esm.dto.PageDto;
 import com.epam.esm.exception.ExceptionKey;
 import com.epam.esm.exception.IncorrectParameterException;
 import com.epam.esm.exception.ResourceNotFoundException;
+import com.epam.esm.validator.DtoValidator;
+import org.springframework.stereotype.Component;
 
-public class PageValidator {
-    private static int MIN_NUMBER = 1;
-    private static int DEFAULT_PAGE = 1;
-    private static int DEFAULT_SIZE = 5;
+@Component
+public class PageValidator implements DtoValidator<PageDto> {
 
-    private PageValidator(){}
+    private static final int MIN_NUMBER = 1;
+    private static final int DEFAULT_PAGE = 1;
+    private static final int DEFAULT_SIZE = 5;
 
-    /**
-     * Validate page.
-     *
-     * @param pageDto the page dto
-     */
-    public static void validatePage(PageDto pageDto) {
+    @Override
+    public void validate(PageDto pageDto) {
         fillEmptyFields(pageDto);
         if (pageDto.getTotalRecords() == 0) {
             throw new ResourceNotFoundException(ExceptionKey.USER_ORDERS_NOT_FOUND);
@@ -33,16 +31,16 @@ public class PageValidator {
         }
     }
 
-    private static void fillEmptyFields(PageDto pageDto) {
-        if (pageDto.getPageNumber() == 0) {
+    private void fillEmptyFields(PageDto pageDto) {
+        if (pageDto.getPageNumber() == null) {
             pageDto.setPageNumber(DEFAULT_PAGE);
         }
-        if (pageDto.getSize() == 0) {
+        if (pageDto.getSize() == null) {
             pageDto.setSize(DEFAULT_SIZE);
         }
     }
 
-    private static int calculateLastPage(PageDto pageDto) {
+    private int calculateLastPage(PageDto pageDto) {
         long endPage;
         if (pageDto.getTotalRecords() % pageDto.getSize() == 0) {
             endPage = pageDto.getTotalRecords() / pageDto.getSize();

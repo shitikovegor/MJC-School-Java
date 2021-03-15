@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Repository
 public class OrderDaoImpl extends BaseDaoImpl<Order> implements OrderDao {
+
     private static final String ORDER_FIND_BY_USER_ID = "SELECT o FROM Order o WHERE user_id_fk = ?1";
     private static final String ORDER_TOTAL_RECORDS = "SELECT COUNT(*) FROM Order";
     private static final String ORDER_TOTAL_RECORDS_BY_USER_ID = "SELECT COUNT(*) FROM Order WHERE user_id_fk = ?1";

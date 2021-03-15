@@ -15,6 +15,9 @@ import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.service.UserService;
 import com.epam.esm.util.Page;
+import com.epam.esm.validator.impl.GiftCertificateValidator;
+import com.epam.esm.validator.impl.OrderValidator;
+import com.epam.esm.validator.impl.PageValidator;
 import org.junit.jupiter.api.*;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -35,6 +38,7 @@ import static org.modelmapper.config.Configuration.AccessLevel.PRIVATE;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OrderServiceImplTest {
+
     private OrderService orderService;
     private UserService userService;
     private GiftCertificateService giftCertificateService;
@@ -48,19 +52,23 @@ class OrderServiceImplTest {
     private User user;
     private Order order;
     private OrderDto orderDto;
+    private OrderValidator orderValidator;
+    private PageValidator pageValidator;
 
     @BeforeAll
     void setUp() {
         orderDao = mock(OrderDaoImpl.class);
         userService = mock(UserServiceImpl.class);
         giftCertificateService = mock(GiftCertificateServiceImpl.class);
+        orderValidator = new OrderValidator(userService, giftCertificateService);
+        pageValidator = new PageValidator();
         modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.STRICT)
                 .setFieldMatchingEnabled(true)
                 .setSkipNullEnabled(true)
                 .setFieldAccessLevel(PRIVATE);
-        orderService = new OrderServiceImpl(modelMapper, orderDao, userService, giftCertificateService);
+        orderService = new OrderServiceImpl(modelMapper, orderDao, userService, giftCertificateService, orderValidator, pageValidator);
         page = new Page(5, 1, 10);
         pageDto = new PageDto(5, 1, 10);
     }
@@ -70,6 +78,8 @@ class OrderServiceImplTest {
         orderService = null;
         orderDao = null;
         userService = null;
+        orderValidator = null;
+        pageValidator = null;
         giftCertificateService = null;
         modelMapper = null;
         page = null;
@@ -119,7 +129,7 @@ class OrderServiceImplTest {
 
     @Test
     void addIncorrectDataShouldThrowException() {
-        OrderDto orderDtoInvalid = new OrderDto(25L, new UserDto(), new GiftCertificateDto(), new BigDecimal(50),
+        OrderDto orderDtoInvalid = new OrderDto(25L, null, new GiftCertificateDto(), new BigDecimal(50),
                 LocalDateTime.of(2021, 1, 5, 23, 59, 0));
         when(giftCertificateService.findById(anyLong())).thenReturn(null);
         when(userService.findById(anyLong())).thenReturn(null);

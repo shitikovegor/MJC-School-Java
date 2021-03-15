@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class OrderDaoImplTest {
+
     private Page page;
     private User user;
     private GiftCertificate giftCertificate;

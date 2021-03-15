@@ -9,8 +9,7 @@ import com.epam.esm.exception.IncorrectParameterException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.TagService;
 import com.epam.esm.util.Page;
-import com.epam.esm.validator.PageValidator;
-import com.epam.esm.validator.TagValidator;
+import com.epam.esm.validator.DtoValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,23 +21,28 @@ import java.util.stream.Collectors;
 
 @Service
 public class TagServiceImpl implements TagService {
+
     private final ModelMapper modelMapper;
     private final TagDao tagDao;
+    private final DtoValidator<TagDto> tagValidator;
+    private final DtoValidator<PageDto> pageValidator;
 
     @Autowired
-    public TagServiceImpl(ModelMapper modelMapper, TagDao tagDao) {
+    public TagServiceImpl(ModelMapper modelMapper, TagDao tagDao, DtoValidator<TagDto> tagValidator, DtoValidator<PageDto> pageValidator) {
         this.modelMapper = modelMapper;
         this.tagDao = tagDao;
+        this.tagValidator = tagValidator;
+        this.pageValidator = pageValidator;
     }
 
     @Transactional
     @Override
     public long add(TagDto tagDto) {
-        TagValidator.validateName(tagDto.getName());
+        tagValidator.validate(tagDto);
         Tag tag = modelMapper.map(tagDto, Tag.class);
         Optional<Tag> existingTag = tagDao.findByName(tag.getName());
 
-        if (existingTag.isEmpty()) {
+        if (!existingTag.isPresent()) {
             Tag addedTag = tagDao.add(tag);
             return addedTag.getId();
         } else {
@@ -48,7 +52,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<TagDto> findAll(PageDto pageDto) {
-        PageValidator.validatePage(pageDto);
+        pageValidator.validate(pageDto);
         Page page = modelMapper.map(pageDto, Page.class);
         return tagDao.findAll(page).stream()
                 .map(tag -> modelMapper.map(tag, TagDto.class))

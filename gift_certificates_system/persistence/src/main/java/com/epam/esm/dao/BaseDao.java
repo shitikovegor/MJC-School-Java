@@ -13,6 +13,7 @@ import java.util.Optional;
  * @version 1.0
  */
 public interface BaseDao<T> {
+
     /**
      * Add entity.
      *

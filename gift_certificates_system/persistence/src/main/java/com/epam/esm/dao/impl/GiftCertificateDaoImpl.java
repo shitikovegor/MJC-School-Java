@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @Repository
 public class GiftCertificateDaoImpl extends BaseDaoImpl<GiftCertificate> implements GiftCertificateDao {
+
     private static final String GIFT_CERTIFICATE_FIND_ALL = "SELECT g FROM GiftCertificate g WHERE g.isDeleted = false";
     private static final String GIFT_CERTIFICATE_FIND_BY_ID = "SELECT g FROM GiftCertificate g WHERE g.id = ?1 " +
             "AND g.isDeleted = false";
@@ -60,7 +61,9 @@ public class GiftCertificateDaoImpl extends BaseDaoImpl<GiftCertificate> impleme
         CriteriaQuery<Long> query =
                 new CriteriaQueryCreator().generateCountCriteriaQueryBySearchParameters(giftCertificateQueryParameters,
                         builder);
-        return entityManager.createQuery(query).getSingleResult().longValue();
+        return entityManager.createQuery(query)
+                .getSingleResult()
+                .longValue();
     }
 
     @Override

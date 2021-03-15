@@ -16,6 +16,7 @@ public class GiftCertificateQueryParameters {
      * @version 1.0
      */
     public enum SortType {
+
         /**
          * Name sort type.
          */
@@ -31,11 +32,6 @@ public class GiftCertificateQueryParameters {
             this.queryValue = queryValue;
         }
 
-        /**
-         * Gets query value.
-         *
-         * @return the query value
-         */
         public String getQueryValue() {
             return queryValue;
         }
@@ -48,6 +44,7 @@ public class GiftCertificateQueryParameters {
      * @version 1.0
      */
     public enum SortOrder {
+
         /**
          * Asc sort order.
          */

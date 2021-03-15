@@ -87,7 +87,6 @@ public class ErrorHandler {
         return new ErrorInfo(errorMessage, UNSUPPORTED_MEDIA_TYPE.getCode());
     }
 
-
     /**
      * Handle {@link HttpMessageNotReadableException}.
      *
@@ -199,7 +198,6 @@ public class ErrorHandler {
                 exception.getMessage());
         return new ErrorInfo(errorMessage, INTERNAL_ERROR.getCode());
     }
-
 
     private String createErrorMessage(String message, String parameter) {
         return String.format(message, parameter);

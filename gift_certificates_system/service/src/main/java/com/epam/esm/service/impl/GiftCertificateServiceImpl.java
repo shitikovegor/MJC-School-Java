@@ -12,8 +12,7 @@ import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.TagService;
 import com.epam.esm.util.GiftCertificateQueryParameters;
 import com.epam.esm.util.Page;
-import com.epam.esm.validator.GiftCertificateValidator;
-import com.epam.esm.validator.PageValidator;
+import com.epam.esm.validator.DtoValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,21 +24,26 @@ import java.util.stream.Collectors;
 
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
+
     private final ModelMapper modelMapper;
     private final GiftCertificateDao giftCertificateDao;
     private final TagService tagService;
+    private final DtoValidator<GiftCertificateDto> giftCertificateValidator;
+    private final DtoValidator<PageDto> pageValidator;
 
     @Autowired
-    public GiftCertificateServiceImpl(ModelMapper modelMapper, GiftCertificateDao giftCertificateDao, TagService tagService) {
+    public GiftCertificateServiceImpl(ModelMapper modelMapper, GiftCertificateDao giftCertificateDao, TagService tagService, DtoValidator<GiftCertificateDto> giftCertificateValidator, DtoValidator<PageDto> pageValidator) {
         this.modelMapper = modelMapper;
         this.giftCertificateDao = giftCertificateDao;
         this.tagService = tagService;
+        this.giftCertificateValidator = giftCertificateValidator;
+        this.pageValidator = pageValidator;
     }
 
     @Transactional
     @Override
     public long add(GiftCertificateDto giftCertificateDto) {
-        GiftCertificateValidator.validate(giftCertificateDto);
+        giftCertificateValidator.validate(giftCertificateDto);
         findAndSetTags(giftCertificateDto);
         GiftCertificate giftCertificate = modelMapper.map(giftCertificateDto, GiftCertificate.class);
         GiftCertificate addedGiftCertificate = giftCertificateDao.add(giftCertificate);
@@ -68,7 +72,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public GiftCertificateDto update(GiftCertificateDto giftCertificateDto) {
         GiftCertificateDto foundGiftCertificate = findById(giftCertificateDto.getId());
-        GiftCertificateValidator.validate(giftCertificateDto);
+        giftCertificateValidator.validate(giftCertificateDto);
         giftCertificateDto.setCreateDate(foundGiftCertificate.getCreateDate());
         findAndSetTags(giftCertificateDto);
         GiftCertificate giftCertificate = modelMapper.map(giftCertificateDto, GiftCertificate.class);
@@ -81,7 +85,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     public GiftCertificateDto updatePart(GiftCertificateDto giftCertificateDto) {
         GiftCertificateDto foundGiftCertificateDto = findById(giftCertificateDto.getId());
         fillUpdatedFields(giftCertificateDto, foundGiftCertificateDto);
-        GiftCertificateValidator.validate(foundGiftCertificateDto);
+        giftCertificateValidator.validate(foundGiftCertificateDto);
         findAndSetTags(foundGiftCertificateDto);
         GiftCertificate foundGiftCertificate = modelMapper.map(foundGiftCertificateDto, GiftCertificate.class);
         GiftCertificate updatedGiftCertificate = giftCertificateDao.update(foundGiftCertificate);
@@ -91,7 +95,7 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     @Override
     public List<GiftCertificateDto> findCertificates(GiftCertificateQueryParametersDto giftCertificateQueryParametersDto,
                                                      PageDto pageDto) {
-        PageValidator.validatePage(pageDto);
+        pageValidator.validate(pageDto);
         Page page = modelMapper.map(pageDto, Page.class);
         GiftCertificateQueryParameters parameters = modelMapper.map(giftCertificateQueryParametersDto,
                 GiftCertificateQueryParameters.class);
@@ -110,11 +114,16 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
     private void findAndSetTags(GiftCertificateDto giftCertificateDto) {
         List<TagDto> tags = giftCertificateDto.getTags().stream()
                 .distinct()
-                .map(tagDto -> tagService.findByName(tagDto.getName())
-                        .orElseGet(() -> new TagDto(tagService.add(tagDto), tagDto.getName())))
+                .map(tagDto -> findByNameOrCreateTagDto(tagDto))
                 .collect(Collectors.toList());
 
         giftCertificateDto.setTags(tags);
+    }
+
+    private TagDto findByNameOrCreateTagDto(TagDto tagDto) {
+        String tagName = tagDto.getName();
+        return tagService.findByName(tagName)
+                .orElseGet(() -> new TagDto(tagService.add(tagDto), tagName));
     }
 
     private void fillUpdatedFields(GiftCertificateDto updatedGiftCertificateDto,

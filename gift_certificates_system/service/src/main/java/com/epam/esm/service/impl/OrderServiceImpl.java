@@ -10,8 +10,7 @@ import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.service.UserService;
 import com.epam.esm.util.Page;
-import com.epam.esm.validator.OrderValidator;
-import com.epam.esm.validator.PageValidator;
+import com.epam.esm.validator.DtoValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,17 +22,22 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+
     private final ModelMapper modelMapper;
     private final OrderDao orderDao;
     private final UserService userService;
     private final GiftCertificateService giftCertificateService;
+    private final DtoValidator<OrderDto> orderValidator;
+    private final DtoValidator<PageDto> pageValidator;
 
     @Autowired
-    public OrderServiceImpl(ModelMapper modelMapper, OrderDao orderDao, UserService userService, GiftCertificateService giftCertificateService) {
+    public OrderServiceImpl(ModelMapper modelMapper, OrderDao orderDao, UserService userService, GiftCertificateService giftCertificateService, DtoValidator<OrderDto> orderValidator, DtoValidator<PageDto> pageValidator) {
         this.modelMapper = modelMapper;
         this.orderDao = orderDao;
         this.userService = userService;
         this.giftCertificateService = giftCertificateService;
+        this.orderValidator = orderValidator;
+        this.pageValidator = pageValidator;
     }
 
     @Override
@@ -47,8 +51,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public long add(OrderDto orderDto) {
-        OrderValidator.validateUser(orderDto.getUser());
-        OrderValidator.validateCertificate(orderDto.getGiftCertificate());
+        orderValidator.validate(orderDto);
         orderDto.setGiftCertificate(giftCertificateService.findById(orderDto.getGiftCertificate().getId()));
         orderDto.setUser(userService.findById(orderDto.getUser().getId()));
         orderDto.setCost(orderDto.getGiftCertificate().getPrice());
@@ -68,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> findByUserId(long userId, PageDto pageDto) {
-        PageValidator.validatePage(pageDto);
+        pageValidator.validate(pageDto);
         Page page = modelMapper.map(pageDto, Page.class);
         return orderDao.findOrdersByUserId(userId, page).stream()
                 .map(order -> modelMapper.map(order, OrderDto.class))

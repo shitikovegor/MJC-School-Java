@@ -10,8 +10,7 @@ import com.epam.esm.exception.IncorrectParameterException;
 import com.epam.esm.exception.ResourceNotFoundException;
 import com.epam.esm.service.UserService;
 import com.epam.esm.util.Page;
-import com.epam.esm.validator.PageValidator;
-import com.epam.esm.validator.UserValidator;
+import com.epam.esm.validator.DtoValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,23 +22,28 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     private final ModelMapper modelMapper;
     private final UserDao userDao;
+    private final DtoValidator<UserRegistrationDto> userValidator;
+    private final DtoValidator<PageDto> pageValidator;
 
     @Autowired
-    public UserServiceImpl(ModelMapper modelMapper, UserDao userDao) {
+    public UserServiceImpl(ModelMapper modelMapper, UserDao userDao, DtoValidator<UserRegistrationDto> userValidator, DtoValidator<PageDto> pageValidator) {
         this.modelMapper = modelMapper;
         this.userDao = userDao;
+        this.userValidator = userValidator;
+        this.pageValidator = pageValidator;
     }
 
     @Transactional
     @Override
     public long register(UserRegistrationDto userRegistrationDto) {
-        UserValidator.validateUserRegistration(userRegistrationDto);
+        userValidator.validate(userRegistrationDto);
         User user = modelMapper.map(userRegistrationDto, User.class);
         Optional<User> existingUser = userDao.findByUsername(user.getUsername());
 
-        if (existingUser.isEmpty()) {
+        if (!existingUser.isPresent()) {
             User addedUser = userDao.add(user);
             return addedUser.getId();
         } else {
@@ -49,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> findAll(PageDto pageDto) {
-        PageValidator.validatePage(pageDto);
+        pageValidator.validate(pageDto);
         Page page = modelMapper.map(pageDto, Page.class);
         return userDao.findAll(page).stream()
                 .map(user -> modelMapper.map(user, UserDto.class))

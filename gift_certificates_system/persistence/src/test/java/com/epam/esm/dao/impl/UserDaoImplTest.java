@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserDaoImplTest {
+
     private final UserDao userDao;
     private Page page;
 

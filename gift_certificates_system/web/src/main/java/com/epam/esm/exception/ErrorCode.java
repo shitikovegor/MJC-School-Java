@@ -7,6 +7,7 @@ package com.epam.esm.exception;
  * @version 1.0
  */
 public enum ErrorCode {
+
     INCORRECT_PARAMETER(4004),
     NOT_FOUND(4044),
     INTERNAL_ERROR(5004),

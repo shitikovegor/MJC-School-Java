@@ -17,16 +17,22 @@ import java.util.Objects;
 @Entity
 @Table(name = "gift_certificate_order")
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "user_id_fk", referencedColumnName = "id")
     private User user;
+
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "gift_certificate_id_fk", referencedColumnName = "id")
     private GiftCertificate giftCertificate;
+
+    @Column(name = "cost")
     private BigDecimal cost;
+
     @Column(name = "purchase_date")
     private LocalDateTime purchaseDate;
 

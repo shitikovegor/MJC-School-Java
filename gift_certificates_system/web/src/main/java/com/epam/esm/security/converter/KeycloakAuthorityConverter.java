@@ -17,9 +17,12 @@ import java.util.stream.Collectors;
  * @version 1.0
  */
 public class KeycloakAuthorityConverter implements Converter<Jwt, Collection<GrantedAuthority>> {
+
+    private static final String AUTHORITIES = "authorities";
+
     @Override
     public Collection<GrantedAuthority> convert(Jwt jwt) {
-        JSONArray authorities = (JSONArray) jwt.getClaims().get("authorities");
+        JSONArray authorities = (JSONArray) jwt.getClaims().get(AUTHORITIES);
         if (authorities != null) {
             return authorities.stream()
                     .map(String::valueOf)

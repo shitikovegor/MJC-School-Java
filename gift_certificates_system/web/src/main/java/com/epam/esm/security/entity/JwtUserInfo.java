@@ -12,6 +12,7 @@ import java.util.Map;
  * @version 1.0
  */
 public class JwtUserInfo extends Jwt {
+
     private long userId;
     private String username;
 

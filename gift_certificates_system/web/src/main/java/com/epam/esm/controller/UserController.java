@@ -30,6 +30,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+
     private final UserService userService;
     private final KeycloakAdminClientService keycloakService;
 
@@ -73,8 +74,8 @@ public class UserController {
      * @return the users
      */
     @GetMapping
-    public ResponseEntity<PageCollection<UserDto>> getUsers(@RequestParam(required = false, defaultValue = "1") int page,
-                                                            @RequestParam(required = false, defaultValue = "5") int size) {
+    public ResponseEntity<PageCollection<UserDto>> getUsers(@RequestParam(required = false) Integer page,
+                                                            @RequestParam(required = false) Integer size) {
         PageDto pageDto = new PageDto(size, page, userService.findTotalRecords());
         List<UserDto> users = userService.findAll(pageDto);
         PageCollection<UserDto> collection = new PageCollection<>(users, pageDto.getTotalRecords());

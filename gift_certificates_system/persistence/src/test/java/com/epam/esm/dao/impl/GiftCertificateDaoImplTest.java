@@ -28,16 +28,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Transactional
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GiftCertificateDaoImplTest {
+
     private final GiftCertificateDao giftCertificateDao;
     private Page page;
     private GiftCertificateQueryParameters parameters;
-
 
     @Autowired
     public GiftCertificateDaoImplTest(GiftCertificateDao giftCertificateDao) {
         this.giftCertificateDao = giftCertificateDao;
     }
-
 
     @BeforeAll
     void setUp() {

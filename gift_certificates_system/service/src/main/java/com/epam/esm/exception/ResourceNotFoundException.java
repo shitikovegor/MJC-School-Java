@@ -7,6 +7,7 @@ package com.epam.esm.exception;
  * @version 1.0
  */
 public class ResourceNotFoundException extends RuntimeException {
+
     private String messageParameter;
     private String messageKey;
 

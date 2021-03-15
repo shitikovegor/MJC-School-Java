@@ -20,22 +20,35 @@ import java.util.Objects;
 @Entity
 @Table(name = "gift_certificate")
 public class GiftCertificate implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "description")
     private String description;
+
+    @Column(name = "price")
     private BigDecimal price;
+
+    @Column(name = "duration")
     private int duration;
+
     @Column(name = "create_date")
     private LocalDateTime createDate;
+
     @Column(name = "last_update_date")
     private LocalDateTime lastUpdateDate;
+
     @ManyToMany
     @JoinTable(name = "gift_certificate_has_tag",
             joinColumns = @JoinColumn(name = "gift_certificate_id_fk", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id_fk", referencedColumnName = "id"))
     private List<Tag> tags;
+
     @Column(name = "deleted")
     private boolean isDeleted;
 

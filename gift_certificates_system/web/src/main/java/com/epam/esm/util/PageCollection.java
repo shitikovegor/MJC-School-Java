@@ -14,6 +14,7 @@ import java.util.Objects;
  * @version 1.0
  */
 public class PageCollection<T extends Object> extends RepresentationModel<PageCollection<T>> {
+
     private List<T> items;
     private long total;
 

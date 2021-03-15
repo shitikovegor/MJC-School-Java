@@ -7,23 +7,19 @@ package com.epam.esm.exception;
  * @author Egor Shitikov
  * @version 1.0
  */
-public final class   ExceptionKey {
+public final class ExceptionKey {
+
     public static final String TAG_NOT_FOUND = "tag.notFound";
-    public static final String TAG_ID_INCORRECT = "tag.incorrectId";
     public static final String TAG_NAME_INCORRECT = "tag.incorrectName";
     public static final String TAG_EXISTS = "tag.exists";
     public static final String TAG_DOES_NOT_EXIST = "tag.notExists";
 
     public static final String GIFT_CERTIFICATE_NOT_FOUND = "giftCertificate.notFound";
-    public static final String GIFT_CERTIFICATE_ID_INCORRECT = "giftCertificate.incorrectId";
     public static final String GIFT_CERTIFICATE_NAME_INCORRECT = "giftCertificate.incorrectName";
     public static final String GIFT_CERTIFICATE_DESCRIPTION_INCORRECT = "giftCertificate.incorrectDescription";
     public static final String GIFT_CERTIFICATE_PRICE_INCORRECT = "giftCertificate.incorrectPrice";
     public static final String GIFT_CERTIFICATE_DURATION_INCORRECT = "giftCertificate.incorrectDuration";
-    public static final String GIFT_CERTIFICATE_NOT_COMPLETED = "giftCertificate.notCompleted";
-    public static final String GIFT_CERTIFICATES_NOT_FOUND = "giftCertificates.notFound";
 
-    public static final String USER_ID_INCORRECT = "user.incorrectId";
     public static final String USER_FIRSTNAME_INCORRECT = "user.incorrectFirstname";
     public static final String USER_LASTNAME_INCORRECT = "user.incorrectLastname";
     public static final String USER_PASSWORD_INCORRECT = "user.incorrectPassword";
@@ -46,7 +42,6 @@ public final class   ExceptionKey {
     public static final String AUTHORIZATION_ERROR = "authorizationError";
     public static final String JWT_ERROR = "jwtError";
     public static final String AUTH_SERVER_ERROR = "authServerError";
-
 
     private ExceptionKey() {
     }

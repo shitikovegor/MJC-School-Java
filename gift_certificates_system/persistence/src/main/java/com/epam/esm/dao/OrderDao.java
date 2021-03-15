@@ -12,6 +12,7 @@ import java.util.List;
  * @version 1.0
  */
 public interface OrderDao extends BaseDao<Order> {
+
     /**
      * Find orders by user id list.
      *

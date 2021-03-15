@@ -7,10 +7,12 @@ package com.epam.esm.exception;
  * @version 1.0
  */
 public class ErrorInfo {
+
     /**
      * The Error message.
      */
     String errorMessage;
+
     /**
      * The Error code.
      */

@@ -13,6 +13,7 @@ import java.util.Objects;
  * @version 1.0
  */
 public class UserRegistrationDto extends RepresentationModel<UserRegistrationDto> {
+
     private long id;
     private String username;
     private String password;

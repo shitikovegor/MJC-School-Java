@@ -30,6 +30,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping("/gift-certificates")
 public class GiftCertificateController {
+
     private final GiftCertificateService giftCertificateService;
 
     /**
@@ -55,14 +56,13 @@ public class GiftCertificateController {
      * @return the gift certificates
      */
     @GetMapping
-    public ResponseEntity<PageCollection<GiftCertificateDto>> getGiftCertificates
-    (@RequestParam(required = false) String[] tagName,
-     @RequestParam(required = false) String name,
-     @RequestParam(required = false) String description,
-     @RequestParam(required = false) SortType sortType,
-     @RequestParam(required = false) SortOrder sortOrder,
-     @RequestParam(required = false, defaultValue = "1") int page,
-     @RequestParam(required = false, defaultValue = "5") int size) {
+    public ResponseEntity<PageCollection<GiftCertificateDto>> getGiftCertificates(@RequestParam(required = false) String[] tagName,
+                                                                                  @RequestParam(required = false) String name,
+                                                                                  @RequestParam(required = false) String description,
+                                                                                  @RequestParam(required = false) SortType sortType,
+                                                                                  @RequestParam(required = false) SortOrder sortOrder,
+                                                                                  @RequestParam(required = false) Integer page,
+                                                                                  @RequestParam(required = false) Integer size) {
         GiftCertificateQueryParametersDto giftCertificateQueryParametersDto = new GiftCertificateQueryParametersDto();
         giftCertificateQueryParametersDto.setTagNames(tagName);
         giftCertificateQueryParametersDto.setName(name);

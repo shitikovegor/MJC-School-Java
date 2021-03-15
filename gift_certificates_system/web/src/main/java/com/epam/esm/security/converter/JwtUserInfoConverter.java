@@ -18,7 +18,9 @@ import java.util.Collection;
  * @version 1.0
  */
 public class JwtUserInfoConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+
     private Converter<Jwt, Collection<GrantedAuthority>> grantedAuthoritiesConverter;
+
     @Autowired
     private JwtUserInfoService service;
 

@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
+
     private static final String USER_FIND_BY_USERNAME = "SELECT u FROM User u WHERE username = ?1";
     private static final String USER_FIND_ALL = "SELECT u FROM User u";
     private static final String USER_TOTAL_RECORDS = "SELECT COUNT(*) FROM User";

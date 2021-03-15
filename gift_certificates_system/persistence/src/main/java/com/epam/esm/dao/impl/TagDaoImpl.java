@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Repository
 public class TagDaoImpl extends BaseDaoImpl<Tag> implements TagDao {
+
     private static final String TAG_FIND_BY_NAME = "SELECT t FROM Tag t WHERE name = ?1";
     private static final String TAG_FIND_ALL = "SELECT t FROM Tag t";
     private static final String GIFT_CERTIFICATE_HAS_TAG_REMOVE = "DELETE FROM gift_certificate_has_tag WHERE " +
@@ -62,8 +63,8 @@ public class TagDaoImpl extends BaseDaoImpl<Tag> implements TagDao {
     }
 
     @Override
-    public int findTotalRecords() {
+    public long findTotalRecords() {
         Long totalRecords = (Long) entityManager.createQuery(TAG_TOTAL_RECORDS).getSingleResult();
-        return totalRecords.intValue();
+        return totalRecords.longValue();
     }
 }
