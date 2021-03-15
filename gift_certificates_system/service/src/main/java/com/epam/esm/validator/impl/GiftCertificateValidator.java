@@ -16,8 +16,8 @@ public class GiftCertificateValidator implements DtoValidator<GiftCertificateDto
     private static final int MAX_DURATION = 365;
     private static final String NAME_PATTERN = "[\\p{L}0-9\\s-',]{1,100}";
     private static final String DESCRIPTION_PATTERN = "[\\p{L}0-9\\s-,._!?&'%:]{1,500}";
-    private static final BigDecimal MIN_PRICE = new BigDecimal(1);
-    private static final BigDecimal MAX_PRICE = new BigDecimal(999999.99);
+    private static final BigDecimal MIN_PRICE = BigDecimal.valueOf(1);
+    private static final BigDecimal MAX_PRICE = BigDecimal.valueOf(999999.99);
 
     @Override
     public void validate(GiftCertificateDto giftCertificateDto) {
@@ -40,8 +40,8 @@ public class GiftCertificateValidator implements DtoValidator<GiftCertificateDto
     }
 
     private void validatePrice(BigDecimal price) {
-        if (price == null || price.compareTo(MIN_PRICE) == -1 || price.compareTo(MAX_PRICE) == 1) {
-            throw new IncorrectParameterException(GIFT_CERTIFICATE_PRICE_INCORRECT, price.toString());
+        if (price == null || price.compareTo(MIN_PRICE) < 0 || price.compareTo(MAX_PRICE) > 0) {
+            throw new IncorrectParameterException(GIFT_CERTIFICATE_PRICE_INCORRECT);
         }
     }
 

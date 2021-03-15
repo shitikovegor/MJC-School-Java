@@ -25,12 +25,12 @@ import java.util.Collections;
 @Service
 public class KeycloakAdminClientService {
 
-    @Value("${keycloak.realm}")
-    private String realm;
     private static final int CREATED_STATUS = 201;
-
     private final Keycloak keycloak;
     private final UserService userService;
+
+    @Value("${keycloak.realm}")
+    private String realm;
 
     @Autowired
     public KeycloakAdminClientService(Keycloak keycloak, UserService userService) {
@@ -60,11 +60,11 @@ public class KeycloakAdminClientService {
         CredentialRepresentation passwordCredential = createPasswordCredentials(user.getPassword());
         userRepresentation.setCredentials(Collections.singletonList(passwordCredential));
 
-        Response response = usersResource.create(userRepresentation);
-
-        if (response.getStatus() != CREATED_STATUS) {
-            throw new AuthorizationServerException(ExceptionKey.AUTH_SERVER_ERROR,
-                    response.getStatusInfo() + " (" + response.getStatus() + ")");
+        try (Response response = usersResource.create(userRepresentation)) {
+            if (response.getStatus() != CREATED_STATUS) {
+                throw new AuthorizationServerException(ExceptionKey.AUTH_SERVER_ERROR,
+                        response.getStatusInfo() + " (" + response.getStatus() + ")");
+            }
         }
     }
 

@@ -1,7 +1,6 @@
 package com.epam.esm.entity;
 
 import com.epam.esm.dao.audit.GiftCertificateAuditListener;
-import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
 import java.io.Serializable;

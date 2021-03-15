@@ -86,6 +86,7 @@ public class OrderController {
      *
      * @param id the id
      */
+    @PreAuthorize("hasRole('admin')")
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrder(@PathVariable long id) {

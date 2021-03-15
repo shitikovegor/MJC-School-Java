@@ -39,16 +39,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests(oauth2 -> oauth2
-                        .antMatchers(HttpMethod.POST, "/users").permitAll()
-                        .antMatchers(HttpMethod.GET, "/gift-certificates/**").permitAll()
-                        .antMatchers(HttpMethod.GET, "/tags/**").hasAnyRole("user", "admin")
-                        .antMatchers(HttpMethod.GET, "/users/{\\d+}").hasAnyRole("user", "admin")
-                        .antMatchers(HttpMethod.GET, "/orders/{\\d+}").hasAnyRole("user", "admin")
-                        .antMatchers(HttpMethod.GET, "/orders/users/{\\d+}").hasAnyRole("user", "admin")
-                        .antMatchers(HttpMethod.POST, "/orders/**").hasAnyRole("user", "admin")
-                        .antMatchers("/**").hasRole("admin")
-                        .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt()
                         .jwtAuthenticationConverter(authenticationConverter())

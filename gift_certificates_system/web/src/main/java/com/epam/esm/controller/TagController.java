@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -48,6 +49,7 @@ public class TagController {
      * @param size the size
      * @return the tags
      */
+    @PreAuthorize("hasAnyRole('admin', 'user')")
     @GetMapping
     public ResponseEntity<PageCollection<TagDto>> getTags(@RequestParam(required = false) Integer page,
                                                           @RequestParam(required = false) Integer size) {
@@ -65,6 +67,7 @@ public class TagController {
      * @param id the tag id
      * @return the tag DTO
      */
+    @PreAuthorize("hasAnyRole('admin', 'user')")
     @GetMapping("/{id}")
     public TagDto getTagById(@PathVariable @Valid long id) {
         return tagService.findById(id);
@@ -76,6 +79,7 @@ public class TagController {
      * @param tagDto the tag DTO
      * @return the response entity
      */
+    @PreAuthorize("hasRole('admin')")
     @PostMapping
     public ResponseEntity<String> addTag(@RequestBody TagDto tagDto) {
         long tagId = tagService.add(tagDto);
@@ -96,6 +100,7 @@ public class TagController {
      * @param id the tag id
      * @return the response entity
      */
+    @PreAuthorize("hasRole('admin')")
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTag(@PathVariable long id) {
         tagService.remove(id);
@@ -107,6 +112,7 @@ public class TagController {
      *
      * @return the tag by id
      */
+    @PreAuthorize("hasAnyRole('admin', 'user')")
     @GetMapping("/most_popular")
     public TagDto getMostPopularTagFromUserWithMaxPurchases() {
         return tagService.findMostPopularTagFromUserWithMaxPurchases();

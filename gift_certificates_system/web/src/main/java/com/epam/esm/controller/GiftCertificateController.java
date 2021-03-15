@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -55,6 +57,7 @@ public class GiftCertificateController {
      * @param size        the size
      * @return the gift certificates
      */
+    @PreAuthorize("permitAll()")
     @GetMapping
     public ResponseEntity<PageCollection<GiftCertificateDto>> getGiftCertificates(@RequestParam(required = false) String[] tagName,
                                                                                   @RequestParam(required = false) String name,
@@ -87,6 +90,7 @@ public class GiftCertificateController {
      * @param id the id
      * @return the gift-certificate DTO
      */
+    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public GiftCertificateDto getGiftCertificateById(@PathVariable long id) {
         GiftCertificateDto foundGiftCertificate = giftCertificateService.findById(id);
@@ -100,6 +104,7 @@ public class GiftCertificateController {
      * @param giftCertificateDto the gift certificate dto
      * @return the response entity
      */
+    @PreAuthorize("hasRole('admin')")
     @PostMapping
     public ResponseEntity<String> addGiftCertificate(@RequestBody GiftCertificateDto giftCertificateDto) {
         long tagId = giftCertificateService.add(giftCertificateDto);
@@ -120,6 +125,7 @@ public class GiftCertificateController {
      * @param giftCertificateDto the gift-certificate DTO
      * @return the gift-certificate DTO
      */
+    @PreAuthorize("hasRole('admin')")
     @PutMapping
     public GiftCertificateDto updateGiftCertificate(@RequestBody GiftCertificateDto giftCertificateDto) {
         GiftCertificateDto updatedGiftCertificate = giftCertificateService.update(giftCertificateDto);
@@ -133,6 +139,7 @@ public class GiftCertificateController {
      * @param giftCertificateDto the gift-certificate DTO
      * @return the gift-certificate DTO
      */
+    @PreAuthorize("hasRole('admin')")
     @PatchMapping
     public GiftCertificateDto updatePartOfGiftCertificate(@RequestBody GiftCertificateDto giftCertificateDto) {
         GiftCertificateDto updatedGiftCertificate = giftCertificateService.updatePart(giftCertificateDto);
@@ -145,6 +152,7 @@ public class GiftCertificateController {
      *
      * @param id the gift-certificate id
      */
+    @PreAuthorize("hasRole('admin')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteGiftCertificate(@PathVariable long id) {
         giftCertificateService.remove(id);

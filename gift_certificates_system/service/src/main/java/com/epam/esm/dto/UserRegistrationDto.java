@@ -3,7 +3,6 @@ package com.epam.esm.dto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.hateoas.RepresentationModel;
 
-import java.util.List;
 import java.util.Objects;
 
 /**

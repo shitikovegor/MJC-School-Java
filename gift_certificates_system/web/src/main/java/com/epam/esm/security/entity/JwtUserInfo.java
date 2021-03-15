@@ -4,6 +4,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.time.Instant;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Class {@code JwtUserInfo} represents user info for token
@@ -15,19 +16,6 @@ public class JwtUserInfo extends Jwt {
 
     private long userId;
     private String username;
-
-    /**
-     * Constructs a {@code Jwt} using the provided parameters.
-     *
-     * @param tokenValue the token value
-     * @param issuedAt   the time at which the JWT was issued
-     * @param expiresAt  the expiration time on or after which the JWT MUST NOT be accepted
-     * @param headers    the JOSE header(s)
-     * @param claims     the JWT Claims Set
-     */
-    public JwtUserInfo(String tokenValue, Instant issuedAt, Instant expiresAt, Map<String, Object> headers, Map<String, Object> claims) {
-        super(tokenValue, issuedAt, expiresAt, headers, claims);
-    }
 
     /**
      * Instantiates a new Jwt user info.

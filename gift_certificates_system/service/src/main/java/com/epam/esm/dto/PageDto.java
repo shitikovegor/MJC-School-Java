@@ -72,8 +72,12 @@ public class PageDto {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         PageDto pageDto = (PageDto) o;
         return Objects.equals(size, pageDto.size) &&
                 Objects.equals(pageNumber, pageDto.pageNumber) &&

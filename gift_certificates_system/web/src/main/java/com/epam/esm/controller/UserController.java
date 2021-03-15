@@ -52,6 +52,7 @@ public class UserController {
      * @param userRegistrationDto the user registration dto
      * @return the response entity
      */
+    @PreAuthorize("permitAll()")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> registerUser(@RequestBody UserRegistrationDto userRegistrationDto) {
@@ -73,6 +74,7 @@ public class UserController {
      * @param size the size
      * @return the users
      */
+    @PreAuthorize("hasRole('admin')")
     @GetMapping
     public ResponseEntity<PageCollection<UserDto>> getUsers(@RequestParam(required = false) Integer page,
                                                             @RequestParam(required = false) Integer size) {
