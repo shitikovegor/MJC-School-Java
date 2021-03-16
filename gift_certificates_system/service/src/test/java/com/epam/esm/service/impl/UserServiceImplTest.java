@@ -58,7 +58,7 @@ class UserServiceImplTest {
                 .setFieldAccessLevel(PRIVATE);
         userService = new UserServiceImpl(modelMapper, userDao, userValidator, pageValidator);
         page = new Page(5, 1, 10);
-        pageDto = new PageDto(5, 1, 10);
+        pageDto = new PageDto(5, 1, 10L);
         user = new User(2L, "user3@epam.com", "", "");
         userDto = new UserDto(2L, "user3@epam.com", "", "");
 

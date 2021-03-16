@@ -119,7 +119,7 @@ class GiftCertificateServiceImplTest {
                 .thenReturn(giftCertificates);
 
         assertEquals(giftCertificatesDto, giftCertificateService.findCertificates(parametersDto,
-                new PageDto(5, 1, 10)));
+                new PageDto(5, 1, 10L)));
     }
 
     @Test

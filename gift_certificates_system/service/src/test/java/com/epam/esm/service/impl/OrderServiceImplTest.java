@@ -70,7 +70,7 @@ class OrderServiceImplTest {
                 .setFieldAccessLevel(PRIVATE);
         orderService = new OrderServiceImpl(modelMapper, orderDao, userService, giftCertificateService, orderValidator, pageValidator);
         page = new Page(5, 1, 10);
-        pageDto = new PageDto(5, 1, 10);
+        pageDto = new PageDto(5, 1, 10L);
     }
 
     @AfterAll

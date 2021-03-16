@@ -50,7 +50,7 @@ class TagServiceImplTest {
                 .setFieldAccessLevel(PRIVATE);
         tagService = new TagServiceImpl(modelMapper, tagDao, tagValidator, pageValidator);
         page = new Page(5, 1, 10);
-        pageDto = new PageDto(5, 1, 10);
+        pageDto = new PageDto(5, 1, 10L);
     }
 
     @AfterAll
