@@ -1,16 +1,18 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id "org.sonarqube" version "3.0"
+}
+
 group 'com.epam.esm'
 version '1.0'
 
-buildscript {
-    ext {
-        springBootVersion = '2.4.2'
-    }
+allprojects {
+    apply plugin: "jacoco"
+    apply plugin: "org.sonarqube"
+
     repositories {
         mavenCentral()
-    }
-    dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
-        classpath "io.spring.gradle:dependency-management-plugin:1.0.11.RELEASE"
     }
 }
 
@@ -18,6 +20,8 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'java-library'
     apply plugin: 'war'
+
+    ext.springBootVersion = '2.4.2'
 
     compileJava {
         sourceCompatibility = '1.8'
@@ -38,6 +42,40 @@ subprojects {
         implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 
     }
-//    jar.enabled=true
+
+    test {
+        useJUnitPlatform()
+        finalizedBy jacocoTestReport
+    }
+}
+
+task codeCoverageReport(type: JacocoReport) {
+
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+
+    reports {
+        xml.enabled true
+        html.enabled false
+        csv.enabled false
+    }
+}
+
+codeCoverageReport.dependsOn {
+    subprojects*.test
+}
+
+sonarqube {
+    properties {
+        property "sonar.host.url", "http://localhost:9000"
+        property 'sonar.projectName', 'gift_certificates'
+        property 'sonar.projectKey', 'gift_certificates'
+        property 'sonar.login', 'b1bc6990ef97613ac4b77c21e4ae7aa9879cb101'
+        property 'sonar.core.codeCoveragePlugin', 'jacoco'
+        property 'sonar.coverage.jacoco.xmlReportPaths', "${rootDir}/build/reports/jacoco/codeCoverageReport/codeCoverageReport.xml"
+    }
 }
 
