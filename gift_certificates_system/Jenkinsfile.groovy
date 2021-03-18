@@ -23,7 +23,8 @@ pipeline {
                         sh 'cd gift_certificates_system'
                         sh 'gradle clean build codeCoverageReport'
                     } finally {
-                        junit '**/build/test-results/test/*.xml'
+//                        junit '**/build/test-results/**/*.xml'
+                        junit allowEmptyResults: true, testResults: '**/test-results/*.xml'
                     }
                 }
             }
