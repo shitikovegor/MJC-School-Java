@@ -46,7 +46,7 @@ subprojects {
     test {
         task copyReport(type: Copy) {
             from "build/test-results"
-            into "$rootDir/test-results"
+            into "${rootDir}/build/test-results"
         }
 
         useJUnitPlatform()
