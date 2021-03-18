@@ -44,7 +44,13 @@ subprojects {
     }
 
     test {
+        task copyReport(type: Copy) {
+            from "build/test-results"
+            into "$rootDir/test-results"
+        }
+
         useJUnitPlatform()
+        finalizedBy copyReport
         finalizedBy jacocoTestReport
     }
 }
