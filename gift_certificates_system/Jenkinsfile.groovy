@@ -44,15 +44,12 @@ pipeline {
 //                scannerHome = tool 'sonarqube'
 //            }
             steps {
-                script
-                        {
-                            def scannerHome = tool 'sonarqube';
-                            dir('gift_certificates_system') {
-                                withSonarQubeEnv('sonarqube') {
-                                    sh "${scannerHome}/bin/sonar-scanner"
-                                }
-                            }
-                        }
+//                def scannerHome = tool 'sonarqube';
+                dir('gift_certificates_system') {
+//                    withSonarQubeEnv('sonarqube') {
+                        sh "gradle sonarqube"
+//                    }
+                }
             }
         }
 
