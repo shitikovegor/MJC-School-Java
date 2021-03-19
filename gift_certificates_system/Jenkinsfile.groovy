@@ -30,14 +30,6 @@ pipeline {
             }
         }
 
-//        stage("Build, Test") {
-//            steps {
-//                dir('gift_certificates_system') {
-//                    sh 'gradle clean build codeCoverageReport'
-//                }
-//            }
-//        }
-
         stage("SonarQube") {
             environment {
                 scannerHome = tool 'sonarqube'
