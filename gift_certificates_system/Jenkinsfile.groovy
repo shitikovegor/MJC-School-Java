@@ -16,17 +16,24 @@ pipeline {
             }
         }
 
+//        stage("Build, Test") {
+//            steps {
+//                script {
+//                    try {
+//                        sh 'cd gift_certificates_system'
+//                        sh 'gradle clean build codeCoverageReport'
+//                    } finally {
+////                        junit '**/build/test-results/**/*.xml'
+//                        junit allowEmptyResults: true, testResults: '**/test-results/*.xml'
+//                    }
+//                }
+//            }
+//        }
+
         stage("Build, Test") {
             steps {
-                script {
-                    try {
-                        sh 'cd gift_certificates_system'
-                        sh 'gradle clean build codeCoverageReport'
-                    } finally {
-//                        junit '**/build/test-results/**/*.xml'
-                        junit allowEmptyResults: true, testResults: '**/test-results/*.xml'
-                    }
-                }
+                sh 'cd gift_certificates_system'
+                sh 'gradle clean build codeCoverageReport'
             }
         }
 
