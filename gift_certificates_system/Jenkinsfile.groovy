@@ -32,8 +32,9 @@ pipeline {
 
         stage("Build, Test") {
             steps {
-                sh 'cd gift_certificates_system'
-                sh 'gradle clean build codeCoverageReport'
+                dir('gift_certificates_system') {
+                    sh 'gradle clean build codeCoverageReport'
+                }
             }
         }
 
@@ -42,9 +43,10 @@ pipeline {
                 scannerHome = tool 'sonarqube'
             }
             steps {
-                sh 'cd gift_certificates_system'
-                withSonarQubeEnv('sonarqube') {
-                    sh "${scannerHome}/bin/sonar-scanner"
+                dir('gift_certificates_system') {
+                    withSonarQubeEnv('sonarqube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
                 }
             }
         }
