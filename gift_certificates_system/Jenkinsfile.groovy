@@ -21,7 +21,6 @@ pipeline {
                 dir('gift_certificates_system') {
                     script {
                         try {
-                            sh 'cd gift_certificates_system'
                             sh 'gradle clean build codeCoverageReport'
                         } finally {
                         junit '**/build/test-results/**/*.xml'
