@@ -16,38 +16,44 @@ pipeline {
             }
         }
 
-//        stage("Build, Test") {
-//            steps {
-//                script {
-//                    try {
-//                        sh 'cd gift_certificates_system'
-//                        sh 'gradle clean build codeCoverageReport'
-//                    } finally {
-////                        junit '**/build/test-results/**/*.xml'
-//                        junit allowEmptyResults: true, testResults: '**/test-results/*.xml'
-//                    }
-//                }
-//            }
-//        }
-
         stage("Build, Test") {
             steps {
                 dir('gift_certificates_system') {
-                    sh 'gradle clean build codeCoverageReport'
+                    script {
+                        try {
+                            sh 'cd gift_certificates_system'
+                            sh 'gradle clean build codeCoverageReport'
+                        } finally {
+                        junit '**/build/test-results/**/*.xml'
+//                            junit allowEmptyResults: true, testResults: '**/test-results/*.xml'
+                        }
+                    }
                 }
             }
         }
 
+//        stage("Build, Test") {
+//            steps {
+//                dir('gift_certificates_system') {
+//                    sh 'gradle clean build codeCoverageReport'
+//                }
+//            }
+//        }
+
         stage("SonarQube") {
-            environment {
-                scannerHome = tool 'sonarqube'
-            }
+//            environment {
+//                scannerHome = tool 'sonarqube'
+//            }
             steps {
-                dir('gift_certificates_system') {
-                    withSonarQubeEnv('sonarqube') {
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
-                }
+                script
+                        {
+                            def scannerHome = tool 'sonarqube';
+                            dir('gift_certificates_system') {
+                                withSonarQubeEnv('sonarqube') {
+                                    sh "${scannerHome}/bin/sonar-scanner"
+                                }
+                            }
+                        }
             }
         }
 
