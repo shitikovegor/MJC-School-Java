@@ -24,7 +24,6 @@ pipeline {
                             sh 'gradle clean build codeCoverageReport'
                         } finally {
                         junit '**/build/test-results/**/*.xml'
-//                            junit allowEmptyResults: true, testResults: '**/test-results/*.xml'
                         }
                     }
                 }
@@ -40,15 +39,15 @@ pipeline {
 //        }
 
         stage("SonarQube") {
-//            environment {
-//                scannerHome = tool 'sonarqube'
-//            }
+            environment {
+                scannerHome = tool 'sonarqube'
+            }
             steps {
-//                def scannerHome = tool 'sonarqube';
+                def scannerHome = tool 'sonarqube';
                 dir('gift_certificates_system') {
-//                    withSonarQubeEnv('sonarqube') {
-                        sh "gradle sonarqube"
-//                    }
+                    withSonarQubeEnv('sonarqube') {
+                        sh "${env.scannerHome}/bin/sonar-scanner"
+                    }
                 }
             }
         }
