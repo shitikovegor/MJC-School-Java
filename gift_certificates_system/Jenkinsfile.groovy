@@ -43,7 +43,6 @@ pipeline {
                 scannerHome = tool 'sonarqube'
             }
             steps {
-                def scannerHome = tool 'sonarqube';
                 dir('gift_certificates_system') {
                     withSonarQubeEnv('sonarqube') {
                         sh "${env.scannerHome}/bin/sonar-scanner"
