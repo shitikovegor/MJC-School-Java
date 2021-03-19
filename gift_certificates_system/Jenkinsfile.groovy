@@ -21,7 +21,7 @@ pipeline {
                 dir('gift_certificates_system') {
                     script {
                         try {
-                            sh 'gradle clean build codeCoverageReport'
+                            bat 'gradle clean build codeCoverageReport'
                         } finally {
                         junit '**/build/test-results/**/*.xml'
                         }
@@ -45,7 +45,7 @@ pipeline {
             steps {
                 dir('gift_certificates_system') {
                     withSonarQubeEnv('sonarqube') {
-                        sh "${env.scannerHome}/bin/sonar-scanner"
+                        bat "${scannerHome}\\bin\\sonar-scanner"
                     }
                 }
             }
